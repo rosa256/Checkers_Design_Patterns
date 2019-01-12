@@ -1,4 +1,5 @@
 package com.checkers.Layout;
+import com.checkers.Game;
 import com.checkers.Player;
 
 import javax.swing.*;
@@ -9,22 +10,29 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.net.URL;
 import java.util.List;
 
 public class MenuFrame extends JFrame {
 
     private static final String ARIAL = "Arial"; /* Font style */
     List<Player> playersInGame;
+    private GameFrame gameFrame;
+    private JButton loadGameButton;
 
     public MenuFrame(List playersInGame){
         this.playersInGame = playersInGame;
         setResizable(false);
         setLocation(0, 0);
         setTitle("Design Patterns");
-        setLayout(new GridLayout(2, 2));
+        setLayout(new GridLayout(5, 1));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(1024, 768));
-
+        gameFrame = new GameFrame(playersInGame);
 
         AddButtonsToFrame();
 
@@ -41,8 +49,9 @@ public class MenuFrame extends JFrame {
         newGameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                OptionsPanel optionsPanel = new OptionsPanel(playersInGame);
-                //createGameWindow();
+                new OptionsPanel(playersInGame);
+                gameFrame.setVisible(true);
+                gameFrame.pack();
             }
         });
         add(newGameButton);
@@ -67,6 +76,12 @@ public class MenuFrame extends JFrame {
             }
         });
         add(authorsButton);
+
+        loadGameButton = new JButton("Wczytaj grę");
+        loadGameButton.setFont(new Font(ARIAL, Font.PLAIN, 30));
+        loadGameButton.setPreferredSize(new Dimension(300, 300));
+        add(loadGameButton);
+
         JButton exitButton = new JButton("Wyjście");
         exitButton.setFont(new Font(ARIAL, Font.PLAIN, 30));
         exitButton.addActionListener(new ActionListener() {
@@ -76,5 +91,12 @@ public class MenuFrame extends JFrame {
             }
         });
         add(exitButton);
+    }
+
+    public GameFrame getGameFrame(){
+        return this.gameFrame;
+    }
+    public JButton getLoadGameButton(){
+        return loadGameButton;
     }
 }
