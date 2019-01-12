@@ -2,7 +2,7 @@ package com.checkers;
 
 import java.util.Timer;
 
-public class Player {
+public class Player implements java.io.Serializable{
 
     private String nickName;
     private Timer timer;

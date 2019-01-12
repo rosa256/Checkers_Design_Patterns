@@ -1,7 +1,13 @@
 package com.checkers;
 
+import javax.swing.*;
+
 public class Main {
     public static void main(String[] args){
-        Checkers checkers = new Checkers();
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                new Checkers();
+            }
+        });
     }
 }
