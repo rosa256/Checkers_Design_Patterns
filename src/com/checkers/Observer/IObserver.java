@@ -1,6 +1,6 @@
 package com.checkers.Observer;
 
-public interface IObserver {
+public interface ISubject {
 
     //TODO
     void update();
