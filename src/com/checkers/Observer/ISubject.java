@@ -1,6 +1,8 @@
 package com.checkers.Observer;
 
-public interface ISubject2 {
+import com.checkers.Player;
+
+public interface ISubject {
 
     //TODO
     void add(IObserver observer);
@@ -9,5 +11,5 @@ public interface ISubject2 {
     void remove(IObserver observer);
 
     //TODO
-    void notifyPlayers();
+    void notifyObserver(Player player);
 }
