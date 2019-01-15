@@ -1,5 +1,6 @@
 package com.checkers.Layout;
 
+import com.checkers.Game;
 import com.checkers.Player;
 
 import javax.swing.*;
@@ -35,12 +36,12 @@ public class OptionsPanel extends JPanel {
             if (!nameField1.getText().equals("")) {
                 playersInGame.get(0).setNickName(nameField1.getText());
             } else {
-                playersInGame.get(0).setNickName("Gracz 1 - Default");
+                playersInGame.get(0).setNickName("Gracz1 - Def");
             }
             if (!nameField2.getText().equals("")) {
                 playersInGame.get(1).setNickName(nameField1.getText());
             } else {
-                playersInGame.get(1).setNickName("Gracz 2 - Default");
+                playersInGame.get(1).setNickName("Gracz1 - Def");
             }
         }
     }
