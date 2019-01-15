@@ -1,24 +1,24 @@
 package com.checkers.Command;
 
+import java.util.LinkedList;
 import java.util.Stack;
 
-public class CommandManager {
+public class CommandManager{
 
-    private Stack<Command> undoStack;
-    private Stack<Command> redoStack;
+    private Command[] commands = new Command[2];
 
-    //TODO
-    public void Move(Command command){
-
+    public CommandManager(Command deletePiece, Command move) {
+        commands[0]= deletePiece;
+        commands[1]= move;
     }
 
-    //TODO
     public void undo(){
-
+        commands[1].undo();
+        commands[0].undo();
     }
 
-    //TODO
     public void redo(){
-
+        commands[0].redo();
+        commands[1].redo();
     }
 }

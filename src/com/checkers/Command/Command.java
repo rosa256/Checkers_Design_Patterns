@@ -2,20 +2,10 @@ package com.checkers.Command;
 
 import com.checkers.Decorator.Piece;
 
-public class Command {
+import java.util.LinkedList;
 
-    //TODO
-    public void Move(int x, int y, int to_x, int to_y, Piece piece){
+public interface Command {
 
-    }
-
-    //TODO
-    public void undo(){
-
-    }
-
-    //TODO
-    public void redo(){
-
-    }
+    void undo();
+    void redo();
 }

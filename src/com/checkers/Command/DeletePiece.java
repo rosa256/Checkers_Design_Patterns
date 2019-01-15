@@ -1,21 +1,29 @@
 package com.checkers.Command;
 
+import com.checkers.Decorator.IPiece;
 import com.checkers.Decorator.Piece;
 
-public class DeletePiece extends Command{
+import java.awt.*;
 
-    //TODO
-    public void Move(int x, int y, int to_x, int to_y, Piece piece){
+public class DeletePiece implements Command{
 
+    private IPiece iPiece;
+    private Point point;
+
+    public DeletePiece(IPiece iPiece, Point point){
+        this.iPiece = iPiece;
+        this.point = point;
     }
 
-    //TODO
-    public void undo(){
-
+    @Override
+    public void undo() {
+        //take((int)point.getX(), (int)point.getY());           //
+        //drop(iPiece, (int)point.getX(), (int)point.getY());
     }
 
-    //TODO
-    public void redo(){
-
+    @Override
+    public void redo() {
+        //take((int)point.getX(), (int)point.getY());
+        //drop(iPiece, (int)point.getX(), (int)point.getY());
     }
 }
