@@ -1,5 +1,6 @@
 package com.checkers.Layout;
 
+import com.checkers.Game;
 import com.checkers.Player;
 
 import javax.swing.*;
@@ -32,16 +33,21 @@ public class OptionsPanel extends JPanel {
 
         int result = JOptionPane.showConfirmDialog(null, this, "Opcje gry", JOptionPane.OK_CANCEL_OPTION);
         if (result == JOptionPane.OK_OPTION) {
+            Player player1, player2;
+            player1 = new Player();
+            player2 = new Player();
             if (!nameField1.getText().equals("")) {
-                playersInGame.get(0).setNickName(nameField1.getText());
+                player1.setNickName(nameField1.getText());
             } else {
-                playersInGame.get(0).setNickName("Gracz 1 - Default");
+                player1.setNickName("Gracz1 - Def");
             }
             if (!nameField2.getText().equals("")) {
-                playersInGame.get(1).setNickName(nameField1.getText());
+                player2.setNickName(nameField1.getText());
             } else {
-                playersInGame.get(1).setNickName("Gracz 2 - Default");
+                player2.setNickName("Gracz1 - Def");
             }
+            playersInGame.add(player1);
+            playersInGame.add(player2);
         }
     }
 

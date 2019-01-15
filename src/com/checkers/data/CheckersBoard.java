@@ -27,7 +27,7 @@ public class CheckersBoard extends JPanel{
     private CheckersData board;
     private int turn;
 
-    public CheckersBoard(Color color1, Color color2) {
+    public CheckersBoard() {
         timeCounter = new TimeCounter();
 
         board = new CheckersData();

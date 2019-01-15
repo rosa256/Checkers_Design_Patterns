@@ -15,6 +15,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.URL;
+import java.util.Date;
 import java.util.List;
 
 public class MenuFrame extends JFrame {
@@ -34,6 +35,7 @@ public class MenuFrame extends JFrame {
         setPreferredSize(new Dimension(1024, 768));
         gameFrame = new GameFrame(playersInGame);
 
+
         AddButtonsToFrame();
 
         //Do wyświetlenia okna Menu
@@ -50,6 +52,8 @@ public class MenuFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 new OptionsPanel(playersInGame);
+                gameFrame.setNickNames(playersInGame.get(0).getNickName(),
+                        playersInGame.get(1).getNickName());
                 gameFrame.setVisible(true);
                 gameFrame.pack();
             }
@@ -98,5 +102,20 @@ public class MenuFrame extends JFrame {
     }
     public JButton getLoadGameButton(){
         return loadGameButton;
+    }
+
+    private Timer setupPlayerTimer(JLabel time_player1) {
+        final long THIRTY_SECOUNDS = 30000;
+        final java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("mm : ss");
+        time_player1.setText(sdf.format(new Date(THIRTY_SECOUNDS)));
+
+        final long[] x = {THIRTY_SECOUNDS - 1000};
+        Timer al = new Timer(1000, new ActionListener(){
+            public void actionPerformed(ActionEvent ev){
+                time_player1.setText(sdf.format(new Date(x[0])));
+                x[0] -= 1000;
+            }
+        });
+        return al;
     }
 }

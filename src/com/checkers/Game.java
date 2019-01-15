@@ -6,6 +6,7 @@ import com.checkers.Observer.IObserver;
 import com.checkers.Observer.ISubject;
 import com.checkers.Strategy.Strategy;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -15,14 +16,16 @@ public class Game implements java.io.Serializable, IObserver {
     //Zapytac czy Game zostanie zamieniony na ISubject
 
     private Board board;
-    private List<Player> playersInGame;
+    private List<Player> playersInGame = new ArrayList<>();
     private Strategy strategy;
     private static Game instance = null;
     private CommandManager commandManager;
     private MenuFrame menuFrame;
 
     private Game(){
-        menuFrame = new MenuFrame(playersInGame);
+        if(menuFrame==null) {
+            menuFrame = new MenuFrame(playersInGame);
+        }
     }
     private Game(Player player){
         playersInGame.add(player);

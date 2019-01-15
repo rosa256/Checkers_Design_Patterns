@@ -15,7 +15,7 @@ public class Player implements java.io.Serializable, ISubject {
     public String getNickName() {
         return nickName;
     }
-
+    public Player(){};
     public Player(IObserver iObserver){
         this.iObserver = iObserver;
     }

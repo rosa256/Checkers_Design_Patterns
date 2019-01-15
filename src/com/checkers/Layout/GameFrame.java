@@ -11,8 +11,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
-import com.checkers.Board;
-import com.checkers.Player;
 import com.checkers.data.*;
 
 public class GameFrame extends JFrame{
@@ -21,12 +19,13 @@ public class GameFrame extends JFrame{
     private static final String ARIAL = "Arial";
     public CheckersBoard board;
 
-    public GameFrame(java.util.List<Player> playersInGame){
-        board = new CheckersBoard(Color.WHITE, Color.BLACK);
+    private JLabel player1 = new JLabel();
+    private JLabel player2 = new JLabel();
+    public GameFrame(java.util.List playersInGame){
+        board = new CheckersBoard();
         JPanel gameBoard = new JPanel();
         JPanel player1panel = new JPanel();
         JLabel gracz1 = new JLabel("Gracz 1: ");
-        JLabel player1 = new JLabel("Jan-HARDCODE");
         JLabel turn1 = new JLabel("Twoja tura!");
         JLabel win1 = new JLabel("Wygrałeś!");
         JPanel turnpanel = new JPanel();
@@ -35,9 +34,15 @@ public class GameFrame extends JFrame{
         Date date = new Date(board.getElapsedBoardTime());
         String formatted = getFormattedTime(date);
         JLabel time = new JLabel(formatted);
+
+        String formatted1 = getFormattedTime(date);
+        String formatted2 = getFormattedTime(date);
+        JLabel time_player1 = new JLabel(formatted1);
+        JLabel time_player2 = new JLabel(formatted2);
+
+
         JPanel player2panel = new JPanel();
         JLabel gracz2 = new JLabel("Gracz 2:");
-        JLabel player2 = new JLabel("Grzegorz-HARDCODE");
         JLabel turn2 = new JLabel("Twoja tura!");
         JLabel win2 = new JLabel("Wygrałeś!");
 
@@ -49,22 +54,30 @@ public class GameFrame extends JFrame{
         gui.setPreferredSize(new Dimension(256, 128));
         gui.setLayout(new GridLayout(4, 1));
 
-        setupPlayerPanel(player1panel, gracz1, player1, turn1, win1, gui, Color.WHITE);
+        setupPlayerPanel(player1panel, gracz1, player1, turn1, win1, gui, Color.BLACK, time_player1);
 
-        setupTimePanel(turnpanel, gui, turnTimeLabel, time, saveButton);
+        setupTimePanel(turnpanel, gui, turnTimeLabel, time);
 
+        Timer tim = setupPlayerTimer(time_player1);
+        tim.start();
+
+        //Stworzyc Graczy przed nacieniejeim OK na okienku. :) i bedzie banglać.
         Timer timer = new Timer(100, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Date currentTime = new Date(board.getElapsedBoardTime());
                 String format = getFormattedTime(currentTime);
                 time.setText(format);
+
             }
         });
+
         timer.setInitialDelay(0);
         timer.start();
 
-        setupPlayerPanel(player2panel, gracz2, player2, turn2, win2, gui, Color.BLACK);
+
+
+        setupPlayerPanel(player2panel, gracz2, player2, turn2, win2, gui, Color.WHITE, time_player2);
         turn2.setVisible(false);
 
         board.addMouseListener(new  MouseAdapter() {
@@ -98,13 +111,28 @@ public class GameFrame extends JFrame{
         this.add(gui, BorderLayout.EAST);
     }
 
+    private Timer setupPlayerTimer(JLabel time_player1) {
+        final long THIRTY_SECOUNDS = 30000;
+        final java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("mm : ss");
+        time_player1.setText(sdf.format(new Date(THIRTY_SECOUNDS)));
+
+        final long[] x = {THIRTY_SECOUNDS - 1000};
+        Timer al = new Timer(1000, new ActionListener(){
+            public void actionPerformed(ActionEvent ev){
+                time_player1.setText(sdf.format(new Date(x[0])));
+                x[0] -= 1000;
+            }
+        });
+        return al;
+    }
+
     private String getFormattedTime(Date date) {
         SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
         formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
         return formatter.format(date);
     }
 
-    private void setupTimePanel(JPanel turnpanel, JPanel gui, JLabel turnTimeLabel, JLabel time, JButton saveButton) {
+    private void setupTimePanel(JPanel turnpanel, JPanel gui, JLabel turnTimeLabel, JLabel time) {
         turnTimeLabel.setFont(new Font(ARIAL, Font.PLAIN, 24));
         turnpanel.add(turnTimeLabel);
         time.setFont(new Font(ARIAL, Font.PLAIN, 24));
@@ -112,14 +140,17 @@ public class GameFrame extends JFrame{
         gui.add(turnpanel);
     }
 
-    private void setupPlayerPanel(JPanel panel, JLabel graczLabel, JLabel playerLabel, JLabel turnLabel, JLabel winLabel, JPanel gui, Color color) {
+    private void setupPlayerPanel(JPanel panel, JLabel graczLabel, JLabel playerLabel, JLabel turnLabel, JLabel winLabel, JPanel gui, Color color, JLabel time_player) {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         graczLabel.setFont(new Font(ARIAL, Font.PLAIN, 24));
+
         panel.add(graczLabel);
         playerLabel.setFont(new Font(ARIAL, Font.PLAIN, 24));
         playerLabel.setOpaque(true);
         setPlayerColor(playerLabel, color);
+        time_player.setFont(new Font(ARIAL, Font.PLAIN, 24));
         panel.add(playerLabel);
+        panel.add(time_player);
         turnLabel.setFont(new Font(ARIAL, Font.PLAIN, 24));
         winLabel.setFont(new Font(ARIAL, Font.PLAIN, 24));
         winLabel.setVisible(false);
@@ -145,4 +176,8 @@ public class GameFrame extends JFrame{
     }
 
 
+    public void setNickNames(String nickName1, String nickName2) {
+        player1.setText(nickName1);
+        player2.setText(nickName2);
+    }
 }
