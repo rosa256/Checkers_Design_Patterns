@@ -15,17 +15,18 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class MenuFrame extends JFrame {
 
     private static final String ARIAL = "Arial"; /* Font style */
-    List<Player> playersInGame;
+    ArrayList<Player> playersInGame ;
     private GameFrame gameFrame;
     private JButton loadGameButton;
 
-    public MenuFrame(List playersInGame){
+    public MenuFrame(ArrayList<Player> playersInGame){
         this.playersInGame = playersInGame;
         setResizable(false);
         setLocation(0, 0);
@@ -33,6 +34,10 @@ public class MenuFrame extends JFrame {
         setLayout(new GridLayout(5, 1));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(1024, 768));
+        Player player1 = new Player();
+        Player player2 = new Player();
+        playersInGame.add(player1);
+        playersInGame.add(player2);
         gameFrame = new GameFrame(playersInGame);
 
 
@@ -104,18 +109,4 @@ public class MenuFrame extends JFrame {
         return loadGameButton;
     }
 
-    private Timer setupPlayerTimer(JLabel time_player1) {
-        final long THIRTY_SECOUNDS = 30000;
-        final java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("mm : ss");
-        time_player1.setText(sdf.format(new Date(THIRTY_SECOUNDS)));
-
-        final long[] x = {THIRTY_SECOUNDS - 1000};
-        Timer al = new Timer(1000, new ActionListener(){
-            public void actionPerformed(ActionEvent ev){
-                time_player1.setText(sdf.format(new Date(x[0])));
-                x[0] -= 1000;
-            }
-        });
-        return al;
-    }
 }

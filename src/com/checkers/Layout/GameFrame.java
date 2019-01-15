@@ -8,9 +8,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.TimeZone;
 
+import com.checkers.Player;
 import com.checkers.data.*;
 
 public class GameFrame extends JFrame{
@@ -21,7 +23,7 @@ public class GameFrame extends JFrame{
 
     private JLabel player1 = new JLabel();
     private JLabel player2 = new JLabel();
-    public GameFrame(java.util.List playersInGame){
+    public GameFrame(ArrayList<Player> playersInGame){
         board = new CheckersBoard();
         JPanel gameBoard = new JPanel();
         JPanel player1panel = new JPanel();
@@ -58,8 +60,6 @@ public class GameFrame extends JFrame{
 
         setupTimePanel(turnpanel, gui, turnTimeLabel, time);
 
-        Timer tim = setupPlayerTimer(time_player1);
-        tim.start();
 
         //Stworzyc Graczy przed nacieniejeim OK na okienku. :) i bedzie banglać.
         Timer timer = new Timer(100, new ActionListener() {
@@ -75,7 +75,10 @@ public class GameFrame extends JFrame{
         timer.setInitialDelay(0);
         timer.start();
 
+        setupPlayerTimer(time_player1,playersInGame.get(0).getTimer());
+        setupPlayerTimer(time_player2,playersInGame.get(1).getTimer());
 
+        playersInGame.get(0).getTimer().start();
 
         setupPlayerPanel(player2panel, gracz2, player2, turn2, win2, gui, Color.WHITE, time_player2);
         turn2.setVisible(false);
@@ -111,19 +114,18 @@ public class GameFrame extends JFrame{
         this.add(gui, BorderLayout.EAST);
     }
 
-    private Timer setupPlayerTimer(JLabel time_player1) {
+    private void setupPlayerTimer(JLabel time_player, Timer timer) {
         final long THIRTY_SECOUNDS = 30000;
         final java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("mm : ss");
-        time_player1.setText(sdf.format(new Date(THIRTY_SECOUNDS)));
+        time_player.setText(sdf.format(new Date(THIRTY_SECOUNDS)));
 
         final long[] x = {THIRTY_SECOUNDS - 1000};
-        Timer al = new Timer(1000, new ActionListener(){
+        timer = new Timer(1000, new ActionListener(){
             public void actionPerformed(ActionEvent ev){
-                time_player1.setText(sdf.format(new Date(x[0])));
+                time_player.setText(sdf.format(new Date(x[0])));
                 x[0] -= 1000;
             }
         });
-        return al;
     }
 
     private String getFormattedTime(Date date) {

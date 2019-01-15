@@ -16,7 +16,7 @@ public class Game implements java.io.Serializable, IObserver {
     //Zapytac czy Game zostanie zamieniony na ISubject
 
     private Board board;
-    private List<Player> playersInGame = new ArrayList<>();
+    private ArrayList<Player> playersInGame = new ArrayList<>();
     private Strategy strategy;
     private static Game instance = null;
     private CommandManager commandManager;

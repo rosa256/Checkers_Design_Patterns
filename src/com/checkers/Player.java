@@ -3,7 +3,7 @@ package com.checkers;
 import com.checkers.Observer.IObserver;
 import com.checkers.Observer.ISubject;
 
-import java.util.Timer;
+import javax.swing.Timer;
 
 public class Player implements java.io.Serializable, ISubject {
 
