@@ -12,7 +12,9 @@ import java.awt.event.MouseEvent;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Checkers {
@@ -22,7 +24,7 @@ public class Checkers {
     private ArrayList<Memento> mementos = new ArrayList<>();
 
     public Checkers(){
-        Game game = Game.getInstance();
+        game = Game.getInstance();
         System.out.println("Wykonalo sie cokowliek?");
 
         game.getMenuFrame().getGameFrame().getSaveButton().addActionListener(new ActionListener() {
@@ -30,7 +32,7 @@ public class Checkers {
             public void actionPerformed(ActionEvent e) {
                 SavePanel savePanel = new SavePanel();
                 if(!savePanel.getNapis().isEmpty())
-                addMemento(new Memento(game.getMenuFrame().getGameFrame(),savePanel.getNapis()));
+                addMemento(new Memento(Game.getInstance(),savePanel.getNapis()));
                 System.out.println();
             }
         });
@@ -38,13 +40,12 @@ public class Checkers {
         game.getMenuFrame().getLoadGameButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GameFrame gameFrame;
                 LoadPanel loadPanel = new LoadPanel();
 
                 try {
                     FileInputStream fileIn = new FileInputStream(System.getProperty("user.dir")+"/tmp/"+loadPanel.getNapis()+".ser");
                     ObjectInputStream in = new ObjectInputStream(fileIn);
-                    gameFrame = (GameFrame) in.readObject();
+                    game = (Game) in.readObject();
                     in.close();
                     fileIn.close();
                 } catch (IOException i) {
@@ -60,12 +61,23 @@ public class Checkers {
 
                 System.out.println("Deserialized GameFrame...");
 
-                gameFrame.board.loadImages();
-                gameFrame.board.setListeners();
 
-                gameFrame.revalidate();
-                gameFrame.setVisible(true);
-                gameFrame.pack();
+                //Coś tu jeszcze naprawic z Timerami.
+
+
+                game.getMenuFrame().getGameFrame().board.loadImages();
+                game.getMenuFrame().getGameFrame().board.setListeners();
+                game.getPlayersInGame().get(0).refreshTimer();
+                game.getPlayersInGame().get(1).refreshTimer();
+                game.getPlayersInGame().get(0).runTimer(game.getMenuFrame().getGameFrame().getTimerPlayerLabels().get(0));
+                game.getPlayersInGame().get(1).runTimer(game.getMenuFrame().getGameFrame().getTimerPlayerLabels().get(1));
+                game.getMenuFrame().getGameFrame().runGameFrameTimers(game.getPlayersInGame());
+
+                System.out.println(game.getPlayersInGame().get(0).getActual_time());
+
+
+                game.getMenuFrame().getGameFrame().setVisible(true);
+                game.getMenuFrame().getGameFrame().pack();
             }
         });
     }

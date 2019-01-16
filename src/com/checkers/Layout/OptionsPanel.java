@@ -9,6 +9,7 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.util.ArrayList;
 import java.util.List;
 
 public class OptionsPanel extends JPanel {
@@ -18,7 +19,7 @@ public class OptionsPanel extends JPanel {
     JLabel player1Label = new JLabel("Gracz 1");
     JLabel player2Label = new JLabel("Gracz 2");
 
-    public OptionsPanel(List<Player> playersInGame){
+    public OptionsPanel(List<Player> playersInGame, GameFrame gameFrame){
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         createGameOptionsListeners(this, nameField1, nameField2, player1Label, player2Label);
@@ -33,13 +34,22 @@ public class OptionsPanel extends JPanel {
 
         int result = JOptionPane.showConfirmDialog(null, this, "Opcje gry", JOptionPane.OK_CANCEL_OPTION);
         if (result == JOptionPane.OK_OPTION) {
+
+            ArrayList<JLabel> labels = gameFrame.getTimerPlayerLabels();
+            Player player_1 = new Player(labels.get(0));
+            Player player_2 = new Player(labels.get(1));
+
+
+            playersInGame.add(player_1);
+            playersInGame.add(player_2);
+
             if (!nameField1.getText().equals("")) {
                 playersInGame.get(0).setNickName(nameField1.getText());
             } else {
                 playersInGame.get(0).setNickName("Gracz1 - Def");
             }
             if (!nameField2.getText().equals("")) {
-                playersInGame.get(1).setNickName(nameField1.getText());
+                playersInGame.get(1).setNickName(nameField2.getText());
             } else {
                 playersInGame.get(1).setNickName("Gracz1 - Def");
             }

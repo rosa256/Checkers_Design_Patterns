@@ -1,23 +1,11 @@
 package com.checkers.Layout;
-import com.checkers.Game;
 import com.checkers.Player;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 public class MenuFrame extends JFrame {
 
@@ -34,13 +22,8 @@ public class MenuFrame extends JFrame {
         setLayout(new GridLayout(5, 1));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(1024, 768));
-        Player player1 = new Player();
-        Player player2 = new Player();
-        playersInGame.add(player1);
-        playersInGame.add(player2);
+
         gameFrame = new GameFrame(playersInGame);
-
-
         AddButtonsToFrame();
 
         //Do wyświetlenia okna Menu
@@ -56,11 +39,14 @@ public class MenuFrame extends JFrame {
         newGameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new OptionsPanel(playersInGame);
+                new OptionsPanel(playersInGame, gameFrame);
                 gameFrame.setNickNames(playersInGame.get(0).getNickName(),
                         playersInGame.get(1).getNickName());
                 gameFrame.setVisible(true);
                 gameFrame.pack();
+
+                playersInGame.get(0).getTimer().start();
+
             }
         });
         add(newGameButton);

@@ -18,7 +18,7 @@ public class Game implements java.io.Serializable, IObserver {
     private Board board;
     private ArrayList<Player> playersInGame = new ArrayList<>();
     private Strategy strategy;
-    private static Game instance = null;
+    private static Game instance = new Game();
     private CommandManager commandManager;
     private MenuFrame menuFrame;
 
@@ -27,12 +27,9 @@ public class Game implements java.io.Serializable, IObserver {
             menuFrame = new MenuFrame(playersInGame);
         }
     }
-    private Game(Player player){
-        playersInGame.add(player);
-    }
     public static Game getInstance(){
         if(instance == null)
-            return new Game();
+            instance = new Game();
         return instance;
     }
 
@@ -43,6 +40,11 @@ public class Game implements java.io.Serializable, IObserver {
     @Override
     public void update(Player player) {
         int index = playersInGame.indexOf(player);
-        playersInGame.get(index).getTimer();
+        System.out.println(playersInGame.get(index).getNickName()+" pozostalo 5 sekund! Pospiesz sie!");
+        //playersInGame.get(index).getTimer();
+    }
+
+    public ArrayList<Player> getPlayersInGame(){
+        return playersInGame;
     }
 }

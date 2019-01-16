@@ -12,7 +12,7 @@ public class Memento {
     private String state;
 
     public Memento(){}
-    public Memento(GameFrame game,String saveName) {
+    public Memento(Game game,String saveName) {
         try {
             FileOutputStream fileOut = new FileOutputStream(System.getProperty("user.dir")+"/tmp/" +saveName +".ser");
             this.state = System.getProperty("user.dir") + "/tmp/" + saveName +".ser";

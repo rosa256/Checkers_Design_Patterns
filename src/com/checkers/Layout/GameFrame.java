@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.TimeZone;
 
+import com.checkers.Game;
 import com.checkers.Player;
 import com.checkers.data.*;
 
@@ -23,13 +24,19 @@ public class GameFrame extends JFrame{
 
     private JLabel player1 = new JLabel();
     private JLabel player2 = new JLabel();
+    public JLabel timeLabel_player1 = new JLabel();
+    public JLabel timeLabel_player2 = new JLabel();
+    private JLabel turn1 = new JLabel("Twoja tura!");
+    private JLabel win1 = new JLabel("Wygrałeś!");
+    private JLabel turn2 = new JLabel("Twoja tura!");
+    private JLabel win2 = new JLabel("Wygrałeś!");
+
+
     public GameFrame(ArrayList<Player> playersInGame){
         board = new CheckersBoard();
         JPanel gameBoard = new JPanel();
         JPanel player1panel = new JPanel();
         JLabel gracz1 = new JLabel("Gracz 1: ");
-        JLabel turn1 = new JLabel("Twoja tura!");
-        JLabel win1 = new JLabel("Wygrałeś!");
         JPanel turnpanel = new JPanel();
         JPanel gui = new JPanel();
         JLabel turnTimeLabel = new JLabel("Czas tury:");
@@ -37,16 +44,10 @@ public class GameFrame extends JFrame{
         String formatted = getFormattedTime(date);
         JLabel time = new JLabel(formatted);
 
-        String formatted1 = getFormattedTime(date);
-        String formatted2 = getFormattedTime(date);
-        JLabel time_player1 = new JLabel(formatted1);
-        JLabel time_player2 = new JLabel(formatted2);
 
 
         JPanel player2panel = new JPanel();
         JLabel gracz2 = new JLabel("Gracz 2:");
-        JLabel turn2 = new JLabel("Twoja tura!");
-        JLabel win2 = new JLabel("Wygrałeś!");
 
 
         gameBoard.setPreferredSize(new Dimension(1024, 768));
@@ -56,77 +57,60 @@ public class GameFrame extends JFrame{
         gui.setPreferredSize(new Dimension(256, 128));
         gui.setLayout(new GridLayout(4, 1));
 
-        setupPlayerPanel(player1panel, gracz1, player1, turn1, win1, gui, Color.BLACK, time_player1);
+        setupPlayerPanel(player1panel, gracz1, player1, turn1, win1, gui, Color.BLACK, timeLabel_player1);
 
         setupTimePanel(turnpanel, gui, turnTimeLabel, time);
 
-
-        //Stworzyc Graczy przed nacieniejeim OK na okienku. :) i bedzie banglać.
-        Timer timer = new Timer(100, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Date currentTime = new Date(board.getElapsedBoardTime());
-                String format = getFormattedTime(currentTime);
-                time.setText(format);
-
-            }
-        });
-
-        timer.setInitialDelay(0);
-        timer.start();
-
-        setupPlayerTimer(time_player1,playersInGame.get(0).getTimer());
-        setupPlayerTimer(time_player2,playersInGame.get(1).getTimer());
-
-        playersInGame.get(0).getTimer().start();
-
-        setupPlayerPanel(player2panel, gracz2, player2, turn2, win2, gui, Color.WHITE, time_player2);
+        setupPlayerPanel(player2panel, gracz2, player2, turn2, win2, gui, Color.WHITE, timeLabel_player2);
         turn2.setVisible(false);
 
+        runGameFrameTimers(playersInGame);
+
+        gui.add(saveButton);
+        this.add(gui, BorderLayout.EAST);
+    }
+
+    public void runGameFrameTimers(ArrayList<Player> playersInGame) {
         board.addMouseListener(new  MouseAdapter() {
             @Override
-            public void mouseReleased(MouseEvent  e) {
+            public void mouseReleased(MouseEvent e) {
                 if (board.getTurn() == 0 && board.isGameOver() == -1) {
                     turn1.setVisible(true);
                     turn2.setVisible(false);
                     win1.setVisible(false);
                     win2.setVisible(false);
+
+                    playersInGame.get(0).getTimer().start();
+                    playersInGame.get(1).getTimer().stop();
+                    timeLabel_player2.setText(new SimpleDateFormat("mm : ss").format(new Date(10000)));
+                    playersInGame.get(1).refreshTimer();
+
+
                 } else if (board.getTurn() == 1 && board.isGameOver() == -1) {
                     turn2.setVisible(true);
                     turn1.setVisible(false);
                     win1.setVisible(false);
                     win2.setVisible(false);
+                    timeLabel_player1.setText(new SimpleDateFormat("mm : ss").format(new Date(10000)));
+                    playersInGame.get(0).getTimer().stop();
+                    playersInGame.get(1).getTimer().start();
+                    playersInGame.get(0).refreshTimer();
                 }
                 if (board.isGameOver() == 0) {
                     turn1.setVisible(false);
                     turn2.setVisible(false);
                     win1.setVisible(true);
-                    timer.stop();
+
                 } else if (board.isGameOver() == 1) {
                     turn1.setVisible(false);
                     turn2.setVisible(false);
                     win2.setVisible(true);
-                    timer.stop();
+
                 }
             }
         });
-        gui.add(saveButton);
-        this.add(gui, BorderLayout.EAST);
     }
 
-    private void setupPlayerTimer(JLabel time_player, Timer timer) {
-        final long THIRTY_SECOUNDS = 30000;
-        final java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("mm : ss");
-        time_player.setText(sdf.format(new Date(THIRTY_SECOUNDS)));
-
-        final long[] x = {THIRTY_SECOUNDS - 1000};
-        timer = new Timer(1000, new ActionListener(){
-            public void actionPerformed(ActionEvent ev){
-                time_player.setText(sdf.format(new Date(x[0])));
-                x[0] -= 1000;
-            }
-        });
-    }
 
     private String getFormattedTime(Date date) {
         SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
@@ -181,5 +165,11 @@ public class GameFrame extends JFrame{
     public void setNickNames(String nickName1, String nickName2) {
         player1.setText(nickName1);
         player2.setText(nickName2);
+    }
+
+    public ArrayList<JLabel> getTimerPlayerLabels(){
+        ArrayList<JLabel> labels = new ArrayList<>();
+        labels.add(timeLabel_player1); labels.add(timeLabel_player2);
+        return labels;
     }
 }
