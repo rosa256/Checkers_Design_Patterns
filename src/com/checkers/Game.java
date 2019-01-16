@@ -59,7 +59,7 @@ public class Game implements java.io.Serializable, IObserver {
         tr=new AffineTransform();
         tr.scale(Piece.WIDTH,Piece.HEIGHT);
 
-        pieces.put(new Point(1, 0), new TransformDecorator(Piece.getPiece(0), tr));
+        pieces.put(new Point(3, 6), new TransformDecorator(Piece.getPiece(6), tr));
         pieces.put(new Point(3, 0), new TransformDecorator(Piece.getPiece(0), tr));
         pieces.put(new Point(5, 0), new TransformDecorator(Piece.getPiece(0), tr));
         pieces.put(new Point(7, 0), new TransformDecorator(Piece.getPiece(0), tr));
@@ -73,7 +73,6 @@ public class Game implements java.io.Serializable, IObserver {
         pieces.put(new Point(6, 1), new TransformDecorator(Piece.getPiece(0), tr));
 
         pieces.put(new Point(1, 6), new TransformDecorator(Piece.getPiece(6), tr));
-        pieces.put(new Point(3, 6), new TransformDecorator(Piece.getPiece(6), tr));
         pieces.put(new Point(5, 6), new TransformDecorator(Piece.getPiece(6), tr));
         pieces.put(new Point(7, 6), new TransformDecorator(Piece.getPiece(6), tr));
         pieces.put(new Point(0, 5), new TransformDecorator(Piece.getPiece(6), tr));
@@ -86,14 +85,14 @@ public class Game implements java.io.Serializable, IObserver {
         pieces.put(new Point(6, 7), new TransformDecorator(Piece.getPiece(6), tr));
     }
 
-        public boolean canMove(int player, int fromRow, int fromCol, int toRow, int toCol, int turn, int index) {
-            if (Game.getInstance().getPieces().containsKey(new Point(toRow,toCol)) == true) {
+        public boolean canMove(int player, int fromCol, int fromRow, int toCol, int toRow, int turn, int index) {
+            if (Game.getInstance().getPieces().containsKey(new Point(toCol,toRow)) == true) { //!Uwaga zamian toCol, na toRow miejscami!!! tylko tu
                 return false;
             }
             boolean nextColumn = toCol == (fromCol + 1) || toCol == (fromCol - 1);
 
-            return (player == 0 && turn == 0) && (index == 0 && toRow == fromRow + 1 && nextColumn)
-                    || (player == 6 && turn == 1) && (index == 6 && toRow == fromRow - 1 && nextColumn);
+            return (player == 0 ) && (index == 0 && toRow == fromRow + 1 && nextColumn)
+                    || (player == 6 ) && (index == 6 && toRow == fromRow - 1 && nextColumn);
         }
 
     public boolean canJump(int player, int fromRow, int fromCol, int toRow, int toCol, int turn) {
@@ -101,17 +100,25 @@ public class Game implements java.io.Serializable, IObserver {
         System.out.println("fromY"+fromCol);
         System.out.println("ToX"+toRow);
         System.out.println("ToY"+toCol);
-        System.out.println("Bity-pozycja:"+(fromRow + toRow) / 2+(fromCol + toCol) / 2);
-        int jumpedChecker = Game.getInstance().getPieces().get(new Point((fromRow + toRow) / 2,(fromCol + toCol) / 2)).getPiece().getIndex();
+        System.out.println("Bity-pozycja:"+(fromCol + toCol) / 2+(fromRow + toRow) / 2);
+        int jumpedChecker=-1;
+        try {
+        jumpedChecker = Game.getInstance().getPieces().get(new Point((fromCol + toCol) / 2, (fromRow + toRow) / 2)).getPiece().getIndex();
+        }catch (NullPointerException e)
+        {
+            return false;
+        }
+        System.out.println("Bity-pozycja:"+(fromCol + toCol) / 2+(fromRow + toRow) / 2);
+
         boolean correctColumn = toCol == (fromCol + 2) || toCol == (fromCol - 2);
         boolean correctRowWhite = toRow == fromRow + 2;
         boolean correctRowBlack = toRow == fromRow - 2;
-        if (Game.getInstance().getPieces().containsKey(new Point(toRow,toCol)) == true) {
+        if (Game.getInstance().getPieces().containsKey(new Point(toCol,toRow)) == true) {
             return false;
         }
-        if (player == 0 && turn == 0) {
+        if (player == 0) {
             return correctRowWhite && correctColumn && ((jumpedChecker == 6) || (jumpedChecker == 10));
-        } else if (player == 6 && turn == 1) {
+        } else if (player == 6) {
             return correctRowBlack && correctColumn && ((jumpedChecker == 0) || (jumpedChecker == 4));
         }
         return false;

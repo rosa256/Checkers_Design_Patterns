@@ -20,7 +20,7 @@ public class CheckersBoard2 extends JPanel{
     private static final int ZEROY = 7;
     private int turn;
     private Game game;
-    private int yfrom,xfrom, xto, yto;
+    private int selectedColFrom, selectedRowFrom, selectedRowTo, selectedColTo;
 
 
 
@@ -39,9 +39,12 @@ public class CheckersBoard2 extends JPanel{
     int x,y;
     private Image image;
     private IPiece dragged = null;
+    private Point savedPoint= null;
     private AffineTransform draggedAffineTransform = null;
     private Point orginalPoint = new Point(0,0);
     private Point mouse = null;
+
+
 
     public void paint(Graphics g)	{
 
@@ -77,45 +80,51 @@ public CheckersBoard2(){
             dragged = take((ev.getX())/Piece.WIDTH, (ev.getY())/Piece.HEIGHT);
 
             if(dragged!=null){
-                xfrom=ev.getX()/Piece.WIDTH;
-                yfrom=ev.getY()/Piece.HEIGHT;
+                selectedRowFrom =ev.getY()/Piece.HEIGHT;
+                selectedColFrom =ev.getX()/Piece.WIDTH;
+                savedPoint = new Point((ev.getX())/Piece.WIDTH, (ev.getY())/Piece.HEIGHT);
                 draggedAffineTransform = new AffineTransform();
                 dragged = new TransformDecorator(dragged,draggedAffineTransform);
                 mouse = ev.getPoint();
-                System.out.println("Zlaaaapalem");
             }
         }
         public void mouseReleased(MouseEvent ev) {
             if (dragged != null) {
-                xto=ev.getX()/Piece.WIDTH;
-                yto=ev.getY()/Piece.HEIGHT;
+                selectedColTo =ev.getX()/Piece.WIDTH;
+                selectedRowTo =ev.getY()/Piece.HEIGHT;
 
                 System.out.println();
-                System.out.println("xFrom"+xfrom+" yfrom"+yfrom+" xT"+xto+" yT"+yto);
+                System.out.println("xFrom"+ selectedRowFrom +" selectedColFrom"+ selectedColFrom +" xT"+ selectedRowTo +" yT"+ selectedColTo);
 
                 int currentIndex = dragged.getPiece().getIndex();
                 System.out.println("INDEX: "+currentIndex);
 
+                boolean someAction=false;
 
-                if ((xfrom + 1 == xto || xfrom - 1 == xto) && (currentIndex == 0 || currentIndex == 6)) {
-                    if (Game.getInstance().canMove(currentIndex, xfrom, yfrom, xto, yto, turn, currentIndex)) {
+                if (Game.getInstance().canMove(currentIndex,  selectedColFrom,selectedRowFrom,selectedColTo , selectedRowTo, turn, currentIndex)) {
+                if ((selectedRowFrom + 1 == selectedRowTo || selectedRowFrom - 1 == selectedRowTo) && (currentIndex == 0 || currentIndex == 6)) {
                         drop(dragged.getPiece(), (ev.getX()) / Piece.WIDTH, (ev.getY()) / Piece.HEIGHT);
-                        System.out.println("Ruch");
-                        System.out.println("Ruch");
+                        someAction=true;
+
                         //changeTurn();
                     }
-                }  else if ((xfrom + 2 == xto || xfrom - 2 == xto) && (currentIndex == 0 || currentIndex == 6)) {
-                    if (Game.getInstance().canJump(currentIndex, xfrom, yfrom, xto, yto, turn)) {
+                }  else if ((selectedRowFrom + 2 == selectedRowTo || selectedRowFrom - 2 == selectedRowTo) && (currentIndex == 0 || currentIndex == 6)) {
+                    if (Game.getInstance().canJump(currentIndex, selectedRowFrom, selectedColFrom, selectedRowTo, selectedColTo, turn)) {
                         drop(dragged.getPiece(), (ev.getX()) / Piece.WIDTH, (ev.getY()) / Piece.HEIGHT);
-                        int jumpRow = (xfrom + xto) / 2;
-                        int jumpCol = (xfrom + yto) / 2;
-                        Game.getInstance().getPieces().remove(new Point(jumpRow,jumpCol));
-                        changeTurn();
+                        int jumpRow = (selectedRowFrom + selectedRowTo) / 2;
+                        int jumpCol = (selectedColFrom + selectedColTo) / 2;
+                        Game.getInstance().getPieces().remove(new Point(jumpCol,jumpRow));
+                        someAction=true;
+                        //changeTurn();
                     }
-                    repaint();
                 }
-            }
+
+                if(!someAction)
+                    drop(dragged.getPiece(),savedPoint.x,savedPoint.y);
                 dragged = null;
+                System.out.println("Size:"+Game.getInstance().getPieces().size());
+                repaint();
+            }
         }
     });
     this.addMouseMotionListener(new MouseMotionAdapter(){
