@@ -55,7 +55,7 @@ public class MenuFrame extends JFrame {
                 gameFrame.setNickNames(playersInGame.get(0).getNickName(),
                         playersInGame.get(1).getNickName());
 
-                board = new CheckersBoard2();
+                board = new CheckersBoard2(gameFrame.getRedo(),gameFrame.getUndo());
                 gameFrame.add(board);
                 Game.getInstance().loadPieces();
                 gameFrame.setVisible(true);

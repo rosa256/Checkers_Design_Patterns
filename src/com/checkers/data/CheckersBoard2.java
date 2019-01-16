@@ -22,7 +22,7 @@ public class CheckersBoard2 extends JPanel{
     private int turn;
     private Game game;
     private int selectedColFrom, selectedRowFrom, selectedRowTo, selectedColTo;
-
+    JButton undo,redo;
 
     private HashMap<Point, IPiece> board = new HashMap<Point, IPiece>();
 
@@ -46,7 +46,6 @@ public class CheckersBoard2 extends JPanel{
     private Point mouse = null;
 
 
-
     public void paint(Graphics g)	{
 
         g.drawImage(image, 0, 0, null);
@@ -63,14 +62,15 @@ public class CheckersBoard2 extends JPanel{
     }
 
 
-public CheckersBoard2(){
+public CheckersBoard2(JButton redo, JButton undo){
     AffineTransform transform = new AffineTransform();
     //transform.translate(ZEROX, ZEROY);
     transform.scale(128, 96);
+    this.undo = undo;
+    this.redo = redo;
 
     //Game.getInstance().loadPieces();
     board = Game.getInstance().getPieces();
-
     image = new ImageIcon("src/com/checkers/pictures/board.png").getImage()
             .getScaledInstance(1024,768,Image.SCALE_SMOOTH);
     setPreferredSize(new Dimension(1024, 768));
@@ -89,6 +89,7 @@ public CheckersBoard2(){
                 mouse = ev.getPoint();
             }
         }
+
         public void mouseReleased(MouseEvent ev) {
             if (dragged != null) {
                 selectedColTo =ev.getX()/Piece.WIDTH;
@@ -128,6 +129,23 @@ public CheckersBoard2(){
             }
         }
     });
+
+    undo.setEnabled(true);
+    redo.setEnabled(true);
+    undo.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            System.out.println("JEEEJ DZIALAM UNDO");
+        }
+    });
+
+    redo.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            System.out.println("JEEEJ DZIALAM REDO");
+        }
+    });
+
     this.addMouseMotionListener(new MouseMotionAdapter(){
         public void mouseDragged(MouseEvent ev)	{
             draggedAffineTransform.setToTranslation((int)(ev.getX() - CheckersBoard2.this.mouse.getX()), (int)(ev.getY() - CheckersBoard2.this.mouse.getY()));
