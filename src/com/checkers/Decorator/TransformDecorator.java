@@ -7,16 +7,16 @@ public class TransformDecorator extends Decorator{
 
     private AffineTransform transform;
 
-    public TransformDecorator(IPiece iPiece, AffineTransform affineTransform) {
-        super(iPiece);
-        transform = affineTransform;
+    public TransformDecorator(IPiece block,AffineTransform affineTransform) {
+        super(block);
+        this.transform = affineTransform;
     }
 
     @Override
-    public void draw(Graphics2D graphics2D, int x, int y) {
-        AffineTransform affineTransform = graphics2D.getTransform();
-        graphics2D.transform(transform);
-        iPiece.draw(graphics2D, x, y);
-        graphics2D.setTransform(affineTransform);
+    public void draw(Graphics2D g, int X, int Y) {
+        AffineTransform tr = g.getTransform();
+        g.transform(transform);
+        block.draw(g,X,Y);
+        g.setTransform(tr);
     }
 }

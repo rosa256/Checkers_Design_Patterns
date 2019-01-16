@@ -65,8 +65,8 @@ public class Checkers {
                 //Coś tu jeszcze naprawic z Timerami.
 
 
-                game.getMenuFrame().getGameFrame().board.loadImages();
-                game.getMenuFrame().getGameFrame().board.setListeners();
+                //game.getMenuFrame().getGameFrame().board.loadImages();
+               // game.getMenuFrame().getGameFrame().board.setListeners();
                 game.getPlayersInGame().get(0).refreshTimer();
                 game.getPlayersInGame().get(1).refreshTimer();
                 game.getPlayersInGame().get(0).runTimer(game.getMenuFrame().getGameFrame().getTimerPlayerLabels().get(0));

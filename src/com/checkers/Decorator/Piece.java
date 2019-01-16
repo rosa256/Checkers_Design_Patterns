@@ -7,26 +7,32 @@ import java.util.Map;
 
 public class Piece implements IPiece{
 
-    private static final Image image = new ImageIcon("pieces4.png").getImage();
-    private int index;
-    private static Map<Integer,Piece> pool = new HashMap<>();
+    public static final int TILESIZE = 32;
+    private static Image image = new ImageIcon("pieces4.png").getImage();
 
-    public void draw(Graphics2D g, int x, int y) {
-        g.drawImage(image, x, y, x + 1, y + 1, index * TILESIZE, 0, (index + 1) * TILESIZE, TILESIZE, null);
+    private Integer index;
+    private Piece(Integer idx){
+        this.index = idx;
     }
 
-    private Piece(int index) {
-        this.index = index;
+    private static final HashMap<Integer, Piece> piecesByIdx = new HashMap<Integer, Piece>();
+
+    public static Piece getPiece(Integer index){
+        Piece piece = piecesByIdx.get(index);
+        if(piece == null) {
+            piece = new Piece(index);
+            piecesByIdx.put(index, new Piece(index));
+        }
+        return piece;
+    }
+
+    public void draw(Graphics2D g, int X, int Y) {
+        g.drawImage(image, X, Y, X+1, Y+1,
+                index*TILESIZE, 0, (index+1)*TILESIZE, TILESIZE, null);   // tu bedzie przekazywany stan zewnetrzny
     }
 
     @Override
-    public IPiece getDecoratedPiece(int x, int y) {
+    public IPiece getPiece() {
         return null;
-    }
-
-    public static Piece getPiece(Integer index){
-        if(!pool.containsKey(index))
-            pool.put(index, new Piece(index));
-        return pool.get(index);
     }
 }

@@ -20,7 +20,7 @@ public class GameFrame extends JFrame{
 
     private JButton saveButton = new JButton("Save");
     private static final String ARIAL = "Arial";
-    public CheckersBoard board;
+    public CheckersBoard2 board;
 
     private JLabel player1 = new JLabel();
     private JLabel player2 = new JLabel();
@@ -33,16 +33,18 @@ public class GameFrame extends JFrame{
 
 
     public GameFrame(ArrayList<Player> playersInGame){
-        board = new CheckersBoard();
+        //board = new CheckersBoard();
+        board = new CheckersBoard2();
+        add(board);
         JPanel gameBoard = new JPanel();
         JPanel player1panel = new JPanel();
         JLabel gracz1 = new JLabel("Gracz 1: ");
         JPanel turnpanel = new JPanel();
         JPanel gui = new JPanel();
         JLabel turnTimeLabel = new JLabel("Czas tury:");
-        Date date = new Date(board.getElapsedBoardTime());
-        String formatted = getFormattedTime(date);
-        JLabel time = new JLabel(formatted);
+        //Date date = new Date(board.getElapsedBoardTime());
+        //String formatted = getFormattedTime(date);
+        //JLabel time = new JLabel(formatted);
 
 
 
@@ -53,18 +55,18 @@ public class GameFrame extends JFrame{
         gameBoard.setPreferredSize(new Dimension(1024, 768));
 
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.add(board);
+        //this.add(board);
         gui.setPreferredSize(new Dimension(256, 128));
         gui.setLayout(new GridLayout(4, 1));
 
         setupPlayerPanel(player1panel, gracz1, player1, turn1, win1, gui, Color.BLACK, timeLabel_player1);
 
-        setupTimePanel(turnpanel, gui, turnTimeLabel, time);
+        //setupTimePanel(turnpanel, gui, turnTimeLabel, time);
 
         setupPlayerPanel(player2panel, gracz2, player2, turn2, win2, gui, Color.WHITE, timeLabel_player2);
         turn2.setVisible(false);
 
-        runGameFrameTimers(playersInGame);
+//        runGameFrameTimers(playersInGame);
 
         gui.add(saveButton);
         this.add(gui, BorderLayout.EAST);
