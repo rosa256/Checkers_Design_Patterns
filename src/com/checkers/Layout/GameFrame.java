@@ -35,24 +35,20 @@ public class GameFrame extends JFrame{
     private JButton redo = new JButton(new ImageIcon("redo.png"));
 
 
+    public JButton getUndo() {
+        return undo;
+    }
+
+    public JButton getRedo() {
+        return redo;
+    }
+
     public GameFrame(){
         //board = new CheckersBoard();
         bar.add(undo);
         bar.add(redo);
         undo.setEnabled(false);
         redo.setEnabled(false);
-        undo.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        redo.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
         this.add(bar, BorderLayout.PAGE_START);
         JPanel gameBoard = new JPanel();
         JPanel player1panel = new JPanel();

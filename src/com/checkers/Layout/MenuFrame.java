@@ -62,7 +62,6 @@ public class MenuFrame extends JFrame {
                 gameFrame.repaint();
                 gameFrame.revalidate();
 
-
                 gameFrame.pack();
 
                 playersInGame.get(0).getTimer().start();

@@ -5,6 +5,7 @@ import com.checkers.Decorator.IPiece;
 import com.checkers.Decorator.Piece;
 import com.checkers.Decorator.TransformDecorator;
 import com.checkers.Game;
+import com.checkers.Layout.MenuFrame;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,7 +22,6 @@ public class CheckersBoard2 extends JPanel{
     private int turn;
     private Game game;
     private int selectedColFrom, selectedRowFrom, selectedRowTo, selectedColTo;
-
 
 
     private HashMap<Point, IPiece> board = new HashMap<Point, IPiece>();

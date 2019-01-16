@@ -87,6 +87,7 @@ public class Checkers {
                 menuFrame.getGameFrame().pack();
             }
         });
+
     }
 
     //TODO
