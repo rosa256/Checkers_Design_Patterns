@@ -35,14 +35,6 @@ public class OptionsPanel extends JPanel {
         int result = JOptionPane.showConfirmDialog(null, this, "Opcje gry", JOptionPane.OK_CANCEL_OPTION);
         if (result == JOptionPane.OK_OPTION) {
 
-            ArrayList<JLabel> labels = gameFrame.getTimerPlayerLabels();
-            Player player_1 = new Player(labels.get(0));
-            Player player_2 = new Player(labels.get(1));
-
-
-            playersInGame.add(player_1);
-            playersInGame.add(player_2);
-
             if (!nameField1.getText().equals("")) {
                 playersInGame.get(0).setNickName(nameField1.getText());
             } else {

@@ -2,6 +2,7 @@ package com.checkers;
 
 import com.checkers.Layout.GameFrame;
 import com.checkers.Layout.LoadPanel;
+import com.checkers.Layout.MenuFrame;
 import com.checkers.Layout.SavePanel;
 import com.checkers.Memento.Memento;
 
@@ -22,12 +23,18 @@ public class Checkers {
     private Game game;
     private Statistics statistics;
     private ArrayList<Memento> mementos = new ArrayList<>();
+    private MenuFrame menuFrame;
+
+
 
     public Checkers(){
         game = Game.getInstance();
         System.out.println("Wykonalo sie cokowliek?");
 
-        game.getMenuFrame().getGameFrame().getSaveButton().addActionListener(new ActionListener() {
+
+        menuFrame = new MenuFrame();
+
+        menuFrame.getGameFrame().getSaveButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 SavePanel savePanel = new SavePanel();
@@ -37,7 +44,7 @@ public class Checkers {
             }
         });
 
-        game.getMenuFrame().getLoadGameButton().addActionListener(new ActionListener() {
+        menuFrame.getLoadGameButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 LoadPanel loadPanel = new LoadPanel();
@@ -69,15 +76,15 @@ public class Checkers {
                // game.getMenuFrame().getGameFrame().board.setListeners();
                 game.getPlayersInGame().get(0).refreshTimer();
                 game.getPlayersInGame().get(1).refreshTimer();
-                game.getPlayersInGame().get(0).runTimer(game.getMenuFrame().getGameFrame().getTimerPlayerLabels().get(0));
-                game.getPlayersInGame().get(1).runTimer(game.getMenuFrame().getGameFrame().getTimerPlayerLabels().get(1));
-                game.getMenuFrame().getGameFrame().runGameFrameTimers(game.getPlayersInGame());
+                game.getPlayersInGame().get(0).runTimer(menuFrame.getGameFrame().getTimerPlayerLabels().get(0));
+                game.getPlayersInGame().get(1).runTimer(menuFrame.getGameFrame().getTimerPlayerLabels().get(1));
+                menuFrame.getGameFrame().runGameFrameTimers(game.getPlayersInGame());
 
                 System.out.println(game.getPlayersInGame().get(0).getActual_time());
 
 
-                game.getMenuFrame().getGameFrame().setVisible(true);
-                game.getMenuFrame().getGameFrame().pack();
+                menuFrame.getGameFrame().setVisible(true);
+                menuFrame.getGameFrame().pack();
             }
         });
     }

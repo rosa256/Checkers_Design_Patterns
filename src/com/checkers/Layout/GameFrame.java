@@ -3,8 +3,6 @@ package com.checkers.Layout;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
@@ -32,10 +30,8 @@ public class GameFrame extends JFrame{
     private JLabel win2 = new JLabel("Wygrałeś!");
 
 
-    public GameFrame(ArrayList<Player> playersInGame){
+    public GameFrame(){
         //board = new CheckersBoard();
-        board = new CheckersBoard2();
-        add(board);
         JPanel gameBoard = new JPanel();
         JPanel player1panel = new JPanel();
         JLabel gracz1 = new JLabel("Gracz 1: ");

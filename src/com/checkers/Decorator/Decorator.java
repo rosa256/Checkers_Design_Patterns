@@ -18,4 +18,9 @@ public class Decorator implements IPiece{
     public IPiece getPiece() {
         return block;
     }
+
+    @Override
+    public int getIndex() {
+        return block.getIndex();
+    }
 }

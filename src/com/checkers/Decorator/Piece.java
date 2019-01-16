@@ -7,8 +7,13 @@ import java.util.Map;
 
 public class Piece implements IPiece{
 
-    public static final int TILESIZE = 32;
+    public static final int WIDTH = 128;
+    public static final int HEIGHT = 96;
     private static Image image = new ImageIcon("pieces4.png").getImage();
+
+    public int getIndex() {
+        return index;
+    }
 
     private Integer index;
     private Piece(Integer idx){

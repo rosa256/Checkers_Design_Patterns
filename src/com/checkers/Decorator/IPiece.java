@@ -9,4 +9,5 @@ public interface IPiece {
     void draw(Graphics2D graphics2D, int x, int y);
 
     IPiece getPiece();
+    int getIndex();
 }

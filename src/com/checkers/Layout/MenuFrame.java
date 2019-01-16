@@ -1,5 +1,7 @@
 package com.checkers.Layout;
+import com.checkers.Game;
 import com.checkers.Player;
+import com.checkers.data.CheckersBoard2;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,12 +12,13 @@ import java.util.ArrayList;
 public class MenuFrame extends JFrame {
 
     private static final String ARIAL = "Arial"; /* Font style */
-    ArrayList<Player> playersInGame ;
+
     private GameFrame gameFrame;
     private JButton loadGameButton;
+    private ArrayList<Player> playersInGame = new ArrayList<>();
+    public CheckersBoard2 board;
 
-    public MenuFrame(ArrayList<Player> playersInGame){
-        this.playersInGame = playersInGame;
+    public MenuFrame(){
         setResizable(false);
         setLocation(0, 0);
         setTitle("Design Patterns");
@@ -23,8 +26,17 @@ public class MenuFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(1024, 768));
 
-        gameFrame = new GameFrame(playersInGame);
+        gameFrame = new GameFrame();
         AddButtonsToFrame();
+
+        ArrayList<JLabel> labels = gameFrame.getTimerPlayerLabels();
+        Player player_1 = new Player(labels.get(0));
+        Player player_2 = new Player(labels.get(1));
+
+
+
+        playersInGame.add(player_1);
+        playersInGame.add(player_2);
 
         //Do wyświetlenia okna Menu
         setVisible(true);
@@ -42,7 +54,15 @@ public class MenuFrame extends JFrame {
                 new OptionsPanel(playersInGame, gameFrame);
                 gameFrame.setNickNames(playersInGame.get(0).getNickName(),
                         playersInGame.get(1).getNickName());
+
+                board = new CheckersBoard2();
+                gameFrame.add(board);
+                Game.getInstance().loadPieces();
                 gameFrame.setVisible(true);
+                gameFrame.repaint();
+                gameFrame.revalidate();
+
+
                 gameFrame.pack();
 
                 playersInGame.get(0).getTimer().start();
@@ -94,5 +114,6 @@ public class MenuFrame extends JFrame {
     public JButton getLoadGameButton(){
         return loadGameButton;
     }
+
 
 }
