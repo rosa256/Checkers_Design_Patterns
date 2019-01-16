@@ -2,7 +2,7 @@ package com.checkers.Command;
 
 import com.checkers.data.CheckersBoard2;
 
-public class CommandMakro {
+public class CommandMakro implements Command{
 
     private Command[] commands = new Command[2];
 

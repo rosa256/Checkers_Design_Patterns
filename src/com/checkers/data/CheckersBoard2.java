@@ -1,6 +1,9 @@
 package com.checkers.data;
 
 import com.checkers.Command.Command;
+import com.checkers.Command.CommandMakro;
+import com.checkers.Command.DeletePiece;
+import com.checkers.Command.Move;
 import com.checkers.Decorator.IPiece;
 import com.checkers.Decorator.Piece;
 import com.checkers.Decorator.TransformDecorator;
@@ -16,6 +19,9 @@ import java.util.LinkedList;
 import java.util.Map;
 
 public class CheckersBoard2 extends JPanel{
+
+    private LinkedList<Command> undoList = new LinkedList<>();
+    private LinkedList<Command> redoList = new LinkedList<>();
 
     private static final int ZEROX = 23;
     private static final int ZEROY = 7;
@@ -107,7 +113,7 @@ public CheckersBoard2(JButton redo, JButton undo){
                 if ((selectedRowFrom + 1 == selectedRowTo || selectedRowFrom - 1 == selectedRowTo) && (currentIndex == 0 || currentIndex == 6)) {
                         drop(dragged.getPiece(), (ev.getX()) / Piece.WIDTH, (ev.getY()) / Piece.HEIGHT);
                         someAction=true;
-
+                        undoList.push(new Move(dragged.getPiece(), savedPoint, new Point(ev.getX()/Piece.WIDTH, ev.getY()/Piece.HEIGHT)));
                         //changeTurn();
                     }
                 }  else if ((selectedRowFrom + 2 == selectedRowTo || selectedRowFrom - 2 == selectedRowTo) && (currentIndex == 0 || currentIndex == 6)) {
@@ -116,8 +122,12 @@ public CheckersBoard2(JButton redo, JButton undo){
                         int jumpRow = (selectedRowFrom + selectedRowTo) / 2;
                         int jumpCol = (selectedColFrom + selectedColTo) / 2;
                         Game.getInstance().getPieces().remove(new Point(jumpCol,jumpRow));
+                        Point zbity = new Point(jumpCol,jumpRow);
                         someAction=true;
                         //changeTurn();
+                        DeletePiece deletePiece = new DeletePiece(board.get(zbity), zbity);
+                        Move move = new Move(dragged, savedPoint, new Point(ev.getX()/Piece.WIDTH, ev.getY()/Piece.HEIGHT));
+                        undoList.push(new CommandMakro(deletePiece, move));
                     }
                 }
 
@@ -126,6 +136,9 @@ public CheckersBoard2(JButton redo, JButton undo){
                 dragged = null;
                 System.out.println("Size:"+Game.getInstance().getPieces().size());
                 repaint();
+                redoList.clear();
+                redo.setEnabled(false);
+                undo.setEnabled(true);
             }
         }
     });
@@ -136,6 +149,13 @@ public CheckersBoard2(JButton redo, JButton undo){
         @Override
         public void actionPerformed(ActionEvent e) {
             System.out.println("JEEEJ DZIALAM UNDO");
+            undoList.pop();
+            Command command = undoList.pop();
+            redoList.push(command);
+            command.undo(CheckersBoard2.this);
+            if(undoList.isEmpty())
+                undo.setEnabled(false);
+            redo.setEnabled(true);
         }
     });
 
@@ -143,6 +163,12 @@ public CheckersBoard2(JButton redo, JButton undo){
         @Override
         public void actionPerformed(ActionEvent e) {
             System.out.println("JEEEJ DZIALAM REDO");
+            Command command = redoList.pop();
+            undoList.push(command);
+            command.redo(CheckersBoard2.this);
+            if(redoList.isEmpty())
+                redo.setEnabled(false);
+            undo.setEnabled(true);
         }
     });
 
