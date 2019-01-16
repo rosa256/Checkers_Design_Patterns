@@ -29,7 +29,7 @@ public class CheckersBoard2 extends JPanel{
         repaint();
         board.put(new Point(x, y), dragged2);
     }
-    private IPiece take(int x, int y)	{
+    public IPiece take(int x, int y)	{
         repaint();
         orginalPoint.x=x;
         orginalPoint.y=y;

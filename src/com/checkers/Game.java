@@ -59,7 +59,7 @@ public class Game implements java.io.Serializable, IObserver {
         tr=new AffineTransform();
         tr.scale(Piece.WIDTH,Piece.HEIGHT);
 
-        pieces.put(new Point(3, 6), new TransformDecorator(Piece.getPiece(6), tr));
+        pieces.put(new Point(1, 0), new TransformDecorator(Piece.getPiece(0), tr));
         pieces.put(new Point(3, 0), new TransformDecorator(Piece.getPiece(0), tr));
         pieces.put(new Point(5, 0), new TransformDecorator(Piece.getPiece(0), tr));
         pieces.put(new Point(7, 0), new TransformDecorator(Piece.getPiece(0), tr));
@@ -73,6 +73,7 @@ public class Game implements java.io.Serializable, IObserver {
         pieces.put(new Point(6, 1), new TransformDecorator(Piece.getPiece(0), tr));
 
         pieces.put(new Point(1, 6), new TransformDecorator(Piece.getPiece(6), tr));
+        pieces.put(new Point(3, 6), new TransformDecorator(Piece.getPiece(6), tr));
         pieces.put(new Point(5, 6), new TransformDecorator(Piece.getPiece(6), tr));
         pieces.put(new Point(7, 6), new TransformDecorator(Piece.getPiece(6), tr));
         pieces.put(new Point(0, 5), new TransformDecorator(Piece.getPiece(6), tr));
