@@ -7,20 +7,14 @@ import java.util.Stack;
 
 public class CommandManager{
 
-    private Command[] commands = new Command[2];
+    private LinkedList<Command> undoList = new LinkedList<>();
+    private LinkedList<Command> redoList = new LinkedList<>();
 
-    public CommandManager(Command deletePiece, Command move) {
-        commands[0]= deletePiece;
-        commands[1]= move;
+    public LinkedList<Command> getUndoList() {
+        return undoList;
     }
 
-    public void undo(CheckersBoard2 checkersBoard2){
-        commands[1].undo(checkersBoard2);
-        commands[0].undo(checkersBoard2);
-    }
-
-    public void redo(CheckersBoard2 checkersBoard2){
-        commands[0].redo(checkersBoard2);
-        commands[1].redo(checkersBoard2);
+    public LinkedList<Command> getRedoList() {
+        return redoList;
     }
 }

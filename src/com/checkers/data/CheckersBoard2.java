@@ -1,5 +1,6 @@
 package com.checkers.data;
 
+import com.checkers.Command.Command;
 import com.checkers.Decorator.IPiece;
 import com.checkers.Decorator.Piece;
 import com.checkers.Decorator.TransformDecorator;
@@ -7,11 +8,10 @@ import com.checkers.Game;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
+import java.awt.event.*;
 import java.awt.geom.AffineTransform;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 public class CheckersBoard2 extends JPanel{
@@ -25,6 +25,7 @@ public class CheckersBoard2 extends JPanel{
 
 
     private HashMap<Point, IPiece> board = new HashMap<Point, IPiece>();
+
     public void drop(IPiece dragged2, int x, int y)	{
         repaint();
         board.put(new Point(x, y), dragged2);
@@ -153,4 +154,5 @@ public CheckersBoard2(){
             turn = 0;
         }
     }
+
 }

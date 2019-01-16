@@ -38,7 +38,9 @@ public class Game implements java.io.Serializable, IObserver {
         return instance;
     }
 
-
+    public CommandManager getCommandManager() {
+        return commandManager;
+    }
 
     @Override
     public void update(Player player) {
