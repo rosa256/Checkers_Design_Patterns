@@ -146,7 +146,19 @@ public class CheckersBoard2 extends JPanel{
                             Game.getInstance().getPieces().remove(new Point(jumpCol,jumpRow));
                         }
                     }else if((currentIndex == 4 || currentIndex == 10)&&(Game.getInstance().canKingMoveJump(currentIndex, selectedColFrom, selectedRowFrom, selectedColTo, selectedRowTo, turn))){
-
+                            drop(dragged.getPiece(), ev.getX()/Piece.WIDTH, ev.getY()/Piece.HEIGHT);
+                            if(Game.getInstance().getColPionkaDoBicia() != 0 && Game.getInstance().getRowPionkaDoBicia() != 0){
+                                Point doBicia = new Point(Game.getInstance().getColPionkaDoBicia(), Game.getInstance().getRowPionkaDoBicia());
+                                DeletePiece deletePiece = new DeletePiece(board.get(doBicia), doBicia);
+                                Move move = new Move(dragged.getPiece(), savedPoint, new Point(ev.getX()/Piece.WIDTH, ev.getY()/Piece.HEIGHT));
+                                Game.getInstance().getUndoList().push(new CommandMakro(deletePiece, move));
+                                Game.getInstance().getPieces().remove(new Point(Game.getInstance().getColPionkaDoBicia(),Game.getInstance().getRowPionkaDoBicia()));
+                                someAction=true;
+                            }else{
+                                someAction = true;
+                                Game.getInstance().getUndoList().push(new Move(dragged.getPiece(), savedPoint, new Point(ev.getX()/Piece.WIDTH, ev.getY()/Piece.HEIGHT)));
+                            }
+                            changeTurn();
                     }
 
                     if(!someAction)
