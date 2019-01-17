@@ -21,9 +21,6 @@ import java.util.Map;
 
 public class CheckersBoard2 extends JPanel{
 
-    private LinkedList<Command> undoList = new LinkedList<>();
-    private LinkedList<Command> redoList = new LinkedList<>();
-
     private static final int ZEROX = 23;
     private static final int ZEROY = 7;
     private int turn=1;
@@ -31,7 +28,7 @@ public class CheckersBoard2 extends JPanel{
     private int selectedColFrom, selectedRowFrom, selectedRowTo, selectedColTo;
     JButton undo,redo;
 
-    private HashMap<Point, IPiece> board = new HashMap<Point, IPiece>();
+    private HashMap<Point, IPiece> board;
 
     public void drop(IPiece dragged2, int x, int y)	{
         repaint();
@@ -69,124 +66,132 @@ public class CheckersBoard2 extends JPanel{
     }
 
 
-public CheckersBoard2(JButton redo, JButton undo){
-    AffineTransform transform = new AffineTransform();
-    //transform.translate(ZEROX, ZEROY);
-    transform.scale(128, 96);
-    this.undo = undo;
-    this.redo = redo;
+    public CheckersBoard2(JButton redo, JButton undo){
+        AffineTransform transform = new AffineTransform();
+        //transform.translate(ZEROX, ZEROY);
+        transform.scale(128, 96);
+        this.undo = undo;
+        this.redo = redo;
 
-    //Game.getInstance().loadPieces();
-    board = Game.getInstance().getPieces();
-    image = new ImageIcon("src/com/checkers/pictures/board.png").getImage()
-            .getScaledInstance(1024,768,Image.SCALE_SMOOTH);
-    setPreferredSize(new Dimension(1024, 768));
+        //Game.getInstance().loadPieces();
+        board = Game.getInstance().getPieces();
+        image = new ImageIcon("src/com/checkers/pictures/board.png").getImage()
+                .getScaledInstance(1024,768,Image.SCALE_SMOOTH);
+        setPreferredSize(new Dimension(1024, 768));
 
-    this.addMouseListener(new MouseAdapter(){
+        this.addMouseListener(new MouseAdapter(){
 
-        public void mousePressed(MouseEvent ev) {
-            dragged = take((ev.getX())/Piece.WIDTH, (ev.getY())/Piece.HEIGHT);
+            public void mousePressed(MouseEvent ev) {
+                dragged = take((ev.getX())/Piece.WIDTH, (ev.getY())/Piece.HEIGHT);
 
-            if(dragged!=null){
-                selectedRowFrom =ev.getY()/Piece.HEIGHT;
-                selectedColFrom =ev.getX()/Piece.WIDTH;
-                savedPoint = new Point((ev.getX())/Piece.WIDTH, (ev.getY())/Piece.HEIGHT);
-                draggedAffineTransform = new AffineTransform();
-                dragged = new TransformDecorator(dragged,draggedAffineTransform);
-                mouse = ev.getPoint();
-            }
-        }
-
-        public void mouseReleased(MouseEvent ev) {
-            if (dragged != null) {
-                selectedColTo =ev.getX()/Piece.WIDTH;
-                selectedRowTo =ev.getY()/Piece.HEIGHT;
-
-
-                int currentIndex = dragged.getPiece().getIndex();
-
-                boolean someAction=false;
-
-                if (Game.getInstance().canMove(currentIndex,  selectedColFrom,selectedRowFrom,selectedColTo , selectedRowTo, turn)) {
-                    if ((selectedRowFrom + 1 == selectedRowTo || selectedRowFrom - 1 == selectedRowTo) && (currentIndex == 0 || currentIndex == 6)) {
-
-                        System.out.println("COF: " + selectedColFrom + " RWF: " + selectedRowFrom);
-                        System.out.println(savedPoint.x+ " " + savedPoint.y);
-
-                        System.out.println(dragged.getIndex());
-
-                        System.out.println(dragged.getIndex());
-                        someAction=true;
-                        Game.getInstance().getUndoList().push(new Move(dragged.getPiece(), savedPoint, new Point(ev.getX()/Piece.WIDTH, ev.getY()/Piece.HEIGHT)));
-
-                        //Damka Biala
-                        if (selectedRowTo == 0 && board.containsKey(new Point(selectedColTo, selectedRowTo)) && board.get(new Point(selectedColTo, selectedRowTo)).getIndex() == 6) {
-
-                            drop(new IPiece(10),(ev.getX()) / Piece.WIDTH, (ev.getY()) / Piece.HEIGHT);
-                            undoList.push(new Move(dragged.getPiece(), savedPoint, new Point(ev.getX() / Piece.WIDTH, ev.getY() / Piece.HEIGHT)));
-                        }else
-                            drop(dragged.getPiece(), (ev.getX()) / Piece.WIDTH, (ev.getY()) / Piece.HEIGHT);
-
-                    }
-                        //changeTurn();
-                }  else if ((selectedRowFrom + 2 == selectedRowTo || selectedRowFrom - 2 == selectedRowTo) && (currentIndex == 0 || currentIndex == 6)) {
-                    if (Game.getInstance().canJump(currentIndex, selectedRowFrom, selectedColFrom, selectedRowTo, selectedColTo, turn)) {
-                        drop(dragged.getPiece(), (ev.getX()) / Piece.WIDTH, (ev.getY()) / Piece.HEIGHT);
-                        int jumpRow = (selectedRowFrom + selectedRowTo) / 2;
-                        int jumpCol = (selectedColFrom + selectedColTo) / 2;
-                        Point zbity = new Point(jumpCol,jumpRow);
-                        someAction=true;
-                        //changeTurn();
-                        DeletePiece deletePiece = new DeletePiece(board.get(zbity), zbity);
-                        Move move = new Move(dragged.getPiece(), savedPoint, new Point(ev.getX()/Piece.WIDTH, ev.getY()/Piece.HEIGHT));
-                        Game.getInstance().getUndoList().push(new CommandMakro(deletePiece, move));
-                        Game.getInstance().getPieces().remove(new Point(jumpCol,jumpRow));
-                    }
+                if(dragged!=null){
+                    selectedRowFrom =ev.getY()/Piece.HEIGHT;
+                    selectedColFrom =ev.getX()/Piece.WIDTH;
+                    savedPoint = new Point((ev.getX())/Piece.WIDTH, (ev.getY())/Piece.HEIGHT);
+                    draggedAffineTransform = new AffineTransform();
+                    dragged = new TransformDecorator(dragged,draggedAffineTransform);
+                    mouse = ev.getPoint();
                 }
+            }
 
-                if(!someAction)
-                    drop(dragged.getPiece(),savedPoint.x,savedPoint.y);
-                dragged = null;
-                repaint();
-                Game.getInstance().getRedoList().clear();
-                redo.setEnabled(false);
+            public void mouseReleased(MouseEvent ev) {
+                if (dragged != null) {
+                    selectedColTo =ev.getX()/Piece.WIDTH;
+                    selectedRowTo =ev.getY()/Piece.HEIGHT;
+
+
+                    int currentIndex = dragged.getPiece().getIndex();
+
+                    boolean someAction=false;
+
+                    if (Game.getInstance().canMove(currentIndex,  selectedColFrom,selectedRowFrom,selectedColTo , selectedRowTo, turn)) {
+                        if ((selectedRowFrom + 1 == selectedRowTo || selectedRowFrom - 1 == selectedRowTo) && (currentIndex == 0 || currentIndex == 6)) {
+
+                            System.out.println("COF: " + selectedColFrom + " RWF: " + selectedRowFrom);
+                            System.out.println(savedPoint.x+ " " + savedPoint.y);
+
+                            System.out.println(dragged.getIndex());
+
+                            System.out.println(dragged.getIndex());
+                            someAction=true;
+                            Game.getInstance().getUndoList().push(new Move(dragged.getPiece(), savedPoint, new Point(ev.getX()/Piece.WIDTH, ev.getY()/Piece.HEIGHT)));
+
+                            //Damka Czarna
+                            if (selectedRowTo == 0 ) {
+
+                                Game.getInstance().getPieces().put(new Point((ev.getX()) / Piece.WIDTH, (ev.getY()) / Piece.HEIGHT), new TransformDecorator(Piece
+                                        .getPiece(10), Game.getInstance().getTr()));
+                                Game.getInstance().getUndoList().push(new Move(dragged.getPiece(), savedPoint, new Point(ev.getX() / Piece.WIDTH, ev.getY() / Piece.HEIGHT)));
+                            }else if(selectedRowTo == 7){
+                                Game.getInstance().getPieces().put(new Point((ev.getX()) / Piece.WIDTH, (ev.getY()) / Piece.HEIGHT), new TransformDecorator(Piece
+                                        .getPiece(4), Game.getInstance().getTr()));
+                                Game.getInstance().getUndoList().push(new Move(dragged.getPiece(), savedPoint, new Point(ev.getX() / Piece.WIDTH, ev.getY() / Piece.HEIGHT)));
+                            }
+                            else
+                                drop(dragged.getPiece(), (ev.getX()) / Piece.WIDTH, (ev.getY()) / Piece.HEIGHT);
+
+                        }
+                        changeTurn();
+                    }  else if ((selectedRowFrom + 2 == selectedRowTo || selectedRowFrom - 2 == selectedRowTo) && (currentIndex == 0 || currentIndex == 6)) {
+                        if (Game.getInstance().canJump(currentIndex, selectedRowFrom, selectedColFrom, selectedRowTo, selectedColTo, turn)) {
+                            drop(dragged.getPiece(), (ev.getX()) / Piece.WIDTH, (ev.getY()) / Piece.HEIGHT);
+                            int jumpRow = (selectedRowFrom + selectedRowTo) / 2;
+                            int jumpCol = (selectedColFrom + selectedColTo) / 2;
+                            Point zbity = new Point(jumpCol,jumpRow);
+                            someAction=true;
+                            //changeTurn();
+                            DeletePiece deletePiece = new DeletePiece(board.get(zbity), zbity);
+                            Move move = new Move(dragged.getPiece(), savedPoint, new Point(ev.getX()/Piece.WIDTH, ev.getY()/Piece.HEIGHT));
+                            Game.getInstance().getUndoList().push(new CommandMakro(deletePiece, move));
+                            Game.getInstance().getPieces().remove(new Point(jumpCol,jumpRow));
+                        }
+                    }else if((currentIndex == 4 || currentIndex == 10)&&(Game.getInstance().canKingMoveJump(currentIndex, selectedRowFrom, selectedColFrom, selectedRowTo, selectedColTo, turn))){
+
+                    }
+
+                    if(!someAction)
+                        drop(dragged.getPiece(),savedPoint.x,savedPoint.y);
+                    dragged = null;
+                    repaint();
+                    Game.getInstance().getRedoList().clear();
+                    redo.setEnabled(false);
+                    undo.setEnabled(true);
+                }
+            }
+        });
+
+        undo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("JEEEJ DZIALAM UNDO");
+                Command command = Game.getInstance().getUndoList().pop();
+                Game.getInstance().getRedoList().push(command);
+                command.undo(CheckersBoard2.this);
+                if(Game.getInstance().getUndoList().isEmpty())
+                    undo.setEnabled(false);
+                redo.setEnabled(true);
+            }
+        });
+
+        redo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("JEEEJ DZIALAM REDO");
+                Command command = Game.getInstance().getRedoList().pop();
+                Game.getInstance().getUndoList().push(command);
+                command.redo(CheckersBoard2.this);
+                if(Game.getInstance().getRedoList().isEmpty())
+                    redo.setEnabled(false);
                 undo.setEnabled(true);
             }
-        }
-    });
+        });
 
-    undo.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            System.out.println("JEEEJ DZIALAM UNDO");
-            Command command = Game.getInstance().getUndoList().pop();
-            Game.getInstance().getRedoList().push(command);
-            command.undo(CheckersBoard2.this);
-            if(Game.getInstance().getUndoList().isEmpty())
-                undo.setEnabled(false);
-            redo.setEnabled(true);
-        }
-    });
-
-    redo.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            System.out.println("JEEEJ DZIALAM REDO");
-            Command command = Game.getInstance().getRedoList().pop();
-            Game.getInstance().getUndoList().push(command);
-            command.redo(CheckersBoard2.this);
-            if(Game.getInstance().getRedoList().isEmpty())
-                redo.setEnabled(false);
-            undo.setEnabled(true);
-        }
-    });
-
-    this.addMouseMotionListener(new MouseMotionAdapter(){
-        public void mouseDragged(MouseEvent ev)	{
-            draggedAffineTransform.setToTranslation((int)(ev.getX() - CheckersBoard2.this.mouse.getX()), (int)(ev.getY() - CheckersBoard2.this.mouse.getY()));
-            repaint();
-        }
-    });
+        this.addMouseMotionListener(new MouseMotionAdapter(){
+            public void mouseDragged(MouseEvent ev)	{
+                draggedAffineTransform.setToTranslation((int)(ev.getX() - CheckersBoard2.this.mouse.getX()), (int)(ev.getY() - CheckersBoard2.this.mouse.getY()));
+                repaint();
+            }
+        });
 
     }
 

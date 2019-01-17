@@ -39,7 +39,7 @@ public class Piece implements IPiece{
 
     @Override
     public IPiece getPiece() {
-        return this;
+        return null;
     }
 
 }
