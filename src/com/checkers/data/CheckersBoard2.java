@@ -139,7 +139,7 @@ public class CheckersBoard2 extends JPanel{
                             int jumpCol = (selectedColFrom + selectedColTo) / 2;
                             Point zbity = new Point(jumpCol,jumpRow);
                             someAction=true;
-                            //changeTurn();
+                            changeTurn();
                             DeletePiece deletePiece = new DeletePiece(board.get(zbity), zbity);
                             Move move = new Move(dragged.getPiece(), savedPoint, new Point(ev.getX()/Piece.WIDTH, ev.getY()/Piece.HEIGHT));
                             Game.getInstance().getUndoList().push(new CommandMakro(deletePiece, move));
