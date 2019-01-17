@@ -72,7 +72,7 @@ public class Game implements java.io.Serializable, IObserver {
     public void loadPieces(){
         tr=new AffineTransform();
         tr.scale(Piece.WIDTH,Piece.HEIGHT);
-
+//        startowe ustawienie
         pieces.put(new Point(3, 0), new TransformDecorator(Piece.getPiece(0), tr));
         pieces.put(new Point(5, 0), new TransformDecorator(Piece.getPiece(0), tr));
         pieces.put(new Point(7, 0), new TransformDecorator(Piece.getPiece(0), tr));
@@ -98,6 +98,7 @@ public class Game implements java.io.Serializable, IObserver {
         pieces.put(new Point(2, 7), new TransformDecorator(Piece.getPiece(6), tr));
         pieces.put(new Point(4, 7), new TransformDecorator(Piece.getPiece(6), tr));
         pieces.put(new Point(6, 7), new TransformDecorator(Piece.getPiece(6), tr));
+
     }
 
     public AffineTransform getTr() {
@@ -144,83 +145,255 @@ public class Game implements java.io.Serializable, IObserver {
         }
         return false;
     }
-    public boolean canKingMoveJump(int player, int rowFrom, int colFrom, int rowTo, int colTo, int turn) {
-        if ((player == 4 && turn == 0) || (player == 10 && turn == 1)) {
+    public boolean canKingMoveJump(int player, int colFrom, int rowFrom, int colTo, int rowTo, int turn) {
+        int numberOfPoints;
+        int colFromPom = colFrom;
+        int rowFromPom = rowFrom;
+        Point bityPionek;
+        if(pieces.containsKey(new Point(colTo, rowTo))){
+            return false;
+        }
+        if(colFrom == colTo){
+            return false;
+        }
+        if(rowFrom == rowTo){
+            return false;
+        }
+        //damka czarna
+        if (player == 10 && turn == 1 ) {
             ArrayList<Point> availablePoints = new ArrayList<Point>();
             availablePoints.clear();
-            int colPosition;
-            HashMap<Point,IPiece> tab = new HashMap<>();
-            if (rowFrom > rowTo && colFrom > colTo) { // lewy_gorny
-                colPosition = colFrom;
-                for (int i = rowFrom; i >= rowTo; i--) {
-                    tab.put(new Point(i,colPosition),pieces.get(new Point(i,colPosition)));    /////UWAGA MOZE NIE DZIALAC BO trzeba zamienic i z colPosition
+            int pointsCounter = 0;
 
-                    availablePoints.add(new Point(i,colPosition));
-                    colPosition--;
+            //kierunek prawy dół i czarna damka
+            if(colFrom < colTo && rowFrom < rowTo){
+                numberOfPoints = colTo - colFrom;
+                for(int i = 0; i < numberOfPoints; i++){
+                    colFromPom++;
+                    rowFromPom++;
+                    availablePoints.add(new Point(colFromPom, rowFromPom));
                 }
-                for (Point p : availablePoints) {
-                    System.out.println("X: "+p.getX()+"Y: "+p.getY());
-                }
-
-                if(!(rowTo == availablePoints.get(availablePoints.size()-1).getX()
-                        && colTo==availablePoints.get(availablePoints.size()-1).getY())){
+                if(!availablePoints.contains((new Point(colTo, rowTo)))){
                     return false;
                 }
-
-
-            } else if (rowFrom > rowTo && colFrom < colTo) { // prawy_gorny
-                colPosition = colFrom;
-                for (int i = rowFrom; i >= rowTo; i--) {
-                    tab.put(new Point(new Point(i,colPosition)), pieces.get(new Point(i,colPosition)));
-                    availablePoints.add(new Point(i,colPosition));
-                    colPosition++;
+                for(int i = 0; i < numberOfPoints; i++){
+                    if(pointsCounter>1){
+                        return false;
+                    }
+                    colFrom++;
+                    rowFrom++;
+                    if(pieces.containsKey(new Point(colFrom, rowFrom))){
+                        if(pieces.get(new Point(colFrom, rowFrom)).getPiece().getIndex() == 6 || pieces.get(new Point(colFrom, rowFrom)).getPiece().getIndex() == 10){
+                            return false;
+                        }else{
+                            pointsCounter++;
+                        }
+                    }
                 }
-                for (Point p : availablePoints) {
-                    System.out.println("X: "+p.getX()+"Y: "+p.getY());
-                }
-                if(!(rowTo == availablePoints.get(availablePoints.size()-1).getX()
-                        && colTo==availablePoints.get(availablePoints.size()-1).getY())){
-                    return false;
-                }
-
-            } else if (rowFrom < rowTo && colFrom < colTo) { // prawy_dolny
-                System.out.println("PRAWY DOLNY!!!");
-                colPosition = colFrom;
-                for (int i = rowFrom; i <= rowTo; i++) {
-                    System.out.println("rowFrom: "+rowFrom+" rowTo: "+rowTo+" colFrom"+colFrom+" colTo: "+colTo);
-                    tab.put(new Point(colPosition,i), pieces.get(new Point(colPosition,i)));
-
-                    availablePoints.add(new Point(colPosition,i));
-                    colPosition++;
-                    if(i==rowTo)
-                    tab.put(new Point(colPosition, i), new TransformDecorator(Piece.getPiece(6), tr));
-                }
-
-                for (Point p : availablePoints) {
-                    System.out.println("X: "+p.getX()+"Y: "+p.getY());
-                }
-                if(!(rowTo == availablePoints.get(availablePoints.size()-1).getX()
-                        && colTo==availablePoints.get(availablePoints.size()-1).getY())){
-                    return false;
-                }
-            } else if (rowFrom < rowTo && colFrom > colTo) { // lewy_dolny
-                colPosition = colFrom;
-                for (int i = rowFrom; i <= rowTo; i++) {
-                    tab.put(new Point(new Point(i,colPosition)), pieces.get(new Point(i,colPosition)));
-                    availablePoints.add(new Point(i,colPosition));
-                    colPosition--;
-                }
-                for (Point p : availablePoints) {
-                    System.out.println("X: "+p.getX()+"Y: "+p.getY());
-                }
-                if(!(rowTo == availablePoints.get(availablePoints.size()-1).getX()
-                        && colTo==availablePoints.get(availablePoints.size()-1).getY())){
-                    return false;
-                }
-            } else{
-                return false;
             }
-            return checkKingMove(tab,player);
+
+            //kierunek lewy dół i czarna damka
+            if(colFrom > colTo && rowFrom < rowTo){
+                numberOfPoints = colFrom - colTo;
+                for(int i = 0; i < numberOfPoints; i++){
+                    colFromPom--;
+                    rowFromPom++;
+                    availablePoints.add(new Point(colFromPom, rowFromPom));
+                }
+                if(!availablePoints.contains((new Point(colTo, rowTo)))){
+                    return false;
+                }
+                for(int i = 0; i < numberOfPoints; i++){
+                    if(pointsCounter>1){
+                        return false;
+                    }
+                    colFrom--;
+                    rowFrom++;
+                    if(pieces.containsKey(new Point(colFrom, rowFrom))){
+                        if(pieces.get(new Point(colFrom, rowFrom)).getPiece().getIndex() == 6 || pieces.get(new Point(colFrom, rowFrom)).getPiece().getIndex() == 10){
+                            return false;
+                        }else{
+                            pointsCounter++;
+                        }
+                    }
+                }
+            }
+
+            //kierunek prawa góra i czarna damka
+            if(colFrom < colTo && rowFrom > rowTo){
+                numberOfPoints = rowFrom - rowTo;
+                for(int i = 0; i < numberOfPoints; i++){
+                    colFromPom++;
+                    rowFromPom--;
+                    availablePoints.add(new Point(colFromPom, rowFromPom));
+                }
+                if(!availablePoints.contains((new Point(colTo, rowTo)))){
+                    return false;
+                }
+                for(int i = 0; i < numberOfPoints; i++){
+                    if(pointsCounter>1){
+                        return false;
+                    }
+                    colFrom++;
+                    rowFrom--;
+                    if(pieces.containsKey(new Point(colFrom, rowFrom))){
+                        if(pieces.get(new Point(colFrom, rowFrom)).getPiece().getIndex() == 6 || pieces.get(new Point(colFrom, rowFrom)).getPiece().getIndex() == 10){
+                            return false;
+                        }else{
+                            pointsCounter++;
+                        }
+                    }
+                }
+            }
+
+            //kierunek lewa góra i czarna damka
+            if(colFrom > colTo && rowFrom > rowTo){
+                numberOfPoints = colFrom - colTo;
+                for(int i = 0; i < numberOfPoints; i++){
+                    colFromPom--;
+                    rowFromPom--;
+                    availablePoints.add(new Point(colFromPom, rowFromPom));
+                }
+                if(!availablePoints.contains((new Point(colTo, rowTo)))){
+                    return false;
+                }
+                for(int i = 0; i < numberOfPoints; i++){
+                    if(pointsCounter>1){
+                        return false;
+                    }
+                    colFrom--;
+                    rowFrom--;
+                    if(pieces.containsKey(new Point(colFrom, rowFrom))){
+                        if(pieces.get(new Point(colFrom, rowFrom)).getPiece().getIndex() == 6 || pieces.get(new Point(colFrom, rowFrom)).getPiece().getIndex() == 10){
+                            return false;
+                        }else{
+                            pointsCounter++;
+                        }
+                    }
+                }
+            }
+
+            System.out.println("zwracam true ziom");
+            return true;
+        }
+
+
+        //tu biale damki
+        if (player == 4 && turn == 0 ) {
+            ArrayList<Point> availablePoints = new ArrayList<Point>();
+            availablePoints.clear();
+            int pointsCounter = 0;
+
+            //kierunek prawy dół i biała damka
+            if(colFrom < colTo && rowFrom < rowTo){
+                numberOfPoints = colTo - colFrom;
+                for(int i = 0; i < numberOfPoints; i++){
+                    colFromPom++;
+                    rowFromPom++;
+                    availablePoints.add(new Point(colFromPom, rowFromPom));
+                }
+                if(!availablePoints.contains((new Point(colTo, rowTo)))){
+                    return false;
+                }
+                for(int i = 0; i < numberOfPoints; i++){
+                    if(pointsCounter>1){
+                        return false;
+                    }
+                    colFrom++;
+                    rowFrom++;
+                    if(pieces.containsKey(new Point(colFrom, rowFrom))){
+                        if(pieces.get(new Point(colFrom, rowFrom)).getPiece().getIndex() == 0 || pieces.get(new Point(colFrom, rowFrom)).getPiece().getIndex() == 4){
+                            return false;
+                        }else{
+                            pointsCounter++;
+                        }
+                    }
+                }
+            }
+
+            //kierunek lewy dół i biała damka
+            if(colFrom > colTo && rowFrom < rowTo){
+                numberOfPoints = colFrom - colTo;
+                for(int i = 0; i < numberOfPoints; i++){
+                    colFromPom--;
+                    rowFromPom++;
+                    availablePoints.add(new Point(colFromPom, rowFromPom));
+                }
+                if(!availablePoints.contains((new Point(colTo, rowTo)))){
+                    return false;
+                }
+                for(int i = 0; i < numberOfPoints; i++){
+                    if(pointsCounter>1){
+                        return false;
+                    }
+                    colFrom--;
+                    rowFrom++;
+                    if(pieces.containsKey(new Point(colFrom, rowFrom))){
+                        if(pieces.get(new Point(colFrom, rowFrom)).getPiece().getIndex() == 0 || pieces.get(new Point(colFrom, rowFrom)).getPiece().getIndex() == 4){
+                            return false;
+                        }else{
+                            pointsCounter++;
+                        }
+                    }
+                }
+            }
+
+            //kierunek prawa góra i biała damka
+            if(colFrom < colTo && rowFrom > rowTo){
+                numberOfPoints = rowFrom - rowTo;
+                for(int i = 0; i < numberOfPoints; i++){
+                    colFromPom++;
+                    rowFromPom--;
+                    availablePoints.add(new Point(colFromPom, rowFromPom));
+                }
+                if(!availablePoints.contains((new Point(colTo, rowTo)))){
+                    return false;
+                }
+                for(int i = 0; i < numberOfPoints; i++){
+                    if(pointsCounter>1){
+                        return false;
+                    }
+                    colFrom++;
+                    rowFrom--;
+                    if(pieces.containsKey(new Point(colFrom, rowFrom))){
+                        if(pieces.get(new Point(colFrom, rowFrom)).getPiece().getIndex() == 0 || pieces.get(new Point(colFrom, rowFrom)).getPiece().getIndex() == 4){
+                            return false;
+                        }else{
+                            pointsCounter++;
+                        }
+                    }
+                }
+            }
+
+            //kierunek lewa góra i biała damka
+            if(colFrom > colTo && rowFrom > rowTo){
+                numberOfPoints = colFrom - colTo;
+                for(int i = 0; i < numberOfPoints; i++){
+                    colFromPom--;
+                    rowFromPom--;
+                    availablePoints.add(new Point(colFromPom, rowFromPom));
+                }
+                if(!availablePoints.contains((new Point(colTo, rowTo)))){
+                    return false;
+                }
+                for(int i = 0; i < numberOfPoints; i++){
+                    if(pointsCounter>1){
+                        return false;
+                    }
+                    colFrom--;
+                    rowFrom--;
+                    if(pieces.containsKey(new Point(colFrom, rowFrom))){
+                        if(pieces.get(new Point(colFrom, rowFrom)).getPiece().getIndex() == 0 || pieces.get(new Point(colFrom, rowFrom)).getPiece().getIndex() == 4){
+                            return false;
+                        }else{
+                            pointsCounter++;
+                        }
+                    }
+                }
+            }
+
+            System.out.println("zwracam true ziom");
+            return true;
         }
         return false;
     }

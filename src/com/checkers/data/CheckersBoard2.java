@@ -145,7 +145,7 @@ public class CheckersBoard2 extends JPanel{
                             Game.getInstance().getUndoList().push(new CommandMakro(deletePiece, move));
                             Game.getInstance().getPieces().remove(new Point(jumpCol,jumpRow));
                         }
-                    }else if((currentIndex == 4 || currentIndex == 10)&&(Game.getInstance().canKingMoveJump(currentIndex, selectedRowFrom, selectedColFrom, selectedRowTo, selectedColTo, turn))){
+                    }else if((currentIndex == 4 || currentIndex == 10)&&(Game.getInstance().canKingMoveJump(currentIndex, selectedColFrom, selectedRowFrom, selectedColTo, selectedRowTo, turn))){
 
                     }
 
