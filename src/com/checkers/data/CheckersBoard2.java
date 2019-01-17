@@ -20,9 +20,6 @@ import java.util.Map;
 
 public class CheckersBoard2 extends JPanel{
 
-    private LinkedList<Command> undoList = new LinkedList<>();
-    private LinkedList<Command> redoList = new LinkedList<>();
-
     private static final int ZEROX = 23;
     private static final int ZEROY = 7;
     private int turn;
@@ -113,7 +110,7 @@ public CheckersBoard2(JButton redo, JButton undo){
                 if ((selectedRowFrom + 1 == selectedRowTo || selectedRowFrom - 1 == selectedRowTo) && (currentIndex == 0 || currentIndex == 6)) {
                         drop(dragged.getPiece(), (ev.getX()) / Piece.WIDTH, (ev.getY()) / Piece.HEIGHT);
                         someAction=true;
-                        undoList.push(new Move(dragged.getPiece(), savedPoint, new Point(ev.getX()/Piece.WIDTH, ev.getY()/Piece.HEIGHT)));
+                        Game.getInstance().getUndoList().push(new Move(dragged.getPiece(), savedPoint, new Point(ev.getX()/Piece.WIDTH, ev.getY()/Piece.HEIGHT)));
                         //changeTurn();
                     }
                 }  else if ((selectedRowFrom + 2 == selectedRowTo || selectedRowFrom - 2 == selectedRowTo) && (currentIndex == 0 || currentIndex == 6)) {
@@ -126,7 +123,7 @@ public CheckersBoard2(JButton redo, JButton undo){
                         //changeTurn();
                         DeletePiece deletePiece = new DeletePiece(board.get(zbity), zbity);
                         Move move = new Move(dragged.getPiece(), savedPoint, new Point(ev.getX()/Piece.WIDTH, ev.getY()/Piece.HEIGHT));
-                        undoList.push(new CommandMakro(deletePiece, move));
+                        Game.getInstance().getUndoList().push(new CommandMakro(deletePiece, move));
                         Game.getInstance().getPieces().remove(new Point(jumpCol,jumpRow));
                     }
                 }
@@ -136,7 +133,7 @@ public CheckersBoard2(JButton redo, JButton undo){
                 dragged = null;
                 System.out.println("Size:"+Game.getInstance().getPieces().size());
                 repaint();
-                redoList.clear();
+                Game.getInstance().getRedoList().clear();
                 redo.setEnabled(false);
                 undo.setEnabled(true);
             }
@@ -147,10 +144,10 @@ public CheckersBoard2(JButton redo, JButton undo){
         @Override
         public void actionPerformed(ActionEvent e) {
             System.out.println("JEEEJ DZIALAM UNDO");
-            Command command = undoList.pop();
-            redoList.push(command);
+            Command command = Game.getInstance().getUndoList().pop();
+            Game.getInstance().getRedoList().push(command);
             command.undo(CheckersBoard2.this);
-            if(undoList.isEmpty())
+            if(Game.getInstance().getUndoList().isEmpty())
                 undo.setEnabled(false);
             redo.setEnabled(true);
         }
@@ -160,10 +157,10 @@ public CheckersBoard2(JButton redo, JButton undo){
         @Override
         public void actionPerformed(ActionEvent e) {
             System.out.println("JEEEJ DZIALAM REDO");
-            Command command = redoList.pop();
-            undoList.push(command);
+            Command command = Game.getInstance().getRedoList().pop();
+            Game.getInstance().getUndoList().push(command);
             command.redo(CheckersBoard2.this);
-            if(redoList.isEmpty())
+            if(Game.getInstance().getRedoList().isEmpty())
                 redo.setEnabled(false);
             undo.setEnabled(true);
         }

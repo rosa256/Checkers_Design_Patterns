@@ -1,5 +1,6 @@
 package com.checkers;
 
+import com.checkers.Command.Command;
 import com.checkers.Command.CommandManager;
 import com.checkers.Decorator.IPiece;
 import com.checkers.Decorator.Piece;
@@ -12,9 +13,7 @@ import com.checkers.data.CheckersBoard2;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
 
 public class Game implements java.io.Serializable, IObserver {
@@ -29,6 +28,8 @@ public class Game implements java.io.Serializable, IObserver {
     private CommandManager commandManager;
     private AffineTransform tr;
     private MenuFrame menuFrame;
+    private LinkedList<Command> undoList = new LinkedList<>();
+    private LinkedList<Command> redoList = new LinkedList<>();
 
 
     private Game(){
@@ -37,6 +38,14 @@ public class Game implements java.io.Serializable, IObserver {
         if(instance == null)
             instance = new Game();
         return instance;
+    }
+
+    public LinkedList<Command> getUndoList() {
+        return undoList;
+    }
+
+    public LinkedList<Command> getRedoList() {
+        return redoList;
     }
 
     public MenuFrame getMenuFrame(){
