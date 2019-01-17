@@ -121,13 +121,13 @@ public CheckersBoard2(JButton redo, JButton undo){
                         drop(dragged.getPiece(), (ev.getX()) / Piece.WIDTH, (ev.getY()) / Piece.HEIGHT);
                         int jumpRow = (selectedRowFrom + selectedRowTo) / 2;
                         int jumpCol = (selectedColFrom + selectedColTo) / 2;
-                        Game.getInstance().getPieces().remove(new Point(jumpCol,jumpRow));
                         Point zbity = new Point(jumpCol,jumpRow);
                         someAction=true;
                         //changeTurn();
                         DeletePiece deletePiece = new DeletePiece(board.get(zbity), zbity);
                         Move move = new Move(dragged, savedPoint, new Point(ev.getX()/Piece.WIDTH, ev.getY()/Piece.HEIGHT));
                         undoList.push(new CommandMakro(deletePiece, move));
+                        Game.getInstance().getPieces().remove(new Point(jumpCol,jumpRow));
                     }
                 }
 
@@ -143,13 +143,10 @@ public CheckersBoard2(JButton redo, JButton undo){
         }
     });
 
-    undo.setEnabled(true);
-    redo.setEnabled(true);
     undo.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
             System.out.println("JEEEJ DZIALAM UNDO");
-            undoList.pop();
             Command command = undoList.pop();
             redoList.push(command);
             command.undo(CheckersBoard2.this);

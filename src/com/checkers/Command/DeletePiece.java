@@ -18,7 +18,7 @@ public class DeletePiece implements Command{
 
     @Override
     public void undo(CheckersBoard2 checkersBoard2) {
-        checkersBoard2.take((int)point.getX(), (int)point.getY());           //
+        checkersBoard2.take((int)point.getX(), (int)point.getY());
         checkersBoard2.drop(iPiece, (int)point.getX(), (int)point.getY());
     }
 
