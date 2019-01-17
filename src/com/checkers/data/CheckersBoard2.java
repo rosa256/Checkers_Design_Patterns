@@ -118,7 +118,6 @@ public class CheckersBoard2 extends JPanel{
 
                             //Damka Czarna
                             if (selectedRowTo == 0 ) {
-
                                 Game.getInstance().getPieces().put(new Point((ev.getX()) / Piece.WIDTH, (ev.getY()) / Piece.HEIGHT), new TransformDecorator(Piece
                                         .getPiece(10), Game.getInstance().getTr()));
                                 Game.getInstance().getUndoList().push(new Move(dragged.getPiece(), savedPoint, new Point(ev.getX() / Piece.WIDTH, ev.getY() / Piece.HEIGHT)));
@@ -192,6 +191,7 @@ public class CheckersBoard2 extends JPanel{
                 if(Game.getInstance().getUndoList().isEmpty())
                     undo.setEnabled(false);
                 redo.setEnabled(true);
+                changeTurn();
             }
         });
 
@@ -205,6 +205,7 @@ public class CheckersBoard2 extends JPanel{
                 if(Game.getInstance().getRedoList().isEmpty())
                     redo.setEnabled(false);
                 undo.setEnabled(true);
+                changeTurn();
             }
         });
 
