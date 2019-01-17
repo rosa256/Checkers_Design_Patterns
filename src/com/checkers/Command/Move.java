@@ -18,13 +18,11 @@ public class Move implements Command{
         this.to = to;
     }
 
-    //TODO
     public void undo(CheckersBoard2 checkersBoard2) {
         checkersBoard2.take((int)to.getX(), (int)to.getY());
         checkersBoard2.drop(iPiece, (int)from.getX(), (int)from.getY());
     }
 
-    //TODO
     public void redo(CheckersBoard2 checkersBoard2) {
         checkersBoard2.take((int)from.getX(), (int)from.getY());
         checkersBoard2.drop(iPiece,(int)to.getX(), (int)to.getY());
