@@ -15,12 +15,14 @@ import com.checkers.data.CheckersBoard2;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
 
 import static com.checkers.data.CheckersData.WHITE_KING;
 
-public class Game implements java.io.Serializable, IObserver {
+public class Game implements Serializable, IObserver {
 
     //Zapytac sie czy wszystkie obiekty Player zamienią się na IObserver?
     //Zapytac czy Game zostanie zamieniony na ISubject
@@ -40,7 +42,12 @@ public class Game implements java.io.Serializable, IObserver {
     private JButton undo = new JButton(new ImageIcon("undo.png"));
     private JButton redo = new JButton(new ImageIcon("redo.png"));
     private JLabel timeLabel_player1 = new JLabel();
+    private JLabel player2DelayLabel = new JLabel();
+    private JLabel player1DelayLabel = new JLabel();
 
+    public JLabel getPlayer1DelayLabel() {
+        return player1DelayLabel;
+    }
 
     public int getColPionkaDoBicia() {
         return colPionkaDoBicia;
@@ -74,9 +81,25 @@ public class Game implements java.io.Serializable, IObserver {
     @Override
     public void update(Player player) {
         int index = playersInGame.indexOf(player);
-        System.out.println(playersInGame.get(index).getNickName()+" pozostalo 5 sekund! Pospiesz sie!");
-        //playersInGame.get(index).getTimer();
-    }
+        System.out.println("Index:"+index);
+        if(index == 0) {
+            player1DelayLabel.setVisible(true);
+            player1DelayLabel.setText("ŚPIESZ SIĘ!!");
+            player1DelayLabel.setForeground(Color.RED);
+            if(playersInGame.get(index).getActual_time()<0) {
+                playersInGame.get(index).getTimer().stop();
+                player1DelayLabel.setVisible(false);
+            }
+        }else{
+            player2DelayLabel.setText("ŚPIESZ SIĘ!!");
+            player2DelayLabel.setForeground(Color.RED);
+            player2DelayLabel.setVisible(true);
+            if(playersInGame.get(index).getActual_time()<0) {
+                playersInGame.get(index).getTimer().stop();
+                player2DelayLabel.setVisible(false);
+            }
+        }
+        }
 
     public ArrayList<Player> getPlayersInGame(){
         return playersInGame;
@@ -499,6 +522,7 @@ public class Game implements java.io.Serializable, IObserver {
     }
 
 
-
-
+    public JLabel getPlayer2DelayLabel() {
+        return player2DelayLabel;
+    }
 }

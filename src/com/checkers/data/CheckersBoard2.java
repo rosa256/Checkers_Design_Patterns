@@ -21,9 +21,7 @@ import java.util.Map;
 
 public class CheckersBoard2 extends JPanel{
 
-    private static final int ZEROX = 23;
-    private static final int ZEROY = 7;
-    private int turn=1;
+    private int turn=0;
     private Game game;
     private int selectedColFrom, selectedRowFrom, selectedRowTo, selectedColTo;
     JButton undo,redo;
@@ -107,12 +105,6 @@ public class CheckersBoard2 extends JPanel{
                     if (Game.getInstance().canMove(currentIndex,  selectedColFrom,selectedRowFrom,selectedColTo , selectedRowTo, turn)) {
                         if ((selectedRowFrom + 1 == selectedRowTo || selectedRowFrom - 1 == selectedRowTo) && (currentIndex == 0 || currentIndex == 6)) {
 
-                            System.out.println("COF: " + selectedColFrom + " RWF: " + selectedRowFrom);
-                            System.out.println(savedPoint.x+ " " + savedPoint.y);
-
-                            System.out.println(dragged.getIndex());
-
-                            System.out.println(dragged.getIndex());
                             someAction=true;
                             Game.getInstance().getUndoList().push(new Move(dragged.getPiece(), savedPoint, new Point(ev.getX()/Piece.WIDTH, ev.getY()/Piece.HEIGHT)));
 
@@ -172,6 +164,7 @@ public class CheckersBoard2 extends JPanel{
 
                     if(!someAction)
                         drop(dragged.getPiece(),savedPoint.x,savedPoint.y);
+
                     dragged = null;
                     repaint();
                     Game.getInstance().getRedoList().clear();

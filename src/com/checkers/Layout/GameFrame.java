@@ -64,13 +64,12 @@ public class GameFrame extends JFrame{
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         //this.add(board);
         gui.setPreferredSize(new Dimension(256, 128));
-        gui.setLayout(new GridLayout(4, 1));
+        gui.setLayout(new GridLayout(3, 1));
 
-        setupPlayerPanel(player1panel, gracz1, player1NickName, turn1, win1, gui, Color.BLACK, Game.getInstance().getTimeLabel_player1());
-
+        setupPlayerPanel(player1panel, gracz1, player1NickName, turn1, win1, gui, Color.BLACK, Game.getInstance().getTimeLabel_player1(),Game.getInstance().getPlayer1DelayLabel());
         //setupTimePanel(turnpanel, gui, turnTimeLabel, time);
 
-        setupPlayerPanel(player2panel, gracz2, player2NickName, turn2, win2, gui, Color.WHITE, Game.getInstance().getTimeLabel_player2());
+        setupPlayerPanel(player2panel, gracz2, player2NickName, turn2, win2, gui, Color.WHITE, Game.getInstance().getTimeLabel_player2(),Game.getInstance().getPlayer2DelayLabel());
         turn2.setVisible(false);
 
 //        runGameFrameTimers(playersInGame);
@@ -127,15 +126,7 @@ public class GameFrame extends JFrame{
         return formatter.format(date);
     }
 
-    private void setupTimePanel(JPanel turnpanel, JPanel gui, JLabel turnTimeLabel, JLabel time) {
-        turnTimeLabel.setFont(new Font(ARIAL, Font.PLAIN, 24));
-        turnpanel.add(turnTimeLabel);
-        time.setFont(new Font(ARIAL, Font.PLAIN, 24));
-        turnpanel.add(time);
-        gui.add(turnpanel);
-    }
-
-    private void setupPlayerPanel(JPanel panel, JLabel graczLabel, JLabel playerLabel, JLabel turnLabel, JLabel winLabel, JPanel gui, Color color, JLabel time_player) {
+    private void setupPlayerPanel(JPanel panel, JLabel graczLabel, JLabel playerLabel, JLabel turnLabel, JLabel winLabel, JPanel gui, Color color, JLabel time_player, JLabel warnDelay) {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         graczLabel.setFont(new Font(ARIAL, Font.PLAIN, 24));
 
@@ -144,12 +135,14 @@ public class GameFrame extends JFrame{
         playerLabel.setOpaque(true);
         setPlayerColor(playerLabel, color);
         time_player.setFont(new Font(ARIAL, Font.PLAIN, 24));
+        warnDelay.setFont(new Font(ARIAL, Font.PLAIN,24));
         panel.add(playerLabel);
         panel.add(time_player);
         turnLabel.setFont(new Font(ARIAL, Font.PLAIN, 24));
         winLabel.setFont(new Font(ARIAL, Font.PLAIN, 24));
         winLabel.setVisible(false);
         panel.add(turnLabel);
+        panel.add(warnDelay);
         panel.add(winLabel);
         panel.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
         playerLabel.setForeground(color);

@@ -22,6 +22,7 @@ public class Player implements java.io.Serializable, ISubject {
     private final SimpleDateFormat sdf = new SimpleDateFormat("mm : ss");
 
 
+
     public String getNickName() {
         return nickName;
     }
