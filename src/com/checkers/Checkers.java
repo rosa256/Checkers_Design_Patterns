@@ -24,13 +24,9 @@ public class Checkers {
     private Statistics statistics;
     private ArrayList<Memento> mementos = new ArrayList<>();
     private MenuFrame menuFrame;
-
-
-
+    
     public Checkers(){
         game = Game.getInstance();
-        System.out.println("Wykonalo sie cokowliek?");
-
 
         menuFrame = new MenuFrame();
 
@@ -76,8 +72,8 @@ public class Checkers {
                // game.getMenuFrame().getGameFrame().board.setListeners();
                 game.getPlayersInGame().get(0).refreshTimer();
                 game.getPlayersInGame().get(1).refreshTimer();
-                game.getPlayersInGame().get(0).runTimer(menuFrame.getGameFrame().getTimerPlayerLabels().get(0));
-                game.getPlayersInGame().get(1).runTimer(menuFrame.getGameFrame().getTimerPlayerLabels().get(1));
+                //game.getPlayersInGame().get(0).runTimer(menuFrame.getGameFrame().getTimerPlayerLabels().get(0));
+                //game.getPlayersInGame().get(1).runTimer(menuFrame.getGameFrame().getTimerPlayerLabels().get(1));
                 menuFrame.getGameFrame().runGameFrameTimers(game.getPlayersInGame());
 
                 System.out.println(game.getPlayersInGame().get(0).getActual_time());

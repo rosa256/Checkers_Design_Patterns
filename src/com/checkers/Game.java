@@ -11,6 +11,7 @@ import com.checkers.Observer.ISubject;
 import com.checkers.Strategy.Strategy;
 import com.checkers.data.CheckersBoard2;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.util.*;
@@ -33,22 +34,18 @@ public class Game implements java.io.Serializable, IObserver {
     private LinkedList<Command> undoList = new LinkedList<>();
     private LinkedList<Command> redoList = new LinkedList<>();
 
+    private JButton undo = new JButton(new ImageIcon("undo.png"));
+    private JButton redo = new JButton(new ImageIcon("redo.png"));
+    private JLabel timeLabel_player1 = new JLabel();
 
-    private Game(){
-    }
+
+    private Game(){ }
     public static Game getInstance(){
         if(instance == null)
             instance = new Game();
         return instance;
     }
 
-    public LinkedList<Command> getUndoList() {
-        return undoList;
-    }
-
-    public LinkedList<Command> getRedoList() {
-        return redoList;
-    }
 
     public MenuFrame getMenuFrame(){
         return this.menuFrame;
@@ -57,6 +54,8 @@ public class Game implements java.io.Serializable, IObserver {
     @Override
     public void update(Player player) {
         int index = playersInGame.indexOf(player);
+        System.out.println("Index:"+index);
+        System.out.println("Size:"+playersInGame.size());
         System.out.println(playersInGame.get(index).getNickName()+" pozostalo 5 sekund! Pospiesz sie!");
         //playersInGame.get(index).getTimer();
     }
@@ -419,6 +418,35 @@ public class Game implements java.io.Serializable, IObserver {
         }*/
         return false;//flag;
     }
+
+    public JLabel getTimeLabel_player1() {
+        return timeLabel_player1;
+    }
+
+    public JLabel getTimeLabel_player2() {
+        return timeLabel_player2;
+    }
+
+    private JLabel timeLabel_player2 = new JLabel();
+
+
+    public JButton getUndo() {
+        return undo;
+    }
+
+    public JButton getRedo() {
+        return redo;
+    }
+
+    public LinkedList<Command> getUndoList() {
+        return undoList;
+    }
+
+    public LinkedList<Command> getRedoList() {
+        return redoList;
+    }
+
+
 
 
 }

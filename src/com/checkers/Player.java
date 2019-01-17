@@ -16,7 +16,7 @@ public class Player implements java.io.Serializable, ISubject {
     private boolean turn;
     private IObserver iObserver;
 
-    private final long TEN_SECOUNDS = 100000;
+    private final long TEN_SECOUNDS = 15000;
     private long[] actual_time = {TEN_SECOUNDS - 1000};
     private Timer timer;
     private final SimpleDateFormat sdf = new SimpleDateFormat("mm : ss");
@@ -26,8 +26,8 @@ public class Player implements java.io.Serializable, ISubject {
         return nickName;
     }
     public Player(JLabel time_player){
-        runTimer(time_player);
         add(Game.getInstance());
+        runTimer(time_player);
     }
 
     public void setNickName(String nickName) {
@@ -46,8 +46,8 @@ public class Player implements java.io.Serializable, ISubject {
             public void actionPerformed(ActionEvent ev){
                 time_player.setText(sdf.format(new Date(actual_time[0])));
                 actual_time[0] -= 1000;
-                if(actual_time[0]<=4000);
-                    //Player.this.notifyObserver(Player.this);
+                if(actual_time[0]<=4000)
+                    Player.this.notifyObserver(Player.this);
             }
         });
     }

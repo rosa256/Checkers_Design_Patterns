@@ -3,8 +3,6 @@ package com.checkers.Layout;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
@@ -22,29 +20,24 @@ public class GameFrame extends JFrame{
     private static final String ARIAL = "Arial";
     public CheckersBoard2 board;
 
-    private JLabel player1 = new JLabel();
-    private JLabel player2 = new JLabel();
-    public JLabel timeLabel_player1 = new JLabel();
-    public JLabel timeLabel_player2 = new JLabel();
+    private JLabel player1NickName = new JLabel();
+    private JLabel player2NickName = new JLabel();
+//    public JLabel timeLabel_player1 = new JLabel();
+//    public JLabel timeLabel_player2 = new JLabel();
     private JLabel turn1 = new JLabel("Twoja tura!");
     private JLabel win1 = new JLabel("Wygrałeś!");
     private JLabel turn2 = new JLabel("Twoja tura!");
     private JLabel win2 = new JLabel("Wygrałeś!");
     JToolBar bar = new JToolBar();
-    private JButton undo = new JButton(new ImageIcon("undo.png"));
-    private JButton redo = new JButton(new ImageIcon("redo.png"));
+//    private JButton undo = new JButton(new ImageIcon("undo.png"));
+//    private JButton redo = new JButton(new ImageIcon("redo.png"));
 
 
-    public JButton getUndo() {
-        return undo;
-    }
-
-    public JButton getRedo() {
-        return redo;
-    }
 
     public GameFrame(){
         //board = new CheckersBoard();
+        JButton undo = Game.getInstance().getUndo();
+        JButton redo = Game.getInstance().getRedo();
         bar.add(undo);
         bar.add(redo);
         undo.setEnabled(false);
@@ -73,11 +66,11 @@ public class GameFrame extends JFrame{
         gui.setPreferredSize(new Dimension(256, 128));
         gui.setLayout(new GridLayout(4, 1));
 
-        setupPlayerPanel(player1panel, gracz1, player1, turn1, win1, gui, Color.BLACK, timeLabel_player1);
+        setupPlayerPanel(player1panel, gracz1, player1NickName, turn1, win1, gui, Color.BLACK, Game.getInstance().getTimeLabel_player1());
 
         //setupTimePanel(turnpanel, gui, turnTimeLabel, time);
 
-        setupPlayerPanel(player2panel, gracz2, player2, turn2, win2, gui, Color.WHITE, timeLabel_player2);
+        setupPlayerPanel(player2panel, gracz2, player2NickName, turn2, win2, gui, Color.WHITE, Game.getInstance().getTimeLabel_player2());
         turn2.setVisible(false);
 
 //        runGameFrameTimers(playersInGame);
@@ -98,7 +91,7 @@ public class GameFrame extends JFrame{
 
                     playersInGame.get(0).getTimer().start();
                     playersInGame.get(1).getTimer().stop();
-                    timeLabel_player2.setText(new SimpleDateFormat("mm : ss").format(new Date(10000)));
+                    Game.getInstance().getTimeLabel_player2().setText(new SimpleDateFormat("mm : ss").format(new Date(10000)));
                     playersInGame.get(1).refreshTimer();
 
 
@@ -107,7 +100,7 @@ public class GameFrame extends JFrame{
                     turn1.setVisible(false);
                     win1.setVisible(false);
                     win2.setVisible(false);
-                    timeLabel_player1.setText(new SimpleDateFormat("mm : ss").format(new Date(10000)));
+                    Game.getInstance().getTimeLabel_player1().setText(new SimpleDateFormat("mm : ss").format(new Date(10000)));
                     playersInGame.get(0).getTimer().stop();
                     playersInGame.get(1).getTimer().start();
                     playersInGame.get(0).refreshTimer();
@@ -179,13 +172,7 @@ public class GameFrame extends JFrame{
 
 
     public void setNickNames(String nickName1, String nickName2) {
-        player1.setText(nickName1);
-        player2.setText(nickName2);
-    }
-
-    public ArrayList<JLabel> getTimerPlayerLabels(){
-        ArrayList<JLabel> labels = new ArrayList<>();
-        labels.add(timeLabel_player1); labels.add(timeLabel_player2);
-        return labels;
+        player1NickName.setText(nickName1);
+        player2NickName.setText(nickName2);
     }
 }

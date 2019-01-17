@@ -15,7 +15,6 @@ public class MenuFrame extends JFrame {
 
     private GameFrame gameFrame;
     private JButton loadGameButton;
-    private ArrayList<Player> playersInGame = new ArrayList<>();
     public CheckersBoard2 board;
 
     public MenuFrame(){
@@ -30,14 +29,6 @@ public class MenuFrame extends JFrame {
         gameFrame = new GameFrame();
         AddButtonsToFrame();
 
-        ArrayList<JLabel> labels = gameFrame.getTimerPlayerLabels();
-        Player player_1 = new Player(labels.get(0));
-        Player player_2 = new Player(labels.get(1));
-
-
-
-        playersInGame.add(player_1);
-        playersInGame.add(player_2);
 
         //Do wyświetlenia okna Menu
         setVisible(true);
@@ -52,11 +43,12 @@ public class MenuFrame extends JFrame {
         newGameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new OptionsPanel(playersInGame, gameFrame);
+                ArrayList<Player> playersInGame = Game.getInstance().getPlayersInGame();
+                new OptionsPanel();
                 gameFrame.setNickNames(playersInGame.get(0).getNickName(),
                         playersInGame.get(1).getNickName());
 
-                board = new CheckersBoard2(gameFrame.getRedo(),gameFrame.getUndo());
+                board = new CheckersBoard2();
                 gameFrame.add(board);
                 Game.getInstance().getPieces().clear();
                 Game.getInstance().loadPieces();
@@ -66,7 +58,7 @@ public class MenuFrame extends JFrame {
 
                 gameFrame.pack();
 
-                playersInGame.get(0).getTimer().start();
+                Game.getInstance().getPlayersInGame().get(0).getTimer().start();
 
             }
         });

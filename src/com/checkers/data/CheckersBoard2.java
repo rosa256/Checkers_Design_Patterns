@@ -66,12 +66,12 @@ public class CheckersBoard2 extends JPanel{
     }
 
 
-    public CheckersBoard2(JButton redo, JButton undo){
+    public CheckersBoard2( ){
         AffineTransform transform = new AffineTransform();
         //transform.translate(ZEROX, ZEROY);
         transform.scale(128, 96);
-        this.undo = undo;
-        this.redo = redo;
+        this.undo = Game.getInstance().getUndo();
+        this.redo = Game.getInstance().getRedo();
 
         //Game.getInstance().loadPieces();
         board = Game.getInstance().getPieces();

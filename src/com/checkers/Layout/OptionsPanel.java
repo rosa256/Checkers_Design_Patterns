@@ -18,9 +18,12 @@ public class OptionsPanel extends JPanel {
     JTextField nameField2 = new JTextField();
     JLabel player1Label = new JLabel("Gracz 1");
     JLabel player2Label = new JLabel("Gracz 2");
+    private ArrayList<Player> playersInGame;
 
-    public OptionsPanel(List<Player> playersInGame, GameFrame gameFrame){
+    public OptionsPanel(){
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+        this.playersInGame = Game.getInstance().getPlayersInGame();
 
         createGameOptionsListeners(this, nameField1, nameField2, player1Label, player2Label);
 
@@ -34,6 +37,14 @@ public class OptionsPanel extends JPanel {
 
         int result = JOptionPane.showConfirmDialog(null, this, "Opcje gry", JOptionPane.OK_CANCEL_OPTION);
         if (result == JOptionPane.OK_OPTION) {
+
+            Player player_1 = new Player(Game.getInstance().getTimeLabel_player1());
+            Player player_2 = new Player(Game.getInstance().getTimeLabel_player2());
+
+            playersInGame.add(player_1);
+            playersInGame.add(player_2);
+
+            System.out.print("Size2:" + playersInGame.size());
 
             if (!nameField1.getText().equals("")) {
                 playersInGame.get(0).setNickName(nameField1.getText());
