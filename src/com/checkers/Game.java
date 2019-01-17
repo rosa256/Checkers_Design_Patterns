@@ -11,6 +11,7 @@ import com.checkers.Observer.ISubject;
 import com.checkers.Strategy.Strategy;
 import com.checkers.data.CheckersBoard2;
 
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -33,10 +34,29 @@ public class Game implements java.io.Serializable, IObserver {
     private MenuFrame menuFrame;
     private LinkedList<Command> undoList = new LinkedList<>();
     private LinkedList<Command> redoList = new LinkedList<>();
+    private int colPionkaDoBicia = 0;
+    private int rowPionkaDoBicia = 0;
 
     private JButton undo = new JButton(new ImageIcon("undo.png"));
     private JButton redo = new JButton(new ImageIcon("redo.png"));
     private JLabel timeLabel_player1 = new JLabel();
+
+
+    public int getColPionkaDoBicia() {
+        return colPionkaDoBicia;
+    }
+
+    public void setColPionkaDoBicia(int colPionkaDoBicia) {
+        this.colPionkaDoBicia = colPionkaDoBicia;
+    }
+
+    public int getRowPionkaDoBicia() {
+        return rowPionkaDoBicia;
+    }
+
+    public void setRowPionkaDoBicia(int rowPionkaDoBicia) {
+        this.rowPionkaDoBicia = rowPionkaDoBicia;
+    }
 
 
     private Game(){ }
@@ -54,8 +74,6 @@ public class Game implements java.io.Serializable, IObserver {
     @Override
     public void update(Player player) {
         int index = playersInGame.indexOf(player);
-        System.out.println("Index:"+index);
-        System.out.println("Size:"+playersInGame.size());
         System.out.println(playersInGame.get(index).getNickName()+" pozostalo 5 sekund! Pospiesz sie!");
         //playersInGame.get(index).getTimer();
     }
@@ -72,31 +90,40 @@ public class Game implements java.io.Serializable, IObserver {
         tr=new AffineTransform();
         tr.scale(Piece.WIDTH,Piece.HEIGHT);
 //        startowe ustawienie
-        pieces.put(new Point(3, 0), new TransformDecorator(Piece.getPiece(0), tr));
-        pieces.put(new Point(5, 0), new TransformDecorator(Piece.getPiece(0), tr));
-        pieces.put(new Point(7, 0), new TransformDecorator(Piece.getPiece(0), tr));
-        pieces.put(new Point(1, 2), new TransformDecorator(Piece.getPiece(0), tr));
-        pieces.put(new Point(2, 1), new TransformDecorator(Piece.getPiece(0), tr));
-        pieces.put(new Point(5, 2), new TransformDecorator(Piece.getPiece(0), tr));
-        pieces.put(new Point(7, 2), new TransformDecorator(Piece.getPiece(0), tr));
-        pieces.put(new Point(0, 1), new TransformDecorator(Piece.getPiece(0), tr));
-        pieces.put(new Point(6, 1), new TransformDecorator(Piece.getPiece(0), tr));
-        pieces.put(new Point(3, 2), new TransformDecorator(Piece.getPiece(0), tr));
-        pieces.put(new Point(1, 0), new TransformDecorator(Piece.getPiece(0), tr));
-        pieces.put(new Point(4, 1), new TransformDecorator(Piece.getPiece(0), tr));
+//        pieces.put(new Point(3, 0), new TransformDecorator(Piece.getPiece(0), tr));
+//        pieces.put(new Point(5, 0), new TransformDecorator(Piece.getPiece(0), tr));
+//        pieces.put(new Point(7, 0), new TransformDecorator(Piece.getPiece(0), tr));
+//        pieces.put(new Point(1, 2), new TransformDecorator(Piece.getPiece(0), tr));
+//        pieces.put(new Point(2, 1), new TransformDecorator(Piece.getPiece(0), tr));
+//        pieces.put(new Point(5, 2), new TransformDecorator(Piece.getPiece(0), tr));
+//        pieces.put(new Point(7, 2), new TransformDecorator(Piece.getPiece(0), tr));
+//        pieces.put(new Point(0, 1), new TransformDecorator(Piece.getPiece(0), tr));
+//        pieces.put(new Point(6, 1), new TransformDecorator(Piece.getPiece(0), tr));
+//        pieces.put(new Point(3, 2), new TransformDecorator(Piece.getPiece(0), tr));
+//        pieces.put(new Point(1, 0), new TransformDecorator(Piece.getPiece(0), tr));
+//        pieces.put(new Point(4, 1), new TransformDecorator(Piece.getPiece(0), tr));
+//
+//        pieces.put(new Point(1, 6), new TransformDecorator(Piece.getPiece(6), tr));
+//        pieces.put(new Point(3, 6), new TransformDecorator(Piece.getPiece(6), tr));
+//        pieces.put(new Point(5, 6), new TransformDecorator(Piece.getPiece(6), tr));
+//        pieces.put(new Point(7, 6), new TransformDecorator(Piece.getPiece(6), tr));
+//        pieces.put(new Point(0, 5), new TransformDecorator(Piece.getPiece(6), tr));
+//        pieces.put(new Point(2, 5), new TransformDecorator(Piece.getPiece(6), tr));
+//        pieces.put(new Point(4, 5), new TransformDecorator(Piece.getPiece(6), tr));
+//        pieces.put(new Point(6, 5), new TransformDecorator(Piece.getPiece(6), tr));
+//        pieces.put(new Point(0, 7), new TransformDecorator(Piece.getPiece(6), tr));
+//        pieces.put(new Point(2, 7), new TransformDecorator(Piece.getPiece(6), tr));
+//        pieces.put(new Point(4, 7), new TransformDecorator(Piece.getPiece(6), tr));
+//        pieces.put(new Point(6, 7), new TransformDecorator(Piece.getPiece(6), tr));
 
+
+
+        pieces.put(new Point(3, 2), new TransformDecorator(Piece.getPiece(6), tr));
         pieces.put(new Point(1, 6), new TransformDecorator(Piece.getPiece(6), tr));
-        pieces.put(new Point(3, 6), new TransformDecorator(Piece.getPiece(6), tr));
-        pieces.put(new Point(5, 6), new TransformDecorator(Piece.getPiece(6), tr));
         pieces.put(new Point(7, 6), new TransformDecorator(Piece.getPiece(6), tr));
-        pieces.put(new Point(0, 5), new TransformDecorator(Piece.getPiece(6), tr));
-        pieces.put(new Point(2, 5), new TransformDecorator(Piece.getPiece(6), tr));
-        pieces.put(new Point(4, 5), new TransformDecorator(Piece.getPiece(6), tr));
-        pieces.put(new Point(6, 5), new TransformDecorator(Piece.getPiece(6), tr));
-        pieces.put(new Point(0, 7), new TransformDecorator(Piece.getPiece(6), tr));
-        pieces.put(new Point(2, 7), new TransformDecorator(Piece.getPiece(6), tr));
-        pieces.put(new Point(4, 7), new TransformDecorator(Piece.getPiece(6), tr));
-        pieces.put(new Point(6, 7), new TransformDecorator(Piece.getPiece(6), tr));
+        pieces.put(new Point(2, 1), new TransformDecorator(Piece.getPiece(0), tr));
+        pieces.put(new Point(2, 5), new TransformDecorator(Piece.getPiece(0), tr));
+        pieces.put(new Point(7, 0), new TransformDecorator(Piece.getPiece(0), tr));
 
     }
 
@@ -148,7 +175,8 @@ public class Game implements java.io.Serializable, IObserver {
         int numberOfPoints;
         int colFromPom = colFrom;
         int rowFromPom = rowFrom;
-        Point bityPionek;
+        setColPionkaDoBicia(0);
+        setRowPionkaDoBicia(0);
         if(pieces.containsKey(new Point(colTo, rowTo))){
             return false;
         }
@@ -185,6 +213,9 @@ public class Game implements java.io.Serializable, IObserver {
                         if(pieces.get(new Point(colFrom, rowFrom)).getPiece().getIndex() == 6 || pieces.get(new Point(colFrom, rowFrom)).getPiece().getIndex() == 10){
                             return false;
                         }else{
+                            setColPionkaDoBicia(colFrom);
+                            setRowPionkaDoBicia(rowFrom);
+                            System.out.println("Pionek do bicia: "+ colFrom+", "+rowFrom);
                             pointsCounter++;
                         }
                     }
@@ -212,6 +243,9 @@ public class Game implements java.io.Serializable, IObserver {
                         if(pieces.get(new Point(colFrom, rowFrom)).getPiece().getIndex() == 6 || pieces.get(new Point(colFrom, rowFrom)).getPiece().getIndex() == 10){
                             return false;
                         }else{
+                            setColPionkaDoBicia(colFrom);
+                            setRowPionkaDoBicia(rowFrom);
+                            System.out.println("Pionek do bicia: "+ colFrom+", "+rowFrom);
                             pointsCounter++;
                         }
                     }
@@ -239,6 +273,9 @@ public class Game implements java.io.Serializable, IObserver {
                         if(pieces.get(new Point(colFrom, rowFrom)).getPiece().getIndex() == 6 || pieces.get(new Point(colFrom, rowFrom)).getPiece().getIndex() == 10){
                             return false;
                         }else{
+                            setColPionkaDoBicia(colFrom);
+                            setRowPionkaDoBicia(rowFrom);
+                            System.out.println("Pionek do bicia: "+ colFrom+", "+rowFrom);
                             pointsCounter++;
                         }
                     }
@@ -266,6 +303,9 @@ public class Game implements java.io.Serializable, IObserver {
                         if(pieces.get(new Point(colFrom, rowFrom)).getPiece().getIndex() == 6 || pieces.get(new Point(colFrom, rowFrom)).getPiece().getIndex() == 10){
                             return false;
                         }else{
+                            setColPionkaDoBicia(colFrom);
+                            setRowPionkaDoBicia(rowFrom);
+                            System.out.println("Pionek do bicia: "+ colFrom+", "+rowFrom);
                             pointsCounter++;
                         }
                     }
@@ -304,6 +344,9 @@ public class Game implements java.io.Serializable, IObserver {
                         if(pieces.get(new Point(colFrom, rowFrom)).getPiece().getIndex() == 0 || pieces.get(new Point(colFrom, rowFrom)).getPiece().getIndex() == 4){
                             return false;
                         }else{
+                            setColPionkaDoBicia(colFrom);
+                            setRowPionkaDoBicia(rowFrom);
+                            System.out.println("Pionek do bicia: "+ colFrom+", "+rowFrom);
                             pointsCounter++;
                         }
                     }
@@ -331,6 +374,9 @@ public class Game implements java.io.Serializable, IObserver {
                         if(pieces.get(new Point(colFrom, rowFrom)).getPiece().getIndex() == 0 || pieces.get(new Point(colFrom, rowFrom)).getPiece().getIndex() == 4){
                             return false;
                         }else{
+                            setColPionkaDoBicia(colFrom);
+                            setRowPionkaDoBicia(rowFrom);
+                            System.out.println("Pionek do bicia: "+ colFrom+", "+rowFrom);
                             pointsCounter++;
                         }
                     }
@@ -358,6 +404,9 @@ public class Game implements java.io.Serializable, IObserver {
                         if(pieces.get(new Point(colFrom, rowFrom)).getPiece().getIndex() == 0 || pieces.get(new Point(colFrom, rowFrom)).getPiece().getIndex() == 4){
                             return false;
                         }else{
+                            setColPionkaDoBicia(colFrom);
+                            setRowPionkaDoBicia(rowFrom);
+                            System.out.println("Pionek do bicia: "+ colFrom+", "+rowFrom);
                             pointsCounter++;
                         }
                     }
@@ -385,6 +434,9 @@ public class Game implements java.io.Serializable, IObserver {
                         if(pieces.get(new Point(colFrom, rowFrom)).getPiece().getIndex() == 0 || pieces.get(new Point(colFrom, rowFrom)).getPiece().getIndex() == 4){
                             return false;
                         }else{
+                            setColPionkaDoBicia(colFrom);
+                            setRowPionkaDoBicia(rowFrom);
+                            System.out.println("Pionek do bicia: "+ colFrom +", " + rowFrom);
                             pointsCounter++;
                         }
                     }

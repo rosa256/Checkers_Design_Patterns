@@ -24,7 +24,7 @@ public class Checkers {
     private Statistics statistics;
     private ArrayList<Memento> mementos = new ArrayList<>();
     private MenuFrame menuFrame;
-    
+
     public Checkers(){
         game = Game.getInstance();
 
