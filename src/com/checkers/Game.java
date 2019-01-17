@@ -39,6 +39,10 @@ public class Game implements java.io.Serializable, IObserver {
         return instance;
     }
 
+    public CommandManager getCommandManager() {
+        return commandManager;
+    }
+
     public MenuFrame getMenuFrame(){
         return this.menuFrame;
     }
@@ -62,18 +66,16 @@ public class Game implements java.io.Serializable, IObserver {
         tr=new AffineTransform();
         tr.scale(Piece.WIDTH,Piece.HEIGHT);
 
-        pieces.put(new Point(1, 0), new TransformDecorator(Piece.getPiece(0), tr));
         pieces.put(new Point(3, 0), new TransformDecorator(Piece.getPiece(0), tr));
         pieces.put(new Point(5, 0), new TransformDecorator(Piece.getPiece(0), tr));
         pieces.put(new Point(7, 0), new TransformDecorator(Piece.getPiece(0), tr));
         pieces.put(new Point(1, 2), new TransformDecorator(Piece.getPiece(6), tr));
-        pieces.put(new Point(3, 2), new TransformDecorator(Piece.getPiece(6), tr));
+        pieces.put(new Point(2, 1), new TransformDecorator(Piece.getPiece(6), tr));
         pieces.put(new Point(5, 2), new TransformDecorator(Piece.getPiece(0), tr));
         pieces.put(new Point(7, 2), new TransformDecorator(Piece.getPiece(0), tr));
         pieces.put(new Point(0, 1), new TransformDecorator(Piece.getPiece(0), tr));
-        pieces.put(new Point(2, 1), new TransformDecorator(Piece.getPiece(0), tr));
         pieces.put(new Point(4, 1), new TransformDecorator(Piece.getPiece(0), tr));
-        pieces.put(new Point(6, 1), new TransformDecorator(Piece.getPiece(0), tr));
+        //pieces.put(new Point(6, 1), new TransformDecorator(Piece.getPiece(0), tr));
 
         pieces.put(new Point(1, 6), new TransformDecorator(Piece.getPiece(6), tr));
         pieces.put(new Point(3, 6), new TransformDecorator(Piece.getPiece(6), tr));
@@ -89,14 +91,16 @@ public class Game implements java.io.Serializable, IObserver {
         pieces.put(new Point(6, 7), new TransformDecorator(Piece.getPiece(6), tr));
     }
 
-        public boolean canMove(int player, int fromCol, int fromRow, int toCol, int toRow, int turn, int index) {
+        public boolean canMove(int player, int fromCol, int fromRow, int toCol, int toRow, int turn) {
             if (Game.getInstance().getPieces().containsKey(new Point(toCol,toRow)) == true) { //!Uwaga zamian toCol, na toRow miejscami!!! tylko tu
                 return false;
             }
             boolean nextColumn = toCol == (fromCol + 1) || toCol == (fromCol - 1);
 
-            return (player == 0 ) && (index == 0 && toRow == fromRow + 1 && nextColumn)
-                    || (player == 6 ) && (index == 6 && toRow == fromRow - 1 && nextColumn);
+
+
+            return (player == 0 && turn== 0) && (player == 0 && toRow == fromRow + 1 && nextColumn)
+                    || (player == 6 && turn == 1 ) && (player== 6 && toRow == fromRow - 1 && nextColumn);
         }
 
     public boolean canJump(int player, int fromRow, int fromCol, int toRow, int toCol, int turn) {
@@ -120,9 +124,9 @@ public class Game implements java.io.Serializable, IObserver {
         if (Game.getInstance().getPieces().containsKey(new Point(toCol,toRow)) == true) {
             return false;
         }
-        if (player == 0) {
+        if (player == 0 && turn == 0) {
             return correctRowWhite && correctColumn && ((jumpedChecker == 6) || (jumpedChecker == 10));
-        } else if (player == 6) {
+        } else if (player == 6 && turn == 1) {
             return correctRowBlack && correctColumn && ((jumpedChecker == 0) || (jumpedChecker == 4));
         }
         return false;

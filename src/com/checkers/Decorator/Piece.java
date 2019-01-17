@@ -15,6 +15,7 @@ public class Piece implements IPiece{
         return index;
     }
 
+
     private Integer index;
     private Piece(Integer idx){
         this.index = idx;
@@ -38,6 +39,7 @@ public class Piece implements IPiece{
 
     @Override
     public IPiece getPiece() {
-        return null;
+        return this;
     }
+
 }

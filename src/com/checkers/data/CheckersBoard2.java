@@ -14,6 +14,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.AffineTransform;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -25,7 +26,7 @@ public class CheckersBoard2 extends JPanel{
 
     private static final int ZEROX = 23;
     private static final int ZEROY = 7;
-    private int turn;
+    private int turn=1;
     private Game game;
     private int selectedColFrom, selectedRowFrom, selectedRowTo, selectedColTo;
     JButton undo,redo;
@@ -101,21 +102,31 @@ public CheckersBoard2(JButton redo, JButton undo){
                 selectedColTo =ev.getX()/Piece.WIDTH;
                 selectedRowTo =ev.getY()/Piece.HEIGHT;
 
-                System.out.println();
-                System.out.println("xFrom"+ selectedRowFrom +" selectedColFrom"+ selectedColFrom +" xT"+ selectedRowTo +" yT"+ selectedColTo);
 
                 int currentIndex = dragged.getPiece().getIndex();
-                System.out.println("INDEX: "+currentIndex);
 
                 boolean someAction=false;
 
-                if (Game.getInstance().canMove(currentIndex,  selectedColFrom,selectedRowFrom,selectedColTo , selectedRowTo, turn, currentIndex)) {
-                if ((selectedRowFrom + 1 == selectedRowTo || selectedRowFrom - 1 == selectedRowTo) && (currentIndex == 0 || currentIndex == 6)) {
-                        drop(dragged.getPiece(), (ev.getX()) / Piece.WIDTH, (ev.getY()) / Piece.HEIGHT);
+                if (Game.getInstance().canMove(currentIndex,  selectedColFrom,selectedRowFrom,selectedColTo , selectedRowTo, turn)) {
+                    if ((selectedRowFrom + 1 == selectedRowTo || selectedRowFrom - 1 == selectedRowTo) && (currentIndex == 0 || currentIndex == 6)) {
+
+                        System.out.println("COF: " + selectedColFrom + " RWF: " + selectedRowFrom);
+                        System.out.println(savedPoint.x+ " " + savedPoint.y);
+
+                        System.out.println(dragged.getIndex());
+
+                        System.out.println(dragged.getIndex());
                         someAction=true;
-                        undoList.push(new Move(dragged.getPiece(), savedPoint, new Point(ev.getX()/Piece.WIDTH, ev.getY()/Piece.HEIGHT)));
-                        //changeTurn();
+
+                        //Damka Biala
+                        if (selectedRowTo == 0 && board.containsKey(new Point(selectedColTo, selectedRowTo)) && board.get(new Point(selectedColTo, selectedRowTo)).getIndex() == 6) {
+
+                            drop(new IPiece(10),(ev.getX()) / Piece.WIDTH, (ev.getY()) / Piece.HEIGHT);
+                            undoList.push(new Move(dragged.getPiece(), savedPoint, new Point(ev.getX() / Piece.WIDTH, ev.getY() / Piece.HEIGHT)));
+                        }else
+                            drop(dragged.getPiece(), (ev.getX()) / Piece.WIDTH, (ev.getY()) / Piece.HEIGHT);
                     }
+                        changeTurn();
                 }  else if ((selectedRowFrom + 2 == selectedRowTo || selectedRowFrom - 2 == selectedRowTo) && (currentIndex == 0 || currentIndex == 6)) {
                     if (Game.getInstance().canJump(currentIndex, selectedRowFrom, selectedColFrom, selectedRowTo, selectedColTo, turn)) {
                         drop(dragged.getPiece(), (ev.getX()) / Piece.WIDTH, (ev.getY()) / Piece.HEIGHT);
@@ -134,7 +145,6 @@ public CheckersBoard2(JButton redo, JButton undo){
                 if(!someAction)
                     drop(dragged.getPiece(),savedPoint.x,savedPoint.y);
                 dragged = null;
-                System.out.println("Size:"+Game.getInstance().getPieces().size());
                 repaint();
                 redoList.clear();
                 redo.setEnabled(false);
@@ -146,7 +156,6 @@ public CheckersBoard2(JButton redo, JButton undo){
     undo.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            System.out.println("JEEEJ DZIALAM UNDO");
             Command command = undoList.pop();
             redoList.push(command);
             command.undo(CheckersBoard2.this);
@@ -159,7 +168,6 @@ public CheckersBoard2(JButton redo, JButton undo){
     redo.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            System.out.println("JEEEJ DZIALAM REDO");
             Command command = redoList.pop();
             undoList.push(command);
             command.redo(CheckersBoard2.this);
@@ -178,14 +186,12 @@ public CheckersBoard2(JButton redo, JButton undo){
 
     }
 
-
-
     public int getTurn() {
         return turn;
     }
 
     public int isGameOver() {
-        return 0/*board.isOver()*/;
+        return isOver();
     }
 
     private void changeTurn() {
@@ -194,6 +200,23 @@ public CheckersBoard2(JButton redo, JButton undo){
         } else if (turn == 1) {
             turn = 0;
         }
+    }
+
+    public int isOver() {
+        int white=0;
+        int black=0;
+        for (Map.Entry<Point, IPiece> row : board.entrySet()) {
+            if(row.getValue().getPiece().getIndex()==0 || row.getValue().getPiece().getIndex()== 4)
+                white++;
+            else if(row.getValue().getPiece().getIndex()==6 || row.getValue().getPiece().getIndex()== 10)
+                black++;
+        }
+        if(white == 0)
+            return 1;
+        else if (black == 0)
+            return 0;
+        else
+            return -1;
     }
 
 }

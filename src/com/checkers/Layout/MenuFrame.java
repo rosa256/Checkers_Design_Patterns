@@ -26,6 +26,7 @@ public class MenuFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(1024, 768));
 
+        if(gameFrame==null)
         gameFrame = new GameFrame();
         AddButtonsToFrame();
 
@@ -57,6 +58,7 @@ public class MenuFrame extends JFrame {
 
                 board = new CheckersBoard2(gameFrame.getRedo(),gameFrame.getUndo());
                 gameFrame.add(board);
+                Game.getInstance().getPieces().clear();
                 Game.getInstance().loadPieces();
                 gameFrame.setVisible(true);
                 gameFrame.repaint();
