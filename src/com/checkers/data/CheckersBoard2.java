@@ -99,7 +99,6 @@ public class CheckersBoard2 extends JPanel{
                     selectedColTo =ev.getX()/Piece.WIDTH;
                     selectedRowTo =ev.getY()/Piece.HEIGHT;
 
-
                     int currentIndex = dragged.getPiece().getIndex();
 
                     boolean someAction=false;
@@ -107,18 +106,12 @@ public class CheckersBoard2 extends JPanel{
                     if (Game.getInstance().canMove(currentIndex,  selectedColFrom,selectedRowFrom,selectedColTo , selectedRowTo, turn)) {
                         if ((selectedRowFrom + 1 == selectedRowTo || selectedRowFrom - 1 == selectedRowTo) && (currentIndex == 0 || currentIndex == 6)) {
 
-                            System.out.println("COF: " + selectedColFrom + " RWF: " + selectedRowFrom);
-                            System.out.println(savedPoint.x+ " " + savedPoint.y);
-
-                            System.out.println(dragged.getIndex());
-
-                            System.out.println(dragged.getIndex());
                             someAction=true;
+                            changeTurn();
                             Game.getInstance().getUndoList().push(new Move(dragged.getPiece(), savedPoint, new Point(ev.getX()/Piece.WIDTH, ev.getY()/Piece.HEIGHT)));
 
                             //Damka Czarna
                             if (selectedRowTo == 0 ) {
-
                                 Game.getInstance().getPieces().put(new Point((ev.getX()) / Piece.WIDTH, (ev.getY()) / Piece.HEIGHT), new TransformDecorator(Piece
                                         .getPiece(10), Game.getInstance().getTr()));
                                 Game.getInstance().getUndoList().push(new Move(dragged.getPiece(), savedPoint, new Point(ev.getX() / Piece.WIDTH, ev.getY() / Piece.HEIGHT)));
@@ -129,24 +122,24 @@ public class CheckersBoard2 extends JPanel{
                             }
                             else
                                 drop(dragged.getPiece(), (ev.getX()) / Piece.WIDTH, (ev.getY()) / Piece.HEIGHT);
-
                         }
-                        changeTurn();
                     }  else if ((selectedRowFrom + 2 == selectedRowTo || selectedRowFrom - 2 == selectedRowTo) && (currentIndex == 0 || currentIndex == 6)) {
                         if (Game.getInstance().canJump(currentIndex, selectedRowFrom, selectedColFrom, selectedRowTo, selectedColTo, turn)) {
                             drop(dragged.getPiece(), (ev.getX()) / Piece.WIDTH, (ev.getY()) / Piece.HEIGHT);
+                            changeTurn();
                             int jumpRow = (selectedRowFrom + selectedRowTo) / 2;
                             int jumpCol = (selectedColFrom + selectedColTo) / 2;
                             Point zbity = new Point(jumpCol,jumpRow);
                             someAction=true;
-                            //changeTurn();
                             DeletePiece deletePiece = new DeletePiece(board.get(zbity), zbity);
                             Move move = new Move(dragged.getPiece(), savedPoint, new Point(ev.getX()/Piece.WIDTH, ev.getY()/Piece.HEIGHT));
                             Game.getInstance().getUndoList().push(new CommandMakro(deletePiece, move));
                             Game.getInstance().getPieces().remove(new Point(jumpCol,jumpRow));
                         }
                     }else if((currentIndex == 4 || currentIndex == 10)&&(Game.getInstance().canKingMoveJump(currentIndex, selectedRowFrom, selectedColFrom, selectedRowTo, selectedColTo, turn))){
-
+                        drop(dragged.getPiece(), (ev.getX()) / Piece.WIDTH, (ev.getY()) / Piece.HEIGHT);
+                        someAction = true;
+                        changeTurn();
                     }
 
                     if(!someAction)
@@ -163,7 +156,6 @@ public class CheckersBoard2 extends JPanel{
         undo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("JEEEJ DZIALAM UNDO");
                 Command command = Game.getInstance().getUndoList().pop();
                 Game.getInstance().getRedoList().push(command);
                 command.undo(CheckersBoard2.this);
@@ -176,7 +168,6 @@ public class CheckersBoard2 extends JPanel{
         redo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("JEEEJ DZIALAM REDO");
                 Command command = Game.getInstance().getRedoList().pop();
                 Game.getInstance().getUndoList().push(command);
                 command.redo(CheckersBoard2.this);

@@ -77,26 +77,26 @@ public class Game implements java.io.Serializable, IObserver {
         pieces.put(new Point(5, 0), new TransformDecorator(Piece.getPiece(0), tr));
         pieces.put(new Point(7, 0), new TransformDecorator(Piece.getPiece(0), tr));
         pieces.put(new Point(1, 2), new TransformDecorator(Piece.getPiece(0), tr));
-        pieces.put(new Point(2, 1), new TransformDecorator(Piece.getPiece(0), tr));
+        pieces.put(new Point(2, 1), new TransformDecorator(Piece.getPiece(6), tr));
         pieces.put(new Point(5, 2), new TransformDecorator(Piece.getPiece(0), tr));
         pieces.put(new Point(7, 2), new TransformDecorator(Piece.getPiece(0), tr));
         pieces.put(new Point(0, 1), new TransformDecorator(Piece.getPiece(0), tr));
         pieces.put(new Point(6, 1), new TransformDecorator(Piece.getPiece(0), tr));
         pieces.put(new Point(3, 2), new TransformDecorator(Piece.getPiece(0), tr));
-        pieces.put(new Point(1, 0), new TransformDecorator(Piece.getPiece(0), tr));
+        //pieces.put(new Point(1, 0), new TransformDecorator(Piece.getPiece(0), tr));
         pieces.put(new Point(4, 1), new TransformDecorator(Piece.getPiece(0), tr));
 
         pieces.put(new Point(1, 6), new TransformDecorator(Piece.getPiece(6), tr));
         pieces.put(new Point(3, 6), new TransformDecorator(Piece.getPiece(6), tr));
-        pieces.put(new Point(5, 6), new TransformDecorator(Piece.getPiece(6), tr));
+        pieces.put(new Point(5, 6), new TransformDecorator(Piece.getPiece(0), tr));
         pieces.put(new Point(7, 6), new TransformDecorator(Piece.getPiece(6), tr));
         pieces.put(new Point(0, 5), new TransformDecorator(Piece.getPiece(6), tr));
         pieces.put(new Point(2, 5), new TransformDecorator(Piece.getPiece(6), tr));
         pieces.put(new Point(4, 5), new TransformDecorator(Piece.getPiece(6), tr));
-        pieces.put(new Point(6, 5), new TransformDecorator(Piece.getPiece(6), tr));
+        pieces.put(new Point(6, 5), new TransformDecorator(Piece.getPiece(0), tr));
         pieces.put(new Point(0, 7), new TransformDecorator(Piece.getPiece(6), tr));
         pieces.put(new Point(2, 7), new TransformDecorator(Piece.getPiece(6), tr));
-        pieces.put(new Point(4, 7), new TransformDecorator(Piece.getPiece(6), tr));
+        //pieces.put(new Point(4, 7), new TransformDecorator(Piece.getPiece(6), tr));
         pieces.put(new Point(6, 7), new TransformDecorator(Piece.getPiece(6), tr));
     }
 
@@ -149,102 +149,142 @@ public class Game implements java.io.Serializable, IObserver {
             ArrayList<Point> availablePoints = new ArrayList<Point>();
             availablePoints.clear();
             int colPosition;
-            HashMap<Point,IPiece> tab = new HashMap<>();
+
+            ArrayList<Integer> kingPath = new ArrayList<>();
+
             if (rowFrom > rowTo && colFrom > colTo) { // lewy_gorny
                 colPosition = colFrom;
                 for (int i = rowFrom; i >= rowTo; i--) {
-                    tab.put(new Point(i,colPosition),pieces.get(new Point(i,colPosition)));    /////UWAGA MOZE NIE DZIALAC BO trzeba zamienic i z colPosition
 
-                    availablePoints.add(new Point(i,colPosition));
+                    if(pieces.containsKey(new Point(colPosition,i))) {
+                        int index = pieces.get(new Point(colPosition,i)).getPiece().getIndex();
+                        kingPath.add(index);
+
+                    }else{
+                        kingPath.add(-1);
+                    }
+
+                    System.out.println();
+
+                    availablePoints.add(new Point(colPosition,i));
                     colPosition--;
                 }
-                for (Point p : availablePoints) {
-                    System.out.println("X: "+p.getX()+"Y: "+p.getY());
+                for (Integer k:kingPath) {
+                    System.out.print(k+" ");
+                }
+                System.out.println();
+                for(Point p: availablePoints){
+                   System.out.println(p.x+" "+p.y);
                 }
 
-                if(!(rowTo == availablePoints.get(availablePoints.size()-1).getX()
-                        && colTo==availablePoints.get(availablePoints.size()-1).getY())){
+
+                System.out.println(colTo+" "+rowTo+" "+availablePoints.get(availablePoints.size()-1).x+ availablePoints.get(availablePoints.size()-1).y);
+                if(!(colTo == availablePoints.get(availablePoints.size()-1).getX()
+                        && rowTo ==availablePoints.get(availablePoints.size()-1).getY())){
                     return false;
                 }
-
 
             } else if (rowFrom > rowTo && colFrom < colTo) { // prawy_gorny
                 colPosition = colFrom;
                 for (int i = rowFrom; i >= rowTo; i--) {
-                    tab.put(new Point(new Point(i,colPosition)), pieces.get(new Point(i,colPosition)));
-                    availablePoints.add(new Point(i,colPosition));
+                    if(pieces.containsKey(new Point(colPosition,i))) {
+                        int index = pieces.get(new Point(colPosition,i)).getPiece().getIndex();
+                        kingPath.add(index);
+
+                    }else{
+                        kingPath.add(-1);
+                    }
+
+                    availablePoints.add(new Point(colPosition,i));
                     colPosition++;
                 }
-                for (Point p : availablePoints) {
-                    System.out.println("X: "+p.getX()+"Y: "+p.getY());
-                }
-                if(!(rowTo == availablePoints.get(availablePoints.size()-1).getX()
-                        && colTo==availablePoints.get(availablePoints.size()-1).getY())){
+
+                if(!(colTo == availablePoints.get(availablePoints.size()-1).getX()
+                        && rowTo ==availablePoints.get(availablePoints.size()-1).getY())){
                     return false;
                 }
 
             } else if (rowFrom < rowTo && colFrom < colTo) { // prawy_dolny
-                System.out.println("PRAWY DOLNY!!!");
                 colPosition = colFrom;
                 for (int i = rowFrom; i <= rowTo; i++) {
-                    System.out.println("rowFrom: "+rowFrom+" rowTo: "+rowTo+" colFrom"+colFrom+" colTo: "+colTo);
-                    tab.put(new Point(colPosition,i), pieces.get(new Point(colPosition,i)));
+                    if(pieces.containsKey(new Point(colPosition,i))) {
+                        int index = pieces.get(new Point(colPosition,i)).getPiece().getIndex();
+                        kingPath.add(index);
 
+                    }else{
+                        kingPath.add(-1);
+                    }
+
+                    for (Integer k:kingPath) {
+                        System.out.print(k+" ");
+                    }
                     availablePoints.add(new Point(colPosition,i));
                     colPosition++;
-                    if(i==rowTo)
-                    tab.put(new Point(colPosition, i), new TransformDecorator(Piece.getPiece(6), tr));
                 }
-
-                for (Point p : availablePoints) {
-                    System.out.println("X: "+p.getX()+"Y: "+p.getY());
-                }
-                if(!(rowTo == availablePoints.get(availablePoints.size()-1).getX()
-                        && colTo==availablePoints.get(availablePoints.size()-1).getY())){
+                if(!(colTo == availablePoints.get(availablePoints.size()-1).getX()
+                        && rowTo ==availablePoints.get(availablePoints.size()-1).getY())){
                     return false;
                 }
             } else if (rowFrom < rowTo && colFrom > colTo) { // lewy_dolny
                 colPosition = colFrom;
                 for (int i = rowFrom; i <= rowTo; i++) {
-                    tab.put(new Point(new Point(i,colPosition)), pieces.get(new Point(i,colPosition)));
-                    availablePoints.add(new Point(i,colPosition));
+                    if(pieces.containsKey(new Point(colPosition,i))) {
+                        int index = pieces.get(new Point(colPosition,i)).getPiece().getIndex();
+                        kingPath.add(index);
+
+                    }else{
+                        kingPath.add(-1);
+                    }
+
+                    availablePoints.add(new Point(colPosition,i));
                     colPosition--;
                 }
-                for (Point p : availablePoints) {
-                    System.out.println("X: "+p.getX()+"Y: "+p.getY());
-                }
-                if(!(rowTo == availablePoints.get(availablePoints.size()-1).getX()
-                        && colTo==availablePoints.get(availablePoints.size()-1).getY())){
+                if(!(colTo == availablePoints.get(availablePoints.size()-1).getX()
+                        && rowTo ==availablePoints.get(availablePoints.size()-1).getY())){
                     return false;
                 }
             } else{
                 return false;
             }
-            return checkKingMove(tab,player);
+            return makeKingMove(player,kingPath,availablePoints);
         }
         return false;
     }
 
-    private boolean checkKingMove(HashMap<Point, IPiece> tab, int currentPlayer) {
+    private boolean makeKingMove(int player, ArrayList<Integer> kingPath, ArrayList<Point> availablePoints) {
+        System.out.print("Wszedłem :)))");
+        boolean makeMove = true;
 
-        int player = currentPlayer;
-        System.out.println("INDEX!!!!: "+ player);
-        int size = tab.size();
-        boolean flag = true;
-        boolean sameBefore;
-        boolean sameAfter;
-/*        boolean lastElementNotEmpty = tab.get(size - 1) != EMPTY;
-
-        for (int i = 1; i < tab.size(); i++) {
-            sameBefore = tab.get(i).equals(tab.get((i - 1) % size)) && tab.get(i) != EMPTY && tab.get((i - 1) % size) != EMPTY;
-            sameAfter = tab.get(i).equals(tab.get((i + 1) % size)) && tab.get(i) != EMPTY && tab.get((i + 1) % size) != EMPTY;
-            if ((player == WHITE_KING && ((tab.get(i) == WHITE || tab.get(i) == WHITE_KING) || (sameBefore || sameAfter) || (lastElementNotEmpty)))
-                    || (player == BLACK_KING && ((tab.get(i) == BLACK || tab.get(i) == BLACK_KING) || (sameBefore || sameAfter) || (lastElementNotEmpty)))) {
-                flag = false;
-                break;
+        //Ruch dla Czarnego Króla
+        if(player == 10 && (!kingPath.contains(6) && !kingPath.contains(10))) {  //czarny Król się rusza. - I na ścieżce nie ma Czarnych pionków i czarnych Króli.
+            System.out.println("Głębiej");
+            for (int i = 0; i < kingPath.size() - 1; i++) {
+                if ((kingPath.get(i) == 4 || kingPath.get(i) == 0) && (kingPath.get(i) == kingPath.get(i + 1))) //Jeżeli dwie figury białego koloru stoją obok siebie
+                    makeMove = false;
             }
-        }*/
-        return false;//flag;
+            if (makeMove) {
+                for (int i = 0; i < kingPath.size() - 1; i++)
+                    if (kingPath.get(i) == 0 || kingPath.get(i) == 4)
+                        pieces.remove(availablePoints.get(i));
+                return true;
+            }
+
+            //Ruch dla Białego Króla
+
+        } else if(player == 4 && (!kingPath.contains(0) && !kingPath.contains(4))) {  //czarny Król się rusza. - I na ścieżce nie ma Czarnych pionków i czarnych Króli.
+            System.out.println("Głębiej");
+            for (int i = 0; i < kingPath.size() - 1; i++) {
+                if ((kingPath.get(i) == 6 || kingPath.get(i) == 10) && (kingPath.get(i) == kingPath.get(i + 1)))
+                    makeMove = false;
+            }
+            if (makeMove) {
+                for (int i = 0; i < kingPath.size() - 1; i++)
+                    if (kingPath.get(i) == 6 || kingPath.get(i) == 10)
+                        pieces.remove(availablePoints.get(i));
+                return true;
+            }
+        }
+        return false;
     }
 
 
