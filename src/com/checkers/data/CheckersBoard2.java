@@ -134,7 +134,17 @@ public class CheckersBoard2 extends JPanel{
                         changeTurn();
                     }  else if ((selectedRowFrom + 2 == selectedRowTo || selectedRowFrom - 2 == selectedRowTo) && (currentIndex == 0 || currentIndex == 6)) {
                         if (Game.getInstance().canJump(currentIndex, selectedRowFrom, selectedColFrom, selectedRowTo, selectedColTo, turn)) {
-                            drop(dragged.getPiece(), (ev.getX()) / Piece.WIDTH, (ev.getY()) / Piece.HEIGHT);
+                            if (selectedRowTo == 0 ) {
+                                Game.getInstance().getPieces().put(new Point((ev.getX()) / Piece.WIDTH, (ev.getY()) / Piece.HEIGHT), new TransformDecorator(Piece
+                                        .getPiece(10), Game.getInstance().getTr()));
+                                Game.getInstance().getUndoList().push(new Move(dragged.getPiece(), savedPoint, new Point(ev.getX() / Piece.WIDTH, ev.getY() / Piece.HEIGHT)));
+                            }else if(selectedRowTo == 7){
+                                Game.getInstance().getPieces().put(new Point((ev.getX()) / Piece.WIDTH, (ev.getY()) / Piece.HEIGHT), new TransformDecorator(Piece
+                                        .getPiece(4), Game.getInstance().getTr()));
+                                Game.getInstance().getUndoList().push(new Move(dragged.getPiece(), savedPoint, new Point(ev.getX() / Piece.WIDTH, ev.getY() / Piece.HEIGHT)));
+                            }else {
+                                drop(dragged.getPiece(), (ev.getX()) / Piece.WIDTH, (ev.getY()) / Piece.HEIGHT);
+                            }
                             int jumpRow = (selectedRowFrom + selectedRowTo) / 2;
                             int jumpCol = (selectedColFrom + selectedColTo) / 2;
                             Point zbity = new Point(jumpCol,jumpRow);

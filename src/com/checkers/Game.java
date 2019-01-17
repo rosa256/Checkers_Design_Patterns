@@ -118,11 +118,12 @@ public class Game implements java.io.Serializable, IObserver {
 
 
 
-        pieces.put(new Point(4, 3), new TransformDecorator(Piece.getPiece(10), tr));
-        pieces.put(new Point(3, 2), new TransformDecorator(Piece.getPiece(0), tr));
-        pieces.put(new Point(5, 2), new TransformDecorator(Piece.getPiece(0), tr));
-        pieces.put(new Point(3, 4), new TransformDecorator(Piece.getPiece(0), tr));
-        pieces.put(new Point(5, 4), new TransformDecorator(Piece.getPiece(0), tr));
+        pieces.put(new Point(3, 2), new TransformDecorator(Piece.getPiece(6), tr));
+        pieces.put(new Point(1, 6), new TransformDecorator(Piece.getPiece(6), tr));
+        pieces.put(new Point(7, 6), new TransformDecorator(Piece.getPiece(6), tr));
+        pieces.put(new Point(2, 1), new TransformDecorator(Piece.getPiece(0), tr));
+        pieces.put(new Point(2, 5), new TransformDecorator(Piece.getPiece(0), tr));
+        pieces.put(new Point(7, 0), new TransformDecorator(Piece.getPiece(0), tr));
 
     }
 
