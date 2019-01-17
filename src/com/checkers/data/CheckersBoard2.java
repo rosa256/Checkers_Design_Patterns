@@ -125,7 +125,7 @@ public CheckersBoard2(JButton redo, JButton undo){
                         someAction=true;
                         //changeTurn();
                         DeletePiece deletePiece = new DeletePiece(board.get(zbity), zbity);
-                        Move move = new Move(dragged, savedPoint, new Point(ev.getX()/Piece.WIDTH, ev.getY()/Piece.HEIGHT));
+                        Move move = new Move(dragged.getPiece(), savedPoint, new Point(ev.getX()/Piece.WIDTH, ev.getY()/Piece.HEIGHT));
                         undoList.push(new CommandMakro(deletePiece, move));
                         Game.getInstance().getPieces().remove(new Point(jumpCol,jumpRow));
                     }

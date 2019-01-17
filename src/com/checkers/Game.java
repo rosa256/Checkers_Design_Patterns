@@ -28,6 +28,7 @@ public class Game implements java.io.Serializable, IObserver {
     private static Game instance = new Game();
     private CommandManager commandManager;
     private AffineTransform tr;
+    private MenuFrame menuFrame;
 
 
     private Game(){
@@ -38,8 +39,8 @@ public class Game implements java.io.Serializable, IObserver {
         return instance;
     }
 
-    public CommandManager getCommandManager() {
-        return commandManager;
+    public MenuFrame getMenuFrame(){
+        return this.menuFrame;
     }
 
     @Override
