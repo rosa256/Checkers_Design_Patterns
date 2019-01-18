@@ -49,7 +49,8 @@ public class MenuFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 new OptionsPanel();
-                board=new CheckersBoard2();
+                board = new CheckersBoard2(timeLabel_player1,timeLabel_player2);
+                Game.getInstance().setBoard(board);
 
                 if(gameFrame==null)
                     gameFrame = new GameFrame();

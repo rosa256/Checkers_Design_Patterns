@@ -44,6 +44,7 @@ public class CheckersBoard2 extends JPanel{
     private AffineTransform draggedAffineTransform = null;
     private Point orginalPoint = new Point(0,0);
     private Point mouse = null;
+    private JLabel timeLabel_player1,timeLabel_player2;
 
 
     public void paint(Graphics g)	{
@@ -62,7 +63,9 @@ public class CheckersBoard2 extends JPanel{
     }
 
 
-    public CheckersBoard2( ){
+    public CheckersBoard2(JLabel timeLabel_player1, JLabel timeLabel_player2){
+        this.timeLabel_player1=timeLabel_player1;
+        this.timeLabel_player2=timeLabel_player2;
         AffineTransform transform = new AffineTransform();
         //transform.translate(ZEROX, ZEROY);
         transform.scale(128, 96);
@@ -218,7 +221,7 @@ public class CheckersBoard2 extends JPanel{
         Game.getInstance().getPlayersInGame().get(1).getTimer().stop();
         Game.getInstance().getPlayersInGame().get(0).getTimer().start();
         Game.getInstance().getPlayersInGame().get(1).refreshTimer();
-        Game.getInstance().getTimeLabel_player2().setText(new SimpleDateFormat("mm : ss").format(new Date(15000)));
+        timeLabel_player2.setText(new SimpleDateFormat("mm : ss").format(new Date(15000)));
         Game.getInstance().getPlayersInGame().get(0).getTurnLabel().setVisible(true);
         Game.getInstance().getPlayersInGame().get(1).getTurnLabel().setVisible(false);
         Game.getInstance().getPlayersInGame().get(1).getWarnLabel().setVisible(false);
@@ -228,7 +231,7 @@ public class CheckersBoard2 extends JPanel{
         Game.getInstance().getPlayersInGame().get(1).getTimer().start();
         Game.getInstance().getPlayersInGame().get(1).getTurnLabel().setVisible(true);
         Game.getInstance().getPlayersInGame().get(0).getTurnLabel().setVisible(false);
-        Game.getInstance().getTimeLabel_player1().setText(new SimpleDateFormat("mm : ss").format(new Date(15000)));
+        timeLabel_player1.setText(new SimpleDateFormat("mm : ss").format(new Date(15000)));
         Game.getInstance().getPlayersInGame().get(0).getWarnLabel().setVisible(false);
         }
     }

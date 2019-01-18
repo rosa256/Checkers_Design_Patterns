@@ -3,13 +3,8 @@ package com.checkers.Layout;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,7 +21,7 @@ public class GameFrame extends JFrame{
 
     private JLabel player1NickName = new JLabel();
     private JLabel player2NickName = new JLabel();
-    private CheckersBoard2 board = new CheckersBoard2();
+    private CheckersBoard2 board;
     //    public JLabel timeLabel_player1 = new JLabel();
 //    public JLabel timeLabel_player2 = new JLabel();
     public JLabel win1 = new JLabel("Wygrałeś!");
@@ -47,6 +42,7 @@ public class GameFrame extends JFrame{
         //undo.setEnabled(false);
       //  redo.setEnabled(false);
         this.add(bar, BorderLayout.PAGE_START);
+        board = Game.getInstance().getBoard();
         JPanel gameBoard = new JPanel();
         JPanel player1panel = new JPanel();
         JLabel gracz1 = new JLabel("Gracz 1: ");

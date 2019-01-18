@@ -491,4 +491,8 @@ public class Game implements Serializable, IObserver {
     public AffineTransform getTr() {
         return tr;
     }
+
+    public void setBoard(CheckersBoard2 board) {
+        this.board = board;
+    }
 }
