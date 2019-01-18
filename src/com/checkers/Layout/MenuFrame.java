@@ -51,11 +51,19 @@ public class MenuFrame extends JFrame {
                 new OptionsPanel();
                 board = new CheckersBoard2(timeLabel_player1,timeLabel_player2);
                 Game.getInstance().setBoard(board);
+                Game.getInstance().getRedoList().clear();
+                Game.getInstance().getUndoList().clear();
+                gameFrame = new GameFrame();
+                gameFrame.getBar().removeAll();
 
                 if(gameFrame==null)
                     gameFrame = new GameFrame();
+                if(gameFrame.getBar().getComponentCount()<2){
                 gameFrame.getBar().add(board.getUndo());
-                gameFrame.getBar().add(board.getRedo());
+                gameFrame.getBar().add(board.getRedo());}
+                    board.getUndo().setEnabled(false);
+                    board.getRedo().setEnabled(false);
+
 
                 ArrayList<Player> playersInGame = Game.getInstance().getPlayersInGame();
                 gameFrame.setNickNames(playersInGame.get(0).getNickName(),
