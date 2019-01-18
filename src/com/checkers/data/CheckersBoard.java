@@ -16,7 +16,7 @@ import java.awt.geom.AffineTransform;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class CheckersBoard2 extends JPanel{
+public class CheckersBoard extends JPanel{
 
     private int turn=0;
     private int selectedColFrom, selectedRowFrom, selectedRowTo, selectedColTo;
@@ -61,7 +61,7 @@ public class CheckersBoard2 extends JPanel{
     }
 
 
-    public CheckersBoard2(JLabel timeLabel_player1, JLabel timeLabel_player2){
+    public CheckersBoard(JLabel timeLabel_player1, JLabel timeLabel_player2){
         this.timeLabel_player1=timeLabel_player1;
         this.timeLabel_player2=timeLabel_player2;
         AffineTransform transform = new AffineTransform();
@@ -180,7 +180,7 @@ public class CheckersBoard2 extends JPanel{
             public void actionPerformed(ActionEvent e) {
                 Command command = Game.getInstance().getUndoList().pop();
                 Game.getInstance().getRedoList().push(command);
-                command.undo(CheckersBoard2.this);
+                command.undo(CheckersBoard.this);
                 if(Game.getInstance().getUndoList().isEmpty())
                     undo.setEnabled(false);
                 redo.setEnabled(true);
@@ -194,7 +194,7 @@ public class CheckersBoard2 extends JPanel{
             public void actionPerformed(ActionEvent e) {
                 Command command = Game.getInstance().getRedoList().pop();
                 Game.getInstance().getUndoList().push(command);
-                command.redo(CheckersBoard2.this);
+                command.redo(CheckersBoard.this);
                 if(Game.getInstance().getRedoList().isEmpty())
                     redo.setEnabled(false);
                 undo.setEnabled(true);
@@ -205,7 +205,7 @@ public class CheckersBoard2 extends JPanel{
 
         this.addMouseMotionListener(new MouseMotionAdapter(){
             public void mouseDragged(MouseEvent ev)	{
-                draggedAffineTransform.setToTranslation((int)(ev.getX() - CheckersBoard2.this.mouse.getX()), (int)(ev.getY() - CheckersBoard2.this.mouse.getY()));
+                draggedAffineTransform.setToTranslation((int)(ev.getX() - CheckersBoard.this.mouse.getX()), (int)(ev.getY() - CheckersBoard.this.mouse.getY()));
                 repaint();
             }
         });

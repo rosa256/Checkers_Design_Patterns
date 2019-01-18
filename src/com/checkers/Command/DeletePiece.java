@@ -1,7 +1,7 @@
 package com.checkers.Command;
 
 import com.checkers.Decorator.IPiece;
-import com.checkers.data.CheckersBoard2;
+import com.checkers.data.CheckersBoard;
 
 import java.awt.*;
 
@@ -16,14 +16,14 @@ public class DeletePiece implements Command{
     }
 
     @Override
-    public void undo(CheckersBoard2 checkersBoard2) {
-        checkersBoard2.take((int)point.getX(), (int)point.getY());
-        checkersBoard2.drop(iPiece, (int)point.getX(), (int)point.getY());
+    public void undo(CheckersBoard checkersBoard) {
+        checkersBoard.take((int)point.getX(), (int)point.getY());
+        checkersBoard.drop(iPiece, (int)point.getX(), (int)point.getY());
     }
 
     @Override
-    public void redo(CheckersBoard2 checkersBoard2) {
-        checkersBoard2.take((int)point.getX(), (int)point.getY());
-        //checkersBoard2.drop(iPiece, (int)point.getX(), (int)point.getY());
+    public void redo(CheckersBoard checkersBoard) {
+        checkersBoard.take((int)point.getX(), (int)point.getY());
+        //checkersBoard.drop(iPiece, (int)point.getX(), (int)point.getY());
     }
 }

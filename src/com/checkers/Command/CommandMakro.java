@@ -1,6 +1,6 @@
 package com.checkers.Command;
 
-import com.checkers.data.CheckersBoard2;
+import com.checkers.data.CheckersBoard;
 
 import java.io.Serializable;
 
@@ -13,13 +13,13 @@ public class CommandMakro implements Command, Serializable {
         commands[1]= move;
     }
 
-    public void undo(CheckersBoard2 checkersBoard2){
-        commands[1].undo(checkersBoard2);
-        commands[0].undo(checkersBoard2);
+    public void undo(CheckersBoard checkersBoard){
+        commands[1].undo(checkersBoard);
+        commands[0].undo(checkersBoard);
     }
 
-    public void redo(CheckersBoard2 checkersBoard2){
-        commands[0].redo(checkersBoard2);
-        commands[1].redo(checkersBoard2);
+    public void redo(CheckersBoard checkersBoard){
+        commands[0].redo(checkersBoard);
+        commands[1].redo(checkersBoard);
     }
 }

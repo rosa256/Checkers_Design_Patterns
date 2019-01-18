@@ -6,7 +6,7 @@ import com.checkers.Decorator.Piece;
 import com.checkers.Decorator.TransformDecorator;
 import com.checkers.Layout.MenuFrame;
 import com.checkers.Observer.IObserver;
-import com.checkers.data.CheckersBoard2;
+import com.checkers.data.CheckersBoard;
 
 
 import javax.swing.*;
@@ -25,7 +25,7 @@ public class Game implements Serializable, IObserver {
     private LinkedList<Command> undoList = new LinkedList<>();
     private LinkedList<Command> redoList = new LinkedList<>();
 
-    private CheckersBoard2 board;
+    private CheckersBoard board;
     private int colPionkaDoBicia = 0;
     private int rowPionkaDoBicia = 0;
 
@@ -458,11 +458,11 @@ public class Game implements Serializable, IObserver {
         return tr;
     }
 
-    public void setBoard(CheckersBoard2 board) {
+    public void setBoard(CheckersBoard board) {
         this.board = board;
     }
 
-    public CheckersBoard2 getBoard() {
+    public CheckersBoard getBoard() {
         return board;
     }
 

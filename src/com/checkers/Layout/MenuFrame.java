@@ -2,7 +2,7 @@ package com.checkers.Layout;
 import com.checkers.Checkers;
 import com.checkers.Game;
 import com.checkers.Player;
-import com.checkers.data.CheckersBoard2;
+import com.checkers.data.CheckersBoard;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,7 +16,7 @@ public class MenuFrame extends JFrame {
 
     private GameFrame gameFrame;
     private JButton loadGameButton;
-    public CheckersBoard2 board;
+    public CheckersBoard board;
     private Checkers checkers;
     private static MenuFrame instance;
     private JLabel timeLabel_player1 = new JLabel();
@@ -46,7 +46,7 @@ public class MenuFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 new OptionsPanel();
-                board = new CheckersBoard2(timeLabel_player1,timeLabel_player2);
+                board = new CheckersBoard(timeLabel_player1,timeLabel_player2);
                 Game.getInstance().setBoard(board);
                 Game.getInstance().getRedoList().clear();
                 Game.getInstance().getUndoList().clear();
@@ -125,7 +125,7 @@ public class MenuFrame extends JFrame {
         add(exitButton);
     }
 
-    public CheckersBoard2 getBoard() {
+    public CheckersBoard getBoard() {
         return board;
     }
     public static MenuFrame getInstance(){

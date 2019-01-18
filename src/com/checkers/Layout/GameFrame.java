@@ -17,7 +17,7 @@ public class GameFrame extends JFrame{
     private JButton saveButton = new JButton("Save");
     private JLabel player1NickName = new JLabel();
     private JLabel player2NickName = new JLabel();
-    private CheckersBoard2 board;
+    private CheckersBoard board;
     public JLabel win1 = new JLabel("Wygrałeś!");
 
     public JLabel win2 = new JLabel("Wygrałeś!");
