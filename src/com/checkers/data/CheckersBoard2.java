@@ -14,10 +14,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.AffineTransform;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class CheckersBoard2 extends JPanel{
 
@@ -184,6 +182,7 @@ public class CheckersBoard2 extends JPanel{
                     undo.setEnabled(false);
                 redo.setEnabled(true);
                 changeTurn();
+                refreshPlayerPanel();
             }
         });
 
@@ -197,6 +196,7 @@ public class CheckersBoard2 extends JPanel{
                     redo.setEnabled(false);
                 undo.setEnabled(true);
                 changeTurn();
+                refreshPlayerPanel();
             }
         });
 
@@ -207,6 +207,26 @@ public class CheckersBoard2 extends JPanel{
             }
         });
 
+    }
+
+    private void refreshPlayerPanel() {
+        if(turn == 0){
+        Game.getInstance().getPlayersInGame().get(1).getTimer().stop();
+        Game.getInstance().getPlayersInGame().get(0).getTimer().start();
+        Game.getInstance().getPlayersInGame().get(1).refreshTimer();
+        Game.getInstance().getTimeLabel_player2().setText(new SimpleDateFormat("mm : ss").format(new Date(15000)));
+        Game.getInstance().getPlayersInGame().get(0).getTurnLabel().setVisible(true);
+        Game.getInstance().getPlayersInGame().get(1).getTurnLabel().setVisible(false);
+        Game.getInstance().getPlayersInGame().get(1).getWarnLabel().setVisible(false);
+        }else{
+        Game.getInstance().getPlayersInGame().get(0).getTimer().stop();
+        Game.getInstance().getPlayersInGame().get(0).refreshTimer();
+        Game.getInstance().getPlayersInGame().get(1).getTimer().start();
+        Game.getInstance().getPlayersInGame().get(1).getTurnLabel().setVisible(true);
+        Game.getInstance().getPlayersInGame().get(0).getTurnLabel().setVisible(false);
+        Game.getInstance().getTimeLabel_player1().setText(new SimpleDateFormat("mm : ss").format(new Date(15000)));
+        Game.getInstance().getPlayersInGame().get(0).getWarnLabel().setVisible(false);
+        }
     }
 
     public int getTurn() {
