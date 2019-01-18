@@ -103,40 +103,40 @@ public class Game implements Serializable, IObserver {
         tr=new AffineTransform();
         tr.scale(Piece.WIDTH,Piece.HEIGHT);
 //        startowe ustawienie
-//        pieces.put(new Point(3, 0), new TransformDecorator(Piece.getPiece(0), tr));
-//        pieces.put(new Point(5, 0), new TransformDecorator(Piece.getPiece(0), tr));
-//        pieces.put(new Point(7, 0), new TransformDecorator(Piece.getPiece(0), tr));
-//        pieces.put(new Point(1, 2), new TransformDecorator(Piece.getPiece(0), tr));
-//        pieces.put(new Point(2, 1), new TransformDecorator(Piece.getPiece(0), tr));
-//        pieces.put(new Point(5, 2), new TransformDecorator(Piece.getPiece(0), tr));
-//        pieces.put(new Point(7, 2), new TransformDecorator(Piece.getPiece(0), tr));
-//        pieces.put(new Point(0, 1), new TransformDecorator(Piece.getPiece(0), tr));
-//        pieces.put(new Point(6, 1), new TransformDecorator(Piece.getPiece(0), tr));
-//        pieces.put(new Point(3, 2), new TransformDecorator(Piece.getPiece(0), tr));
-//        pieces.put(new Point(1, 0), new TransformDecorator(Piece.getPiece(0), tr));
-//        pieces.put(new Point(4, 1), new TransformDecorator(Piece.getPiece(0), tr));
-//
-//        pieces.put(new Point(1, 6), new TransformDecorator(Piece.getPiece(6), tr));
-//        pieces.put(new Point(3, 6), new TransformDecorator(Piece.getPiece(6), tr));
-//        pieces.put(new Point(5, 6), new TransformDecorator(Piece.getPiece(6), tr));
-//        pieces.put(new Point(7, 6), new TransformDecorator(Piece.getPiece(6), tr));
-//        pieces.put(new Point(0, 5), new TransformDecorator(Piece.getPiece(6), tr));
-//        pieces.put(new Point(2, 5), new TransformDecorator(Piece.getPiece(6), tr));
-//        pieces.put(new Point(4, 5), new TransformDecorator(Piece.getPiece(6), tr));
-//        pieces.put(new Point(6, 5), new TransformDecorator(Piece.getPiece(6), tr));
-//        pieces.put(new Point(0, 7), new TransformDecorator(Piece.getPiece(6), tr));
-//        pieces.put(new Point(2, 7), new TransformDecorator(Piece.getPiece(6), tr));
-//        pieces.put(new Point(4, 7), new TransformDecorator(Piece.getPiece(6), tr));
-//        pieces.put(new Point(6, 7), new TransformDecorator(Piece.getPiece(6), tr));
-
-
-
-        pieces.put(new Point(3, 2), new TransformDecorator(Piece.getPiece(6), tr));
-        pieces.put(new Point(1, 6), new TransformDecorator(Piece.getPiece(6), tr));
-        pieces.put(new Point(7, 6), new TransformDecorator(Piece.getPiece(6), tr));
-        pieces.put(new Point(2, 1), new TransformDecorator(Piece.getPiece(0), tr));
-        pieces.put(new Point(2, 5), new TransformDecorator(Piece.getPiece(0), tr));
+        pieces.put(new Point(3, 0), new TransformDecorator(Piece.getPiece(0), tr));
+        pieces.put(new Point(5, 0), new TransformDecorator(Piece.getPiece(0), tr));
         pieces.put(new Point(7, 0), new TransformDecorator(Piece.getPiece(0), tr));
+        pieces.put(new Point(1, 2), new TransformDecorator(Piece.getPiece(0), tr));
+        pieces.put(new Point(2, 1), new TransformDecorator(Piece.getPiece(0), tr));
+        pieces.put(new Point(5, 2), new TransformDecorator(Piece.getPiece(0), tr));
+        pieces.put(new Point(7, 2), new TransformDecorator(Piece.getPiece(0), tr));
+        pieces.put(new Point(0, 1), new TransformDecorator(Piece.getPiece(0), tr));
+        pieces.put(new Point(6, 1), new TransformDecorator(Piece.getPiece(0), tr));
+        pieces.put(new Point(3, 2), new TransformDecorator(Piece.getPiece(0), tr));
+        pieces.put(new Point(1, 0), new TransformDecorator(Piece.getPiece(0), tr));
+        pieces.put(new Point(4, 1), new TransformDecorator(Piece.getPiece(0), tr));
+
+        pieces.put(new Point(1, 6), new TransformDecorator(Piece.getPiece(6), tr));
+        pieces.put(new Point(3, 6), new TransformDecorator(Piece.getPiece(6), tr));
+        pieces.put(new Point(5, 6), new TransformDecorator(Piece.getPiece(6), tr));
+        pieces.put(new Point(7, 6), new TransformDecorator(Piece.getPiece(6), tr));
+        pieces.put(new Point(0, 5), new TransformDecorator(Piece.getPiece(6), tr));
+        pieces.put(new Point(2, 5), new TransformDecorator(Piece.getPiece(6), tr));
+        pieces.put(new Point(4, 5), new TransformDecorator(Piece.getPiece(6), tr));
+        pieces.put(new Point(6, 5), new TransformDecorator(Piece.getPiece(6), tr));
+        pieces.put(new Point(0, 7), new TransformDecorator(Piece.getPiece(6), tr));
+        pieces.put(new Point(2, 7), new TransformDecorator(Piece.getPiece(6), tr));
+        pieces.put(new Point(4, 7), new TransformDecorator(Piece.getPiece(6), tr));
+        pieces.put(new Point(6, 7), new TransformDecorator(Piece.getPiece(6), tr));
+
+
+
+//        pieces.put(new Point(3, 2), new TransformDecorator(Piece.getPiece(6), tr));
+//        pieces.put(new Point(1, 6), new TransformDecorator(Piece.getPiece(6), tr));
+//        pieces.put(new Point(7, 6), new TransformDecorator(Piece.getPiece(6), tr));
+//        pieces.put(new Point(2, 1), new TransformDecorator(Piece.getPiece(0), tr));
+//        pieces.put(new Point(2, 5), new TransformDecorator(Piece.getPiece(0), tr));
+//        pieces.put(new Point(7, 0), new TransformDecorator(Piece.getPiece(0), tr));
 
     }
 

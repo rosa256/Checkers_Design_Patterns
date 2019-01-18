@@ -123,6 +123,7 @@ public class CheckersBoard2 extends JPanel{
 
                         }
                         changeTurn();
+                        undo.setEnabled(true);
                     }  else if ((selectedRowFrom + 2 == selectedRowTo || selectedRowFrom - 2 == selectedRowTo) && (currentIndex == 0 || currentIndex == 6)) {
                         if (Game.getInstance().canJump(currentIndex, selectedRowFrom, selectedColFrom, selectedRowTo, selectedColTo, turn)) {
                             if (selectedRowTo == 0 ) {
@@ -141,6 +142,7 @@ public class CheckersBoard2 extends JPanel{
                             Point zbity = new Point(jumpCol,jumpRow);
                             someAction=true;
                             changeTurn();
+                            undo.setEnabled(true);
                             DeletePiece deletePiece = new DeletePiece(board.get(zbity), zbity);
                             Move move = new Move(dragged.getPiece(), savedPoint, new Point(ev.getX()/Piece.WIDTH, ev.getY()/Piece.HEIGHT));
                             Game.getInstance().getUndoList().push(new CommandMakro(deletePiece, move));
@@ -160,6 +162,7 @@ public class CheckersBoard2 extends JPanel{
                                 Game.getInstance().getUndoList().push(new Move(dragged.getPiece(), savedPoint, new Point(ev.getX()/Piece.WIDTH, ev.getY()/Piece.HEIGHT)));
                             }
                             changeTurn();
+                            undo.setEnabled(true);
                     }
 
                     if(!someAction)
@@ -169,7 +172,6 @@ public class CheckersBoard2 extends JPanel{
                     repaint();
                     Game.getInstance().getRedoList().clear();
                     redo.setEnabled(false);
-                    undo.setEnabled(true);
                 }
             }
         });
