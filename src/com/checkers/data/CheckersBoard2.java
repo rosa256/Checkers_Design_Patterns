@@ -8,7 +8,6 @@ import com.checkers.Decorator.IPiece;
 import com.checkers.Decorator.Piece;
 import com.checkers.Decorator.TransformDecorator;
 import com.checkers.Game;
-import com.checkers.Layout.MenuFrame;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,7 +19,6 @@ import java.util.*;
 public class CheckersBoard2 extends JPanel{
 
     private int turn=0;
-    private Game game;
     private int selectedColFrom, selectedRowFrom, selectedRowTo, selectedColTo;
     private JButton undo,redo;
 
@@ -47,7 +45,7 @@ public class CheckersBoard2 extends JPanel{
     private JLabel timeLabel_player1,timeLabel_player2;
 
 
-    public void paint(Graphics g)	{
+    public void paint(Graphics g){
 
         g.drawImage(image, 0, 0, null);
         for(Map.Entry<Point, IPiece> e : board.entrySet()) {
@@ -67,14 +65,12 @@ public class CheckersBoard2 extends JPanel{
         this.timeLabel_player1=timeLabel_player1;
         this.timeLabel_player2=timeLabel_player2;
         AffineTransform transform = new AffineTransform();
-        //transform.translate(ZEROX, ZEROY);
         transform.scale(128, 96);
         undo = new JButton(new ImageIcon("undo.png"));
         redo = new JButton(new ImageIcon("redo.png"));
         undo.setEnabled(false);
         redo.setEnabled(false);
 
-        //Game.getInstance().loadPieces();
         board = Game.getInstance().getPieces();
         image = new ImageIcon("src/com/checkers/pictures/board.png").getImage()
                 .getScaledInstance(1024,768,Image.SCALE_SMOOTH);

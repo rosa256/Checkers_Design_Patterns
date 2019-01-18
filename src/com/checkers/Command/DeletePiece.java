@@ -1,7 +1,6 @@
 package com.checkers.Command;
 
 import com.checkers.Decorator.IPiece;
-import com.checkers.Decorator.Piece;
 import com.checkers.data.CheckersBoard2;
 
 import java.awt.*;

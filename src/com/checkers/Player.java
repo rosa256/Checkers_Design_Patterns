@@ -1,6 +1,5 @@
 package com.checkers;
 
-import com.checkers.Layout.GameFrame;
 import com.checkers.Observer.IObserver;
 import com.checkers.Observer.ISubject;
 
@@ -74,7 +73,6 @@ public class Player implements java.io.Serializable, ISubject {
     public long getActual_time() {
         return actual_time[0];
     }
-
 
     public JLabel getTurnLabel() {
         return turnLabel;

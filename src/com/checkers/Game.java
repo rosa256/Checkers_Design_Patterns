@@ -1,15 +1,11 @@
 package com.checkers;
 
 import com.checkers.Command.Command;
-import com.checkers.Command.CommandManager;
 import com.checkers.Decorator.IPiece;
 import com.checkers.Decorator.Piece;
 import com.checkers.Decorator.TransformDecorator;
 import com.checkers.Layout.MenuFrame;
-import com.checkers.Memento.Memento;
 import com.checkers.Observer.IObserver;
-import com.checkers.Observer.ISubject;
-import com.checkers.Strategy.Strategy;
 import com.checkers.data.CheckersBoard2;
 
 
@@ -19,46 +15,19 @@ import java.awt.geom.AffineTransform;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.List;
-
-import static com.checkers.data.CheckersData.WHITE_KING;
 
 public class Game implements Serializable, IObserver {
 
-    //Zapytac sie czy wszystkie obiekty Player zamienią się na IObserver?
-    //Zapytac czy Game zostanie zamieniony na ISubject
-
     private HashMap<Point, IPiece> pieces = new HashMap<>();
     private ArrayList<Player> playersInGame = new ArrayList<>();
-    private Strategy strategy;
     private static Game instance = new Game();
-    private CommandManager commandManager;
     private AffineTransform tr;
-    private MenuFrame menuFrame;
     private LinkedList<Command> undoList = new LinkedList<>();
     private LinkedList<Command> redoList = new LinkedList<>();
-
-    public CheckersBoard2 getBoard() {
-        return board;
-    }
 
     private CheckersBoard2 board;
     private int colPionkaDoBicia = 0;
     private int rowPionkaDoBicia = 0;
-
-    private JLabel timeLabel_player1 = new JLabel();
-
-    public Memento createMemento(){   //tworzenie pamiątki -  sava
-        return new Memento(instance);
-    }
-    public Game setMemento(Memento memento){ //odczytanie stanu z pamiątki - z sava
-        instance=memento.getGame();
-        return instance;
-    }
-
-    public void setPieces(HashMap<Point, IPiece> pieces) {
-        this.pieces = pieces;
-    }
 
     private Game(){ }
     public static Game getInstance(){
@@ -453,9 +422,6 @@ public class Game implements Serializable, IObserver {
         return false;
     }
 
-
-    private JLabel timeLabel_player2 = new JLabel();
-
     public LinkedList<Command> getUndoList() {
         return undoList;
     }
@@ -495,4 +461,9 @@ public class Game implements Serializable, IObserver {
     public void setBoard(CheckersBoard2 board) {
         this.board = board;
     }
+
+    public CheckersBoard2 getBoard() {
+        return board;
+    }
+
 }

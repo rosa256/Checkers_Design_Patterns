@@ -1,9 +1,5 @@
 package com.checkers.Command;
-
-import com.checkers.Decorator.Piece;
 import com.checkers.data.CheckersBoard2;
-
-import java.util.LinkedList;
 
 public interface Command {
 

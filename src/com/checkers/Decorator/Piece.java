@@ -3,7 +3,7 @@ package com.checkers.Decorator;
 import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
-import java.util.Map;
+
 
 public class Piece implements IPiece{
 
@@ -14,7 +14,6 @@ public class Piece implements IPiece{
     public int getIndex() {
         return index;
     }
-
 
     private Integer index;
     private Piece(Integer idx){
@@ -34,7 +33,7 @@ public class Piece implements IPiece{
 
     public void draw(Graphics2D g, int X, int Y) {
         g.drawImage(image, X, Y, X+1, Y+1,
-                index*TILESIZE, 0, (index+1)*TILESIZE, TILESIZE, null);   // tu bedzie przekazywany stan zewnetrzny
+                index*TILESIZE, 0, (index+1)*TILESIZE, TILESIZE, null);
     }
 
     @Override

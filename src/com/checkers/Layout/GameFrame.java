@@ -1,6 +1,5 @@
 package com.checkers.Layout;
 
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -8,52 +7,32 @@ import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.TimeZone;
-
 import com.checkers.Game;
 import com.checkers.Player;
 import com.checkers.data.*;
 
 public class GameFrame extends JFrame{
 
-    private JButton saveButton = new JButton("Save");
     private static final String ARIAL = "Arial";
-
+    private JButton saveButton = new JButton("Save");
     private JLabel player1NickName = new JLabel();
     private JLabel player2NickName = new JLabel();
     private CheckersBoard2 board;
-    //    public JLabel timeLabel_player1 = new JLabel();
-//    public JLabel timeLabel_player2 = new JLabel();
     public JLabel win1 = new JLabel("Wygrałeś!");
 
     public JLabel win2 = new JLabel("Wygrałeś!");
     private JLabel turn1, turn2;
     JToolBar bar = new JToolBar();
-   // private JButton undo;
-   // private JButton redo;
-
 
 
     public GameFrame(){
-       /* undo=board.getUndo();
-        redo=board.getRedo();
-        bar.add(undo);
-        bar.add(redo);*/
-        //undo.setEnabled(false);
-      //  redo.setEnabled(false);
+
         this.add(bar, BorderLayout.PAGE_START);
         board = Game.getInstance().getBoard();
         JPanel gameBoard = new JPanel();
         JPanel player1panel = new JPanel();
         JLabel gracz1 = new JLabel("Gracz 1: ");
-        JPanel turnpanel = new JPanel();
         JPanel gui = new JPanel();
-        JLabel turnTimeLabel = new JLabel("Czas tury:");
-        //Date date = new Date(board.getElapsedBoardTime());
-        //String formatted = getFormattedTime(date);
-        //JLabel time = new JLabel(formatted);
-
-
 
         JPanel player2panel = new JPanel();
         JLabel gracz2 = new JLabel("Gracz 2:");
@@ -62,13 +41,11 @@ public class GameFrame extends JFrame{
         gameBoard.setPreferredSize(new Dimension(1024, 768));
 
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        //this.add(board);
         gui.setPreferredSize(new Dimension(256, 128));
         gui.setLayout(new GridLayout(3, 1));
         turn1 = Game.getInstance().getPlayersInGame().get(0).getTurnLabel();
         turn2 = Game.getInstance().getPlayersInGame().get(1).getTurnLabel();
         setupPlayerPanel(player1panel, gracz1, player1NickName, turn1, win1, gui, Color.BLACK, MenuFrame.getInstance().getTimeLabel_player1(),Game.getInstance().getPlayersInGame().get(0).getWarnLabel());
-        //setupTimePanel(turnpanel, gui, turnTimeLabel, time);
 
         setupPlayerPanel(player2panel, gracz2, player2NickName, turn2, win2, gui, Color.WHITE, MenuFrame.getInstance().getTimeLabel_player2(),Game.getInstance().getPlayersInGame().get(1).getWarnLabel());
         turn2.setVisible(false);
@@ -130,7 +107,6 @@ public class GameFrame extends JFrame{
     private void setupPlayerPanel(JPanel panel, JLabel graczLabel, JLabel playerLabel, JLabel turnLabel, JLabel winLabel, JPanel gui, Color color, JLabel time_player, JLabel warnDelay) {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         graczLabel.setFont(new Font(ARIAL, Font.PLAIN, 24));
-
         panel.add(graczLabel);
         playerLabel.setFont(new Font(ARIAL, Font.PLAIN, 24));
         playerLabel.setOpaque(true);

@@ -3,7 +3,6 @@ import com.checkers.Checkers;
 import com.checkers.Game;
 import com.checkers.Player;
 import com.checkers.data.CheckersBoard2;
-import javafx.scene.control.Menu;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,10 +16,8 @@ public class MenuFrame extends JFrame {
 
     private GameFrame gameFrame;
     private JButton loadGameButton;
-    private ArrayList<Player> playersInGame = new ArrayList<>();
     public CheckersBoard2 board;
     private Checkers checkers;
-    private Game game;
     private static MenuFrame instance;
     private JLabel timeLabel_player1 = new JLabel();
     private JLabel timeLabel_player2 = new JLabel();
@@ -34,7 +31,7 @@ public class MenuFrame extends JFrame {
         setPreferredSize(new Dimension(1024, 768));
 
         AddButtonsToFrame();
-        //Do wyświetlenia okna Menu
+
         setVisible(true);
         pack();
         checkers=new Checkers();
@@ -84,7 +81,6 @@ public class MenuFrame extends JFrame {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         System.out.println("save Button");
-                        checkers.addMemento(Game.getInstance().createMemento()); //tworze pamiątke i dodaje na liste w checkers
                     }
                 });
 

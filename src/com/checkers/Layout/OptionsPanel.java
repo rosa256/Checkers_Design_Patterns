@@ -10,7 +10,6 @@ import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.util.ArrayList;
-import java.util.List;
 
 public class OptionsPanel extends JPanel {
 
