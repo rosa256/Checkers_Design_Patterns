@@ -44,8 +44,6 @@ public class OptionsPanel extends JPanel {
             playersInGame.add(player_1);
             playersInGame.add(player_2);
 
-            System.out.print("Size2:" + playersInGame.size());
-
             if (!nameField1.getText().equals("")) {
                 playersInGame.get(0).setNickName(nameField1.getText());
             } else {

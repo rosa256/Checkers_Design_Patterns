@@ -24,7 +24,7 @@ public class CheckersBoard2 extends JPanel{
     private int turn=0;
     private Game game;
     private int selectedColFrom, selectedRowFrom, selectedRowTo, selectedColTo;
-    JButton undo,redo;
+    private JButton undo,redo;
 
     private HashMap<Point, IPiece> board;
 
@@ -177,7 +177,6 @@ public class CheckersBoard2 extends JPanel{
         undo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("JEEEJ DZIALAM UNDO");
                 Command command = Game.getInstance().getUndoList().pop();
                 Game.getInstance().getRedoList().push(command);
                 command.undo(CheckersBoard2.this);
@@ -191,7 +190,6 @@ public class CheckersBoard2 extends JPanel{
         redo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("JEEEJ DZIALAM REDO");
                 Command command = Game.getInstance().getRedoList().pop();
                 Game.getInstance().getUndoList().push(command);
                 command.redo(CheckersBoard2.this);
@@ -219,7 +217,7 @@ public class CheckersBoard2 extends JPanel{
         return isOver();
     }
 
-    private void changeTurn() {
+    public void changeTurn() {
         if (turn == 0) {
             turn = 1;
         } else if (turn == 1) {

@@ -30,7 +30,7 @@ public class Checkers {
 
         menuFrame = new MenuFrame();
 
-        menuFrame.getGameFrame().getSaveButton().addActionListener(new ActionListener() {
+        Game.getInstance().getSaveButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 SavePanel savePanel = new SavePanel();

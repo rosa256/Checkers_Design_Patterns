@@ -36,35 +36,29 @@ public class Game implements Serializable, IObserver {
     private MenuFrame menuFrame;
     private LinkedList<Command> undoList = new LinkedList<>();
     private LinkedList<Command> redoList = new LinkedList<>();
+
+    public void setBoard(CheckersBoard2 board) {
+        this.board = board;
+    }
+
+    public CheckersBoard2 getBoard() {
+        return board;
+    }
+
+    private CheckersBoard2 board;
     private int colPionkaDoBicia = 0;
     private int rowPionkaDoBicia = 0;
 
     private JButton undo = new JButton(new ImageIcon("undo.png"));
     private JButton redo = new JButton(new ImageIcon("redo.png"));
     private JLabel timeLabel_player1 = new JLabel();
-    private JLabel player2DelayLabel = new JLabel();
-    private JLabel player1DelayLabel = new JLabel();
 
-    public JLabel getPlayer1DelayLabel() {
-        return player1DelayLabel;
+    public JButton getSaveButton() {
+        return saveButton;
     }
 
-    public int getColPionkaDoBicia() {
-        return colPionkaDoBicia;
-    }
-
-    public void setColPionkaDoBicia(int colPionkaDoBicia) {
-        this.colPionkaDoBicia = colPionkaDoBicia;
-    }
-
-    public int getRowPionkaDoBicia() {
-        return rowPionkaDoBicia;
-    }
-
-    public void setRowPionkaDoBicia(int rowPionkaDoBicia) {
-        this.rowPionkaDoBicia = rowPionkaDoBicia;
-    }
-
+    private JButton saveButton = new JButton("Save");
+    private JButton loadGameButton;
 
     private Game(){ }
     public static Game getInstance(){
@@ -74,39 +68,35 @@ public class Game implements Serializable, IObserver {
     }
 
 
-    public MenuFrame getMenuFrame(){
-        return this.menuFrame;
-    }
-
     @Override
     public void update(Player player) {
         int index = playersInGame.indexOf(player);
-        System.out.println("Index:"+index);
-        if(index == 0) {
-            player1DelayLabel.setVisible(true);
-            player1DelayLabel.setText("ŚPIESZ SIĘ!!");
-            player1DelayLabel.setForeground(Color.RED);
+        JLabel warnLabel = playersInGame.get(index).getWarnLabel();
+            warnLabel.setVisible(true);
             if(playersInGame.get(index).getActual_time()<0) {
                 playersInGame.get(index).getTimer().stop();
-                player1DelayLabel.setVisible(false);
-            }
-        }else{
-            player2DelayLabel.setText("ŚPIESZ SIĘ!!");
-            player2DelayLabel.setForeground(Color.RED);
-            player2DelayLabel.setVisible(true);
-            if(playersInGame.get(index).getActual_time()<0) {
-                playersInGame.get(index).getTimer().stop();
-                player2DelayLabel.setVisible(false);
-            }
-        }
-        }
+                Game.getInstance().getBoard().changeTurn();
 
-    public ArrayList<Player> getPlayersInGame(){
-        return playersInGame;
-    }
+                if (board.getTurn() == 0 && board.isGameOver() == -1) {
+                    getPlayersInGame().get(0).getTurnLabel().setVisible(true);
+                    getPlayersInGame().get(1).getTurnLabel().setVisible(false);
 
-    public HashMap<Point, IPiece> getPieces() {
-        return pieces;
+                    Game.getInstance().getTimeLabel_player2().setText(new SimpleDateFormat("mm : ss").format(new Date(15000)));
+                    playersInGame.get(0).getTimer().start();
+                    playersInGame.get(1).getTimer().stop();
+                    playersInGame.get(1).refreshTimer();
+
+                } else if (board.getTurn() == 1 && board.isGameOver() == -1) {
+                    getPlayersInGame().get(1).getTurnLabel().setVisible(true);
+                    getPlayersInGame().get(0).getTurnLabel().setVisible(false);
+                    Game.getInstance().getTimeLabel_player1().setText(new SimpleDateFormat("mm : ss").format(new Date(15000)));
+                    playersInGame.get(0).getTimer().stop();
+                    playersInGame.get(1).getTimer().start();
+                    playersInGame.get(0).refreshTimer();
+
+                }
+                    warnLabel.setVisible(false);
+            }
     }
 
     public void loadPieces(){
@@ -150,10 +140,6 @@ public class Game implements Serializable, IObserver {
 
     }
 
-    public AffineTransform getTr() {
-        return tr;
-    }
-
     public boolean canMove(int player, int fromCol, int fromRow, int toCol, int toRow, int turn) {
         if (Game.getInstance().getPieces().containsKey(new Point(toCol,toRow)) == true) { //!Uwaga zamian toCol, na toRow miejscami!!! tylko tu
             return false;
@@ -167,11 +153,7 @@ public class Game implements Serializable, IObserver {
     }
 
     public boolean canJump(int player, int fromRow, int fromCol, int toRow, int toCol, int turn) {
-        System.out.println("fromX"+fromRow);
-        System.out.println("fromY"+fromCol);
-        System.out.println("ToX"+toRow);
-        System.out.println("ToY"+toCol);
-        System.out.println("Bity-pozycja:"+(fromCol + toCol) / 2+(fromRow + toRow) / 2);
+
         int jumpedChecker=-1;
         try {
             jumpedChecker = Game.getInstance().getPieces().get(new Point((fromCol + toCol) / 2, (fromRow + toRow) / 2)).getPiece().getIndex();
@@ -179,7 +161,6 @@ public class Game implements Serializable, IObserver {
         {
             return false;
         }
-        System.out.println("Bity-pozycja:"+(fromCol + toCol) / 2+(fromRow + toRow) / 2);
 
         boolean correctColumn = toCol == (fromCol + 2) || toCol == (fromCol - 2);
         boolean correctRowWhite = toRow == fromRow + 2;
@@ -472,28 +453,6 @@ public class Game implements Serializable, IObserver {
         return false;
     }
 
-    private boolean checkKingMove(HashMap<Point, IPiece> tab, int currentPlayer) {
-
-        int player = currentPlayer;
-        System.out.println("INDEX!!!!: "+ player);
-        int size = tab.size();
-        boolean flag = true;
-        boolean sameBefore;
-        boolean sameAfter;
-/*        boolean lastElementNotEmpty = tab.get(size - 1) != EMPTY;
-
-        for (int i = 1; i < tab.size(); i++) {
-            sameBefore = tab.get(i).equals(tab.get((i - 1) % size)) && tab.get(i) != EMPTY && tab.get((i - 1) % size) != EMPTY;
-            sameAfter = tab.get(i).equals(tab.get((i + 1) % size)) && tab.get(i) != EMPTY && tab.get((i + 1) % size) != EMPTY;
-            if ((player == WHITE_KING && ((tab.get(i) == WHITE || tab.get(i) == WHITE_KING) || (sameBefore || sameAfter) || (lastElementNotEmpty)))
-                    || (player == BLACK_KING && ((tab.get(i) == BLACK || tab.get(i) == BLACK_KING) || (sameBefore || sameAfter) || (lastElementNotEmpty)))) {
-                flag = false;
-                break;
-            }
-        }*/
-        return false;//flag;
-    }
-
     public JLabel getTimeLabel_player1() {
         return timeLabel_player1;
     }
@@ -521,8 +480,31 @@ public class Game implements Serializable, IObserver {
         return redoList;
     }
 
+    public int getColPionkaDoBicia() {
+        return colPionkaDoBicia;
+    }
 
-    public JLabel getPlayer2DelayLabel() {
-        return player2DelayLabel;
+    public void setColPionkaDoBicia(int colPionkaDoBicia) {
+        this.colPionkaDoBicia = colPionkaDoBicia;
+    }
+
+    public int getRowPionkaDoBicia() {
+        return rowPionkaDoBicia;
+    }
+
+    public void setRowPionkaDoBicia(int rowPionkaDoBicia) {
+        this.rowPionkaDoBicia = rowPionkaDoBicia;
+    }
+
+    public ArrayList<Player> getPlayersInGame(){
+        return playersInGame;
+    }
+
+    public HashMap<Point, IPiece> getPieces() {
+        return pieces;
+    }
+
+    public AffineTransform getTr() {
+        return tr;
     }
 }

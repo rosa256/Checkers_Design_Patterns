@@ -15,7 +15,6 @@ public class MenuFrame extends JFrame {
 
     private GameFrame gameFrame;
     private JButton loadGameButton;
-    public CheckersBoard2 board;
 
     public MenuFrame(){
         setResizable(false);
@@ -25,8 +24,6 @@ public class MenuFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(1024, 768));
 
-        if(gameFrame==null)
-        gameFrame = new GameFrame();
         AddButtonsToFrame();
 
 
@@ -43,13 +40,17 @@ public class MenuFrame extends JFrame {
         newGameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ArrayList<Player> playersInGame = Game.getInstance().getPlayersInGame();
                 new OptionsPanel();
+                Game.getInstance().setBoard(new CheckersBoard2());
+
+                if(gameFrame==null)
+                    gameFrame = new GameFrame();
+
+                ArrayList<Player> playersInGame = Game.getInstance().getPlayersInGame();
                 gameFrame.setNickNames(playersInGame.get(0).getNickName(),
                         playersInGame.get(1).getNickName());
 
-                board = new CheckersBoard2();
-                gameFrame.add(board);
+                gameFrame.add(Game.getInstance().getBoard());
                 Game.getInstance().getPieces().clear();
                 Game.getInstance().loadPieces();
                 gameFrame.setVisible(true);

@@ -16,18 +16,18 @@ import com.checkers.data.*;
 
 public class GameFrame extends JFrame{
 
-    private JButton saveButton = new JButton("Save");
+    private JButton saveButton = Game.getInstance().getSaveButton();
     private static final String ARIAL = "Arial";
-    public CheckersBoard2 board;
 
     private JLabel player1NickName = new JLabel();
     private JLabel player2NickName = new JLabel();
+    private CheckersBoard2 board = Game.getInstance().getBoard();
 //    public JLabel timeLabel_player1 = new JLabel();
 //    public JLabel timeLabel_player2 = new JLabel();
-    private JLabel turn1 = new JLabel("Twoja tura!");
-    private JLabel win1 = new JLabel("Wygrałeś!");
-    private JLabel turn2 = new JLabel("Twoja tura!");
-    private JLabel win2 = new JLabel("Wygrałeś!");
+    public JLabel win1 = new JLabel("Wygrałeś!");
+
+    public JLabel win2 = new JLabel("Wygrałeś!");
+    private JLabel turn1, turn2;
     JToolBar bar = new JToolBar();
 //    private JButton undo = new JButton(new ImageIcon("undo.png"));
 //    private JButton redo = new JButton(new ImageIcon("redo.png"));
@@ -65,14 +65,15 @@ public class GameFrame extends JFrame{
         //this.add(board);
         gui.setPreferredSize(new Dimension(256, 128));
         gui.setLayout(new GridLayout(3, 1));
-
-        setupPlayerPanel(player1panel, gracz1, player1NickName, turn1, win1, gui, Color.BLACK, Game.getInstance().getTimeLabel_player1(),Game.getInstance().getPlayer1DelayLabel());
+        turn1 = Game.getInstance().getPlayersInGame().get(0).getTurnLabel();
+        turn2 = Game.getInstance().getPlayersInGame().get(1).getTurnLabel();
+        setupPlayerPanel(player1panel, gracz1, player1NickName, turn1, win1, gui, Color.BLACK, Game.getInstance().getTimeLabel_player1(),Game.getInstance().getPlayersInGame().get(0).getWarnLabel());
         //setupTimePanel(turnpanel, gui, turnTimeLabel, time);
 
-        setupPlayerPanel(player2panel, gracz2, player2NickName, turn2, win2, gui, Color.WHITE, Game.getInstance().getTimeLabel_player2(),Game.getInstance().getPlayer2DelayLabel());
+        setupPlayerPanel(player2panel, gracz2, player2NickName, turn2, win2, gui, Color.WHITE, Game.getInstance().getTimeLabel_player2(),Game.getInstance().getPlayersInGame().get(1).getWarnLabel());
         turn2.setVisible(false);
 
-//        runGameFrameTimers(playersInGame);
+        runGameFrameTimers(Game.getInstance().getPlayersInGame());
 
         gui.add(saveButton);
         this.add(gui, BorderLayout.EAST);
@@ -88,10 +89,11 @@ public class GameFrame extends JFrame{
                     win1.setVisible(false);
                     win2.setVisible(false);
 
+                    Game.getInstance().getTimeLabel_player2().setText(new SimpleDateFormat("mm : ss").format(new Date(15000)));
                     playersInGame.get(0).getTimer().start();
                     playersInGame.get(1).getTimer().stop();
-                    Game.getInstance().getTimeLabel_player2().setText(new SimpleDateFormat("mm : ss").format(new Date(10000)));
                     playersInGame.get(1).refreshTimer();
+                    playersInGame.get(1).getWarnLabel().setVisible(false);
 
 
                 } else if (board.getTurn() == 1 && board.isGameOver() == -1) {
@@ -99,32 +101,31 @@ public class GameFrame extends JFrame{
                     turn1.setVisible(false);
                     win1.setVisible(false);
                     win2.setVisible(false);
-                    Game.getInstance().getTimeLabel_player1().setText(new SimpleDateFormat("mm : ss").format(new Date(10000)));
+                    Game.getInstance().getTimeLabel_player1().setText(new SimpleDateFormat("mm : ss").format(new Date(15000)));
                     playersInGame.get(0).getTimer().stop();
                     playersInGame.get(1).getTimer().start();
                     playersInGame.get(0).refreshTimer();
+                    playersInGame.get(0).getWarnLabel().setVisible(false);
                 }
                 if (board.isGameOver() == 0) {
                     turn1.setVisible(false);
                     turn2.setVisible(false);
                     win1.setVisible(true);
+                    playersInGame.get(1).getTimer().stop();
+                    playersInGame.get(0).getTimer().stop();
 
                 } else if (board.isGameOver() == 1) {
                     turn1.setVisible(false);
                     turn2.setVisible(false);
                     win2.setVisible(true);
+                    playersInGame.get(0).getTimer().stop();
+                    playersInGame.get(1).getTimer().stop();
 
                 }
             }
         });
     }
 
-
-    private String getFormattedTime(Date date) {
-        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
-        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
-        return formatter.format(date);
-    }
 
     private void setupPlayerPanel(JPanel panel, JLabel graczLabel, JLabel playerLabel, JLabel turnLabel, JLabel winLabel, JPanel gui, Color color, JLabel time_player, JLabel warnDelay) {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -143,7 +144,8 @@ public class GameFrame extends JFrame{
         winLabel.setVisible(false);
         panel.add(turnLabel);
         panel.add(warnDelay);
-        panel.add(winLabel);
+        warnDelay.setVisible(false);
+        panel.add(winLabel).setForeground(Color.BLUE);
         panel.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
         playerLabel.setForeground(color);
         gui.add(panel);
@@ -157,10 +159,6 @@ public class GameFrame extends JFrame{
             player.setBackground(Color.WHITE);
             player.setBorder(BorderFactory.createLineBorder(color));
         }
-    }
-
-    public JButton getSaveButton() {
-        return saveButton;
     }
 
 
