@@ -2,7 +2,9 @@ package com.checkers.Command;
 
 import com.checkers.data.CheckersBoard2;
 
-public class CommandMakro implements Command{
+import java.io.Serializable;
+
+public class CommandMakro implements Command, Serializable {
 
     private Command[] commands = new Command[2];
 

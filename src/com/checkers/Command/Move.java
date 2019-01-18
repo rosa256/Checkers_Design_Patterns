@@ -5,8 +5,9 @@ import com.checkers.Decorator.Piece;
 import com.checkers.data.CheckersBoard2;
 
 import java.awt.*;
+import java.io.Serializable;
 
-public class Move implements Command{
+public class Move implements Command, Serializable {
 
     private IPiece iPiece;
     private Point from;

@@ -1,7 +1,9 @@
 package com.checkers.Layout;
+import com.checkers.Checkers;
 import com.checkers.Game;
 import com.checkers.Player;
 import com.checkers.data.CheckersBoard2;
+import javafx.scene.control.Menu;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,6 +17,13 @@ public class MenuFrame extends JFrame {
 
     private GameFrame gameFrame;
     private JButton loadGameButton;
+    private ArrayList<Player> playersInGame = new ArrayList<>();
+    public CheckersBoard2 board;
+    private Checkers checkers;
+    private Game game;
+    private static MenuFrame instance;
+    private JLabel timeLabel_player1 = new JLabel();
+    private JLabel timeLabel_player2 = new JLabel();
 
     public MenuFrame(){
         setResizable(false);
@@ -25,11 +34,10 @@ public class MenuFrame extends JFrame {
         setPreferredSize(new Dimension(1024, 768));
 
         AddButtonsToFrame();
-
-
         //Do wyświetlenia okna Menu
         setVisible(true);
         pack();
+        checkers=new Checkers();
     }
 
 
@@ -41,16 +49,18 @@ public class MenuFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 new OptionsPanel();
-                Game.getInstance().setBoard(new CheckersBoard2());
+                board=new CheckersBoard2();
 
                 if(gameFrame==null)
                     gameFrame = new GameFrame();
+                gameFrame.getBar().add(board.getUndo());
+                gameFrame.getBar().add(board.getRedo());
 
                 ArrayList<Player> playersInGame = Game.getInstance().getPlayersInGame();
                 gameFrame.setNickNames(playersInGame.get(0).getNickName(),
                         playersInGame.get(1).getNickName());
 
-                gameFrame.add(Game.getInstance().getBoard());
+                gameFrame.add(board);
                 Game.getInstance().getPieces().clear();
                 Game.getInstance().loadPieces();
                 gameFrame.setVisible(true);
@@ -60,6 +70,14 @@ public class MenuFrame extends JFrame {
                 gameFrame.pack();
 
                 Game.getInstance().getPlayersInGame().get(0).getTimer().start();
+
+                gameFrame.getSaveButton().addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        System.out.println("save Button");
+                        checkers.addMemento(Game.getInstance().createMemento()); //tworze pamiątke i dodaje na liste w checkers
+                    }
+                });
 
             }
         });
@@ -102,12 +120,20 @@ public class MenuFrame extends JFrame {
         add(exitButton);
     }
 
-    public GameFrame getGameFrame(){
-        return this.gameFrame;
+    public CheckersBoard2 getBoard() {
+        return board;
     }
-    public JButton getLoadGameButton(){
-        return loadGameButton;
+    public static MenuFrame getInstance(){
+        if(instance==null)
+            instance=new MenuFrame();
+        return instance;
     }
 
+    public JLabel getTimeLabel_player1() {
+        return timeLabel_player1;
+    }
 
+    public JLabel getTimeLabel_player2() {
+        return timeLabel_player2;
+    }
 }

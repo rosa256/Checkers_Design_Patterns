@@ -1,36 +1,33 @@
 package com.checkers.Memento;
 
+import com.checkers.Decorator.IPiece;
 import com.checkers.Game;
 import com.checkers.Layout.GameFrame;
 
+import java.awt.*;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.HashMap;
 
 public class Memento {
 
-    private String state;
+    private Game game;
 
     public Memento(){}
-    public Memento(Game game,String saveName) {
-        try {
-            FileOutputStream fileOut = new FileOutputStream(System.getProperty("user.dir")+"/tmp/" +saveName +".ser");
-            this.state = System.getProperty("user.dir") + "/tmp/" + saveName +".ser";
-            ObjectOutputStream out = new ObjectOutputStream(fileOut);
-            out.writeObject(game);
-            out.close();
-            fileOut.close();
-            System.out.printf("Serialized data is saved in "+System.getProperty("user.dir")+"/tmp/"+ saveName +".ser");
-        } catch (IOException i) {
-            i.printStackTrace();
-        }
+    public Memento(Game game) {
+
+        this.game=game;
     }
 
-    public String getState() {
+   /* public String getState() {
         return state;
-    }
+    }*/
 
-    public void setState(String state) {
-        this.state = state;
+    public Game getGame() {
+        return game;
     }
+/* public void setState(String state) {
+        this.state = state;
+    }*/
 }
