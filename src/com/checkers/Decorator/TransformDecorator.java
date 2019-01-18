@@ -2,8 +2,9 @@ package com.checkers.Decorator;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.io.Serializable;
 
-public class TransformDecorator extends Decorator{
+public class TransformDecorator extends Decorator implements Serializable {
 
     private AffineTransform transform;
 

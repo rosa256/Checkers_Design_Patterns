@@ -21,32 +21,31 @@ import com.checkers.data.*;
 
 public class GameFrame extends JFrame{
 
-    private JButton saveButton = Game.getInstance().getSaveButton();
+    private JButton saveButton = new JButton("Save");
     private static final String ARIAL = "Arial";
 
     private JLabel player1NickName = new JLabel();
     private JLabel player2NickName = new JLabel();
-    private CheckersBoard2 board = Game.getInstance().getBoard();
-//    public JLabel timeLabel_player1 = new JLabel();
+    private CheckersBoard2 board = new CheckersBoard2();
+    //    public JLabel timeLabel_player1 = new JLabel();
 //    public JLabel timeLabel_player2 = new JLabel();
     public JLabel win1 = new JLabel("Wygrałeś!");
 
     public JLabel win2 = new JLabel("Wygrałeś!");
     private JLabel turn1, turn2;
     JToolBar bar = new JToolBar();
-//    private JButton undo = new JButton(new ImageIcon("undo.png"));
-//    private JButton redo = new JButton(new ImageIcon("redo.png"));
+   // private JButton undo;
+   // private JButton redo;
 
 
 
     public GameFrame(){
-        //board = new CheckersBoard();
-        JButton undo = Game.getInstance().getUndo();
-        JButton redo = Game.getInstance().getRedo();
+       /* undo=board.getUndo();
+        redo=board.getRedo();
         bar.add(undo);
-        bar.add(redo);
-        undo.setEnabled(false);
-        redo.setEnabled(false);
+        bar.add(redo);*/
+        //undo.setEnabled(false);
+      //  redo.setEnabled(false);
         this.add(bar, BorderLayout.PAGE_START);
         JPanel gameBoard = new JPanel();
         JPanel player1panel = new JPanel();
@@ -72,10 +71,10 @@ public class GameFrame extends JFrame{
         gui.setLayout(new GridLayout(3, 1));
         turn1 = Game.getInstance().getPlayersInGame().get(0).getTurnLabel();
         turn2 = Game.getInstance().getPlayersInGame().get(1).getTurnLabel();
-        setupPlayerPanel(player1panel, gracz1, player1NickName, turn1, win1, gui, Color.BLACK, Game.getInstance().getTimeLabel_player1(),Game.getInstance().getPlayersInGame().get(0).getWarnLabel());
+        setupPlayerPanel(player1panel, gracz1, player1NickName, turn1, win1, gui, Color.BLACK, MenuFrame.getInstance().getTimeLabel_player1(),Game.getInstance().getPlayersInGame().get(0).getWarnLabel());
         //setupTimePanel(turnpanel, gui, turnTimeLabel, time);
 
-        setupPlayerPanel(player2panel, gracz2, player2NickName, turn2, win2, gui, Color.WHITE, Game.getInstance().getTimeLabel_player2(),Game.getInstance().getPlayersInGame().get(1).getWarnLabel());
+        setupPlayerPanel(player2panel, gracz2, player2NickName, turn2, win2, gui, Color.WHITE, MenuFrame.getInstance().getTimeLabel_player2(),Game.getInstance().getPlayersInGame().get(1).getWarnLabel());
         turn2.setVisible(false);
 
         runGameFrameTimers(Game.getInstance().getPlayersInGame());
@@ -94,7 +93,7 @@ public class GameFrame extends JFrame{
                     win1.setVisible(false);
                     win2.setVisible(false);
 
-                    Game.getInstance().getTimeLabel_player2().setText(new SimpleDateFormat("mm : ss").format(new Date(15000)));
+                    MenuFrame.getInstance().getTimeLabel_player2().setText(new SimpleDateFormat("mm : ss").format(new Date(15000)));
                     playersInGame.get(0).getTimer().start();
                     playersInGame.get(1).getTimer().stop();
                     playersInGame.get(1).refreshTimer();
@@ -106,7 +105,7 @@ public class GameFrame extends JFrame{
                     turn1.setVisible(false);
                     win1.setVisible(false);
                     win2.setVisible(false);
-                    Game.getInstance().getTimeLabel_player1().setText(new SimpleDateFormat("mm : ss").format(new Date(15000)));
+                    MenuFrame.getInstance().getTimeLabel_player1().setText(new SimpleDateFormat("mm : ss").format(new Date(15000)));
                     playersInGame.get(0).getTimer().stop();
                     playersInGame.get(1).getTimer().start();
                     playersInGame.get(0).refreshTimer();
@@ -170,5 +169,13 @@ public class GameFrame extends JFrame{
     public void setNickNames(String nickName1, String nickName2) {
         player1NickName.setText(nickName1);
         player2NickName.setText(nickName2);
+    }
+
+    public JButton getSaveButton() {
+        return saveButton;
+    }
+
+    public JToolBar getBar() {
+        return bar;
     }
 }

@@ -38,8 +38,8 @@ public class OptionsPanel extends JPanel {
         int result = JOptionPane.showConfirmDialog(null, this, "Opcje gry", JOptionPane.OK_CANCEL_OPTION);
         if (result == JOptionPane.OK_OPTION) {
 
-            Player player_1 = new Player(Game.getInstance().getTimeLabel_player1());
-            Player player_2 = new Player(Game.getInstance().getTimeLabel_player2());
+            Player player_1 = new Player(MenuFrame.getInstance().getTimeLabel_player1());
+            Player player_2 = new Player(MenuFrame.getInstance().getTimeLabel_player2());
 
             playersInGame.add(player_1);
             playersInGame.add(player_2);

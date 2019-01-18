@@ -66,8 +66,10 @@ public class CheckersBoard2 extends JPanel{
         AffineTransform transform = new AffineTransform();
         //transform.translate(ZEROX, ZEROY);
         transform.scale(128, 96);
-        this.undo = Game.getInstance().getUndo();
-        this.redo = Game.getInstance().getRedo();
+        undo = new JButton(new ImageIcon("undo.png"));
+        redo = new JButton(new ImageIcon("redo.png"));
+        undo.setEnabled(false);
+        redo.setEnabled(false);
 
         //Game.getInstance().loadPieces();
         board = Game.getInstance().getPieces();
@@ -121,6 +123,7 @@ public class CheckersBoard2 extends JPanel{
 
                         }
                         changeTurn();
+                        undo.setEnabled(true);
                     }  else if ((selectedRowFrom + 2 == selectedRowTo || selectedRowFrom - 2 == selectedRowTo) && (currentIndex == 0 || currentIndex == 6)) {
                         if (Game.getInstance().canJump(currentIndex, selectedRowFrom, selectedColFrom, selectedRowTo, selectedColTo, turn)) {
                             if (selectedRowTo == 0 ) {
@@ -139,25 +142,27 @@ public class CheckersBoard2 extends JPanel{
                             Point zbity = new Point(jumpCol,jumpRow);
                             someAction=true;
                             changeTurn();
+                            undo.setEnabled(true);
                             DeletePiece deletePiece = new DeletePiece(board.get(zbity), zbity);
                             Move move = new Move(dragged.getPiece(), savedPoint, new Point(ev.getX()/Piece.WIDTH, ev.getY()/Piece.HEIGHT));
                             Game.getInstance().getUndoList().push(new CommandMakro(deletePiece, move));
                             Game.getInstance().getPieces().remove(new Point(jumpCol,jumpRow));
                         }
                     }else if((currentIndex == 4 || currentIndex == 10)&&(Game.getInstance().canKingMoveJump(currentIndex, selectedColFrom, selectedRowFrom, selectedColTo, selectedRowTo, turn))){
-                            drop(dragged.getPiece(), ev.getX()/Piece.WIDTH, ev.getY()/Piece.HEIGHT);
-                            if(Game.getInstance().getColPionkaDoBicia() != 0 && Game.getInstance().getRowPionkaDoBicia() != 0){
-                                Point doBicia = new Point(Game.getInstance().getColPionkaDoBicia(), Game.getInstance().getRowPionkaDoBicia());
-                                DeletePiece deletePiece = new DeletePiece(board.get(doBicia), doBicia);
-                                Move move = new Move(dragged.getPiece(), savedPoint, new Point(ev.getX()/Piece.WIDTH, ev.getY()/Piece.HEIGHT));
-                                Game.getInstance().getUndoList().push(new CommandMakro(deletePiece, move));
-                                Game.getInstance().getPieces().remove(new Point(Game.getInstance().getColPionkaDoBicia(),Game.getInstance().getRowPionkaDoBicia()));
-                                someAction=true;
-                            }else{
-                                someAction = true;
-                                Game.getInstance().getUndoList().push(new Move(dragged.getPiece(), savedPoint, new Point(ev.getX()/Piece.WIDTH, ev.getY()/Piece.HEIGHT)));
-                            }
-                            changeTurn();
+                        drop(dragged.getPiece(), ev.getX()/Piece.WIDTH, ev.getY()/Piece.HEIGHT);
+                        if(Game.getInstance().getColPionkaDoBicia() != 0 && Game.getInstance().getRowPionkaDoBicia() != 0){
+                            Point doBicia = new Point(Game.getInstance().getColPionkaDoBicia(), Game.getInstance().getRowPionkaDoBicia());
+                            DeletePiece deletePiece = new DeletePiece(board.get(doBicia), doBicia);
+                            Move move = new Move(dragged.getPiece(), savedPoint, new Point(ev.getX()/Piece.WIDTH, ev.getY()/Piece.HEIGHT));
+                            Game.getInstance().getUndoList().push(new CommandMakro(deletePiece, move));
+                            Game.getInstance().getPieces().remove(new Point(Game.getInstance().getColPionkaDoBicia(),Game.getInstance().getRowPionkaDoBicia()));
+                            someAction=true;
+                        }else{
+                            someAction = true;
+                            Game.getInstance().getUndoList().push(new Move(dragged.getPiece(), savedPoint, new Point(ev.getX()/Piece.WIDTH, ev.getY()/Piece.HEIGHT)));
+                        }
+                        changeTurn();
+                        undo.setEnabled(true);
                     }
 
                     if(!someAction)
@@ -167,7 +172,6 @@ public class CheckersBoard2 extends JPanel{
                     repaint();
                     Game.getInstance().getRedoList().clear();
                     redo.setEnabled(false);
-                    undo.setEnabled(true);
                 }
             }
         });
@@ -262,4 +266,11 @@ public class CheckersBoard2 extends JPanel{
             return -1;
     }
 
+    public JButton getUndo() {
+        return undo;
+    }
+
+    public JButton getRedo() {
+        return redo;
+    }
 }

@@ -6,6 +6,7 @@ import com.checkers.Decorator.IPiece;
 import com.checkers.Decorator.Piece;
 import com.checkers.Decorator.TransformDecorator;
 import com.checkers.Layout.MenuFrame;
+import com.checkers.Memento.Memento;
 import com.checkers.Observer.IObserver;
 import com.checkers.Observer.ISubject;
 import com.checkers.Strategy.Strategy;
@@ -37,10 +38,6 @@ public class Game implements Serializable, IObserver {
     private LinkedList<Command> undoList = new LinkedList<>();
     private LinkedList<Command> redoList = new LinkedList<>();
 
-    public void setBoard(CheckersBoard2 board) {
-        this.board = board;
-    }
-
     public CheckersBoard2 getBoard() {
         return board;
     }
@@ -49,16 +46,19 @@ public class Game implements Serializable, IObserver {
     private int colPionkaDoBicia = 0;
     private int rowPionkaDoBicia = 0;
 
-    private JButton undo = new JButton(new ImageIcon("undo.png"));
-    private JButton redo = new JButton(new ImageIcon("redo.png"));
     private JLabel timeLabel_player1 = new JLabel();
 
-    public JButton getSaveButton() {
-        return saveButton;
+    public Memento createMemento(){   //tworzenie pamiątki -  sava
+        return new Memento(instance);
+    }
+    public Game setMemento(Memento memento){ //odczytanie stanu z pamiątki - z sava
+        instance=memento.getGame();
+        return instance;
     }
 
-    private JButton saveButton = new JButton("Save");
-    private JButton loadGameButton;
+    public void setPieces(HashMap<Point, IPiece> pieces) {
+        this.pieces = pieces;
+    }
 
     private Game(){ }
     public static Game getInstance(){
@@ -75,21 +75,21 @@ public class Game implements Serializable, IObserver {
             warnLabel.setVisible(true);
             if(playersInGame.get(index).getActual_time()<0) {
                 playersInGame.get(index).getTimer().stop();
-                Game.getInstance().getBoard().changeTurn();
+                MenuFrame.getInstance().getBoard().changeTurn();
 
-                if (board.getTurn() == 0 && board.isGameOver() == -1) {
+                if (MenuFrame.getInstance().getBoard().getTurn() == 0 && MenuFrame.getInstance().getBoard().isGameOver() == -1) {
                     getPlayersInGame().get(0).getTurnLabel().setVisible(true);
                     getPlayersInGame().get(1).getTurnLabel().setVisible(false);
 
-                    Game.getInstance().getTimeLabel_player2().setText(new SimpleDateFormat("mm : ss").format(new Date(15000)));
+                    MenuFrame.getInstance().getTimeLabel_player2().setText(new SimpleDateFormat("mm : ss").format(new Date(15000)));
                     playersInGame.get(0).getTimer().start();
                     playersInGame.get(1).getTimer().stop();
                     playersInGame.get(1).refreshTimer();
 
-                } else if (board.getTurn() == 1 && board.isGameOver() == -1) {
+                } else if (MenuFrame.getInstance().getBoard().getTurn() == 1 && MenuFrame.getInstance().getBoard().isGameOver() == -1) {
                     getPlayersInGame().get(1).getTurnLabel().setVisible(true);
                     getPlayersInGame().get(0).getTurnLabel().setVisible(false);
-                    Game.getInstance().getTimeLabel_player1().setText(new SimpleDateFormat("mm : ss").format(new Date(15000)));
+                    MenuFrame.getInstance().getTimeLabel_player1().setText(new SimpleDateFormat("mm : ss").format(new Date(15000)));
                     playersInGame.get(0).getTimer().stop();
                     playersInGame.get(1).getTimer().start();
                     playersInGame.get(0).refreshTimer();
@@ -103,40 +103,40 @@ public class Game implements Serializable, IObserver {
         tr=new AffineTransform();
         tr.scale(Piece.WIDTH,Piece.HEIGHT);
 //        startowe ustawienie
-//        pieces.put(new Point(3, 0), new TransformDecorator(Piece.getPiece(0), tr));
-//        pieces.put(new Point(5, 0), new TransformDecorator(Piece.getPiece(0), tr));
-//        pieces.put(new Point(7, 0), new TransformDecorator(Piece.getPiece(0), tr));
-//        pieces.put(new Point(1, 2), new TransformDecorator(Piece.getPiece(0), tr));
-//        pieces.put(new Point(2, 1), new TransformDecorator(Piece.getPiece(0), tr));
-//        pieces.put(new Point(5, 2), new TransformDecorator(Piece.getPiece(0), tr));
-//        pieces.put(new Point(7, 2), new TransformDecorator(Piece.getPiece(0), tr));
-//        pieces.put(new Point(0, 1), new TransformDecorator(Piece.getPiece(0), tr));
-//        pieces.put(new Point(6, 1), new TransformDecorator(Piece.getPiece(0), tr));
-//        pieces.put(new Point(3, 2), new TransformDecorator(Piece.getPiece(0), tr));
-//        pieces.put(new Point(1, 0), new TransformDecorator(Piece.getPiece(0), tr));
-//        pieces.put(new Point(4, 1), new TransformDecorator(Piece.getPiece(0), tr));
-//
-//        pieces.put(new Point(1, 6), new TransformDecorator(Piece.getPiece(6), tr));
-//        pieces.put(new Point(3, 6), new TransformDecorator(Piece.getPiece(6), tr));
-//        pieces.put(new Point(5, 6), new TransformDecorator(Piece.getPiece(6), tr));
-//        pieces.put(new Point(7, 6), new TransformDecorator(Piece.getPiece(6), tr));
-//        pieces.put(new Point(0, 5), new TransformDecorator(Piece.getPiece(6), tr));
-//        pieces.put(new Point(2, 5), new TransformDecorator(Piece.getPiece(6), tr));
-//        pieces.put(new Point(4, 5), new TransformDecorator(Piece.getPiece(6), tr));
-//        pieces.put(new Point(6, 5), new TransformDecorator(Piece.getPiece(6), tr));
-//        pieces.put(new Point(0, 7), new TransformDecorator(Piece.getPiece(6), tr));
-//        pieces.put(new Point(2, 7), new TransformDecorator(Piece.getPiece(6), tr));
-//        pieces.put(new Point(4, 7), new TransformDecorator(Piece.getPiece(6), tr));
-//        pieces.put(new Point(6, 7), new TransformDecorator(Piece.getPiece(6), tr));
-
-
-
-        pieces.put(new Point(3, 2), new TransformDecorator(Piece.getPiece(6), tr));
-        pieces.put(new Point(1, 6), new TransformDecorator(Piece.getPiece(6), tr));
-        pieces.put(new Point(7, 6), new TransformDecorator(Piece.getPiece(6), tr));
-        pieces.put(new Point(2, 1), new TransformDecorator(Piece.getPiece(0), tr));
-        pieces.put(new Point(2, 5), new TransformDecorator(Piece.getPiece(0), tr));
+        pieces.put(new Point(3, 0), new TransformDecorator(Piece.getPiece(0), tr));
+        pieces.put(new Point(5, 0), new TransformDecorator(Piece.getPiece(0), tr));
         pieces.put(new Point(7, 0), new TransformDecorator(Piece.getPiece(0), tr));
+        pieces.put(new Point(1, 2), new TransformDecorator(Piece.getPiece(0), tr));
+        pieces.put(new Point(2, 1), new TransformDecorator(Piece.getPiece(0), tr));
+        pieces.put(new Point(5, 2), new TransformDecorator(Piece.getPiece(0), tr));
+        pieces.put(new Point(7, 2), new TransformDecorator(Piece.getPiece(0), tr));
+        pieces.put(new Point(0, 1), new TransformDecorator(Piece.getPiece(0), tr));
+        pieces.put(new Point(6, 1), new TransformDecorator(Piece.getPiece(0), tr));
+        pieces.put(new Point(3, 2), new TransformDecorator(Piece.getPiece(0), tr));
+        pieces.put(new Point(1, 0), new TransformDecorator(Piece.getPiece(0), tr));
+        pieces.put(new Point(4, 1), new TransformDecorator(Piece.getPiece(0), tr));
+
+        pieces.put(new Point(1, 6), new TransformDecorator(Piece.getPiece(6), tr));
+        pieces.put(new Point(3, 6), new TransformDecorator(Piece.getPiece(6), tr));
+        pieces.put(new Point(5, 6), new TransformDecorator(Piece.getPiece(6), tr));
+        pieces.put(new Point(7, 6), new TransformDecorator(Piece.getPiece(6), tr));
+        pieces.put(new Point(0, 5), new TransformDecorator(Piece.getPiece(6), tr));
+        pieces.put(new Point(2, 5), new TransformDecorator(Piece.getPiece(6), tr));
+        pieces.put(new Point(4, 5), new TransformDecorator(Piece.getPiece(6), tr));
+        pieces.put(new Point(6, 5), new TransformDecorator(Piece.getPiece(6), tr));
+        pieces.put(new Point(0, 7), new TransformDecorator(Piece.getPiece(6), tr));
+        pieces.put(new Point(2, 7), new TransformDecorator(Piece.getPiece(6), tr));
+        pieces.put(new Point(4, 7), new TransformDecorator(Piece.getPiece(6), tr));
+        pieces.put(new Point(6, 7), new TransformDecorator(Piece.getPiece(6), tr));
+
+
+
+//        pieces.put(new Point(3, 2), new TransformDecorator(Piece.getPiece(6), tr));
+//        pieces.put(new Point(1, 6), new TransformDecorator(Piece.getPiece(6), tr));
+//        pieces.put(new Point(7, 6), new TransformDecorator(Piece.getPiece(6), tr));
+//        pieces.put(new Point(2, 1), new TransformDecorator(Piece.getPiece(0), tr));
+//        pieces.put(new Point(2, 5), new TransformDecorator(Piece.getPiece(0), tr));
+//        pieces.put(new Point(7, 0), new TransformDecorator(Piece.getPiece(0), tr));
 
     }
 
@@ -453,24 +453,8 @@ public class Game implements Serializable, IObserver {
         return false;
     }
 
-    public JLabel getTimeLabel_player1() {
-        return timeLabel_player1;
-    }
-
-    public JLabel getTimeLabel_player2() {
-        return timeLabel_player2;
-    }
 
     private JLabel timeLabel_player2 = new JLabel();
-
-
-    public JButton getUndo() {
-        return undo;
-    }
-
-    public JButton getRedo() {
-        return redo;
-    }
 
     public LinkedList<Command> getUndoList() {
         return undoList;
